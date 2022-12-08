@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QVector>
 #include <QPoint>
+#include <QMap>
 
 
 class Map: public QWidget
@@ -14,47 +15,33 @@ protected:
 
     static const int DOT_WIDTH    = 20;
     static const int DOT_HEIGHT   = 20;
-    static const int FIELD_WIDTH  = 20;
-    static const int FIELD_HEIGHT = 20;
+    static const int FIELD_WIDTH  = 35;
+    static const int FIELD_HEIGHT = 35;
 
-//    void timerEvent(QTimerEvent *event) override;
-//    void keyPressEvent(QKeyEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
-
-    QVector<QPoint> m_walls;
-    QPoint m_target;
+    QSet<QPoint> m_walls;
+    QSet<QPoint> m_cells;
+    QPoint m_target{-1,-1};
+    QPoint m_start;
     bool m_inGame;
+    int m_steps;
     QPoint getRandDot();
     void gameOver();
-    void doDrawing();
+    void drawMap();
 
 private:
 
     static const int WALLS_COUNT = 40;
     static const int WALL_MAX_LEN = 6;
 
- //    static const int DELAY = 150;
- //    int m_timerId;
-
-
     QVector<QPoint> m_lines;
-
-
-    //    enum Directions{
-    //        left, right, up, down
-    //    } m_dir;
-
 
     void initGame();
 
-    QPoint locateTarget();
+    void locateStart();
     void locateWalls();
     void locateLines();
-
-
-//    void move();
-//    void check_field();
-//    void check_target();
+    QVector<QPoint> getNeighbours(QPoint current);
 
 };
 

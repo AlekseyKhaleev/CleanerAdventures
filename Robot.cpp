@@ -87,9 +87,21 @@ bool Robot::g_right()
 
 void Robot::locateSelf()
 {
-    do{
-        m_pos = getRandDot();
-    }while(m_walls.contains(m_pos)||m_target == m_pos);
+//    do{
+//        m_pos = getRandDot();
+//    }while(m_walls.contains(m_pos)||m_target == m_pos);
+    QVector<QPoint> angles{
+        QPoint{1,1},
+        QPoint{1, FIELD_HEIGHT-2},
+        QPoint{FIELD_WIDTH-2, 1},
+        QPoint{FIELD_WIDTH-2,FIELD_HEIGHT-2}
+    };
+    m_pos = angles[rand()%angles.size()];
+    m_target = m_pos;
+    if(m_target.x() == 1){m_target.rx() = FIELD_WIDTH - 2;}
+    else{m_target.rx() = 1;}
+    if(m_target.y() == 1){m_target.ry() = FIELD_HEIGHT - 2;}
+    else{m_target.ry() = 1;}
     m_dest = Directions::up;
 }
 
@@ -151,7 +163,7 @@ void Robot::keyPressEvent(QKeyEvent *event)
 void Robot::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
-    Map::doDrawing();
+    Map::drawMap();
     doPainting();
 }
 
