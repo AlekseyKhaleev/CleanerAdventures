@@ -1,64 +1,42 @@
-#include "Map.h"
+#include "Maze.h"
 #include <QKeyEvent>
 #include <QPainter>
 #include <qrandom.h>
 #include <QTime>
 #include <QMessageBox>
-#include <QPushButton>
-#include <QDebug>
-#include <QCoreApplication>
 #include <QStyle>
-#include <QtWidgets>
 #include <QtGui>
 
 
 
-Map::Map(){
+Maze::Maze(){
     QRect rect = frameGeometry();
     rect.moveCenter(QGuiApplication::primaryScreen()->availableGeometry().center());
     this->setGeometry(rect);
     this->resize(DOT_WIDTH*FIELD_WIDTH, DOT_HEIGHT*FIELD_HEIGHT);
     this->setWindowTitle("Course work: FSM robot");
-    initGame();
+    initMaze();
 }
 
-void Map::paintEvent(QPaintEvent *event){
-    Q_UNUSED(event);
-    drawMap();
-}
-
-void Map::initGame(){
+void Maze::initMaze(){
     m_inGame=true;
-    locateLines();
     locateWalls();
 }
 
-void Map::drawMap()
-{
-    QPainter qp(this);
-    if (m_inGame){
-//        qp.setPen(Qt::black);
-//        for(int i=0; i<16;++i){qp.drawLines(m_lines);}
+void Maze::paintEvent(QPaintEvent *event){
+    Q_UNUSED(event);
+    drawMaze();
+}
 
-        for(auto w:qAsConst(m_walls)){
-            qp.setBrush(Qt::black);
-            qp.drawRect(w.x()*DOT_WIDTH, w.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
-        }
-
-        qp.setBrush(Qt::red);
-        qp.drawEllipse(m_target.x()*DOT_WIDTH, m_target.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
-
-//        qp.setBrush(Qt::green);
-//        qp.drawEllipse(m_start.x()*DOT_WIDTH, m_start.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
-
-    }else
-    {
-        gameOver();
+void Maze::drawMaze(){
+    QPainter qp(this); 
+    for(auto w:qAsConst(m_walls)){
+        qp.setBrush(Qt::black);
+        qp.drawRect(w.x()*DOT_WIDTH, w.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
     }
 }
 
-QPoint Map::getRandDot()
-{
+QPoint Maze::getRandDot(){
     QTime time = QTime::currentTime();
     srand((uint) time.msec());
     QPoint dot;
@@ -67,15 +45,7 @@ QPoint Map::getRandDot()
     return dot;
 }
 
-void Map::locateStart()
-{
-    do{
-        m_start = getRandDot();
-    }while(m_walls.contains(m_start));
-}
-
-void Map::locateWalls()
-{
+void Maze::locateWalls(){
     QPoint dot;
     for(int y=0;y<FIELD_HEIGHT;y++){
         for(int x=0;x<FIELD_WIDTH;x++){
@@ -86,8 +56,7 @@ void Map::locateWalls()
                 m_cells.insert(dot);
 
             }
-            else
-            {
+            else{
                 dot.rx() = x;
                 dot.ry()= y;
                 m_walls.insert(dot);
@@ -95,9 +64,7 @@ void Map::locateWalls()
         }
     }
 
-
-    locateStart();
-    QPoint current = m_start;
+    QPoint current = getRandDot();
     QPoint next;
     QVector<QPoint> neighbours;
     QStack<QPoint> way;
@@ -109,8 +76,7 @@ void Map::locateWalls()
             QPoint toDel = current;
             if(current.y() == next.y()){
                 toDel.rx() = current.x()+((next.x()-current.x())/std::abs(next.x()-current.x()));
-            }else
-            {
+            }else{
             toDel.ry() = current.y()+((next.y()-current.y())/std::abs(next.y()-current.y()));
             }
             m_walls.remove(toDel);
@@ -129,23 +95,9 @@ void Map::locateWalls()
             current = key;
         }
     }while(m_cells.size() > 0);
-    m_target = current;
 }
 
-void Map::locateLines()
-{
-    for(int y=0;y<FIELD_HEIGHT*DOT_HEIGHT;y+=DOT_HEIGHT){
-        m_lines.push_back(QPoint(0,y));
-        m_lines.push_back(QPoint(FIELD_WIDTH*DOT_WIDTH,y));
-    }
-    for(int x=0;x<FIELD_WIDTH*DOT_WIDTH;x+=DOT_WIDTH){
-        m_lines.push_back(QPoint(x,0));
-        m_lines.push_back(QPoint(x,FIELD_HEIGHT*DOT_HEIGHT));
-    }
-}
-
-QVector<QPoint> Map::getNeighbours(QPoint current)
-{
+QVector<QPoint> Maze::getNeighbours(QPoint current){
     QVector<QPoint> curNeighbours;
     current.rx()+=2;
     if(m_cells.contains(current)){
@@ -166,22 +118,6 @@ QVector<QPoint> Map::getNeighbours(QPoint current)
     }
     return curNeighbours;
 }
-
-void Map::gameOver()
-{
-    QRect rect = frameGeometry();
-    rect.moveCenter(QGuiApplication::primaryScreen()->availableGeometry().center());
-    QMessageBox msgb;
-    msgb.setGeometry(rect);
-    msgb.setText("<p align='center'>Game Over</p>");
-    msgb.setInformativeText("<p align='center'>Try again?</p>");
-    msgb.setStandardButtons(QMessageBox::Close | QMessageBox::Retry);
-    msgb.setDefaultButton(QMessageBox::Retry);
-    int ret = msgb.exec();
-    if (ret == QMessageBox::Retry){initGame();}
-    else {QCoreApplication::quit();}
- }
-
 
 //}
 

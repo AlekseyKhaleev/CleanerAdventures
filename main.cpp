@@ -1,4 +1,4 @@
-#include <Map.h>
+#include <Maze.h>
 #include <QApplication>
 #include <Robot.h>
 
