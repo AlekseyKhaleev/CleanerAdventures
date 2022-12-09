@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <QPoint>
+#include <QMap>
 #include "Maze.h"
 
 class Robot : public Maze{
@@ -10,10 +11,10 @@ private:
     static const int T_DELAY = 30;
     static const int A_DELAY = 300;
     static const int MAX_ENERGY = 100;
-    int m_energy;
+    int m_energy[2];
     int m_timer;
     int m_animation;
-    QPoint m_battery;
+    QVector<QPoint> m_battery;
     QPoint m_target;
     QPoint m_pos;
     enum Directions{
@@ -63,13 +64,15 @@ private:
     void locateTarget();
     void locateBattery();
     void initRobot();
-    void moveRobot();
+    bool moveRobot();
     bool checkWall(QPoint dest);
     void checkTarget();
     void checkBattery();
-    void setColor();
+    void checkEnergy();
+    void reduceEnergy();
     void drawRobot();
     void drawTarget();
+    void drawBattery();
     void gameOver();
 
     bool (*ActiveState)()= nullptr; // указатель на активное состояние автомата

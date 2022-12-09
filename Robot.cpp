@@ -31,7 +31,10 @@ void Robot::initRobot(){
     m_tmpColor = white;
     m_timer = startTimer(T_DELAY);
     m_animation = startTimer(A_DELAY);
-    m_energy = MAX_ENERGY;
+    m_energy[0] = MAX_ENERGY;
+    m_energy[1] = MAX_ENERGY;
+    if(!m_battery.empty()){m_battery.clear();}
+    m_battery.push_back(QPoint{-1,-1});
 }
 
 
@@ -39,29 +42,35 @@ void Robot::keyPressEvent(QKeyEvent *event){
     switch (event->key()) {
     case Qt::Key_Left: {
         m_dest = Directions::left;
-        m_energy--;
+        reduceEnergy();
+        checkEnergy();
         break;
     }
     case Qt::Key_Right:{
         m_dest = Directions::right;
-        m_energy--;
+        reduceEnergy();
+        checkEnergy();
         break;
     }
     case Qt::Key_Up:{
         m_dest = Directions::up;
-        m_energy--;
+        reduceEnergy();
+        checkEnergy();
         break;
     }
     case Qt::Key_Down:{
         m_dest = Directions::down;
-        m_energy--;
+        reduceEnergy();
+        checkEnergy();
         break;
     }
     case Qt::Key_Space:{
-        moveRobot();
-        checkTarget();
-        m_energy--;
-        checkBattery();
+        if(moveRobot()){
+            checkTarget();
+            reduceEnergy();
+            checkBattery();
+            checkEnergy();
+        }
         break;
     }
     default:break;
@@ -74,6 +83,7 @@ void Robot::paintEvent(QPaintEvent *event){
         Maze::drawMaze();
         drawRobot();
         drawTarget();
+        drawBattery();
     }
     else{
         gameOver();
@@ -82,7 +92,6 @@ void Robot::paintEvent(QPaintEvent *event){
 
 void Robot::timerEvent(QTimerEvent *event){
     if(event->timerId() == m_timer){
-        setColor();
         repaint();
     }
     else if(event->timerId() == m_animation){qSwap(m_curColor, m_tmpColor);}
@@ -110,9 +119,11 @@ void Robot::locateTarget(){
 
 void Robot::locateBattery()
 {
+    QPoint battery;
     do{
-        m_battery = getRandDot();
-    }while(m_walls.contains(m_battery)||m_pos == m_battery||m_target == m_battery);
+        battery = getRandDot();
+    }while(m_walls.contains(battery)||m_pos == battery||m_target == battery);
+    m_battery.push_back(battery);
 }
 
 void Robot::drawRobot(){
@@ -125,30 +136,52 @@ void Robot::drawRobot(){
     qp.drawEllipse(m_target.x()*DOT_WIDTH, m_target.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
  }
 
- void Robot::moveRobot(){
+ void Robot::drawBattery(){
+     QPainter qp(this);
+     qp.setBrush(Qt::green);
+     for(auto &b:m_battery){
+        if(b.x() >= 0){
+            qp.drawEllipse(b.x()*DOT_WIDTH, b.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
+        }
+     }
+ }
+
+ bool Robot::moveRobot(){
      QPoint tar_pos = m_pos;
      switch(m_dest){
      case left: {
         tar_pos.rx()-=1;
-        if(checkWall(tar_pos)){m_pos = tar_pos;}
-        break;
+        if(checkWall(tar_pos)){
+            m_pos = tar_pos;
+            return true;
+        }
+        return false;
      }
      case right:{
         tar_pos.rx()+=1;
-        if(checkWall(tar_pos)){m_pos = tar_pos;}
-        break;
+        if(checkWall(tar_pos)){
+            m_pos = tar_pos;
+            return true;
+        }
+        return false;
      }
      case up:{
         tar_pos.ry()-=1;
-        if(checkWall(tar_pos)){m_pos = tar_pos;}
-        break;
+        if(checkWall(tar_pos)){
+            m_pos = tar_pos;
+            return true;
+        }
+        return false;
      }
      case down:{
         tar_pos.ry()+=1;
-        if(checkWall(tar_pos)){m_pos = tar_pos;}
-        break;
+        if(checkWall(tar_pos)){
+            m_pos = tar_pos;
+            return true;
+        }
+        return false;
      }
-     default: break;
+     default: return false;
      }
  }
 
@@ -160,26 +193,36 @@ void Robot::drawRobot(){
      if(m_pos == m_target) {m_inGame = false;}
  }
 
- void Robot::checkBattery()
- {
-    if(m_pos == m_battery) {
-        m_energy = MAX_ENERGY;
-        m_battery = QPoint{-1,-1};
+ void Robot::checkBattery(){
+    if(m_battery.contains(m_pos)) {
+        m_energy[1] = MAX_ENERGY;
+        m_battery.removeAll(m_pos);
+
     }
  }
 
- void Robot::setColor()
- {
-    int proc_energy = m_energy%100;
-    if(proc_energy>1){
-        if(proc_energy>30){
-            if(proc_energy>50){
+ void Robot::checkEnergy(){
+    int proc_energy[2]{m_energy[0]%100, m_energy[1]%100};
+    if(proc_energy[1]>0){
+        if(proc_energy[1]>30){
+            if(proc_energy[1]>50&&m_tmpColor == white){
                 m_curColor = green;
             }
-            m_curColor = yellow;
+            else if(m_curColor == green){
+                m_curColor = yellow;
+                locateBattery();
+            }
         }
-        m_curColor = green;
+        else if(m_curColor == yellow){
+            m_curColor = red;
+            locateBattery();
+        }
     }
+ }
+
+ void Robot::reduceEnergy(){
+     m_energy[0]=m_energy[1];
+     m_energy[1]--;
  }
 
  void Robot::gameOver(){
