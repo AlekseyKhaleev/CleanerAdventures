@@ -30,11 +30,12 @@ void Robot::initRobot(){
     m_curColor = green;
     m_tmpColor = white;
     m_timer = startTimer(T_DELAY);
-    m_animation = startTimer(A_DELAY);
-    m_energy[0] = MAX_ENERGY;
-    m_energy[1] = MAX_ENERGY;
+    m_anim_timer = startTimer(A_DELAY);
+    m_energy = MAX_ENERGY%100;
     if(!m_battery.empty()){m_battery.clear();}
     m_battery.push_back(QPoint{-1,-1});
+    m_steps = 0;
+    findShortWay();
 }
 
 
@@ -42,32 +43,33 @@ void Robot::keyPressEvent(QKeyEvent *event){
     switch (event->key()) {
     case Qt::Key_Left: {
         m_dest = Directions::left;
-        reduceEnergy();
+        m_energy--;
         checkEnergy();
         break;
     }
     case Qt::Key_Right:{
         m_dest = Directions::right;
-        reduceEnergy();
+        m_energy--;
         checkEnergy();
+        updateScore();
         break;
     }
     case Qt::Key_Up:{
         m_dest = Directions::up;
-        reduceEnergy();
+        m_energy--;
         checkEnergy();
         break;
     }
     case Qt::Key_Down:{
         m_dest = Directions::down;
-        reduceEnergy();
+        m_energy--;
         checkEnergy();
         break;
     }
     case Qt::Key_Space:{
         if(moveRobot()){
             checkTarget();
-            reduceEnergy();
+            m_energy--;
             checkBattery();
             checkEnergy();
         }
@@ -94,8 +96,7 @@ void Robot::timerEvent(QTimerEvent *event){
     if(event->timerId() == m_timer){
         repaint();
     }
-    else if(event->timerId() == m_animation){qSwap(m_curColor, m_tmpColor);}
-
+    else if(event->timerId() == m_anim_timer){qSwap(m_curColor, m_tmpColor);}
 }
 
 void Robot::locateSelf(){
@@ -117,8 +118,7 @@ void Robot::locateTarget(){
     else                  {m_target.ry() = 1;}
 }
 
-void Robot::locateBattery()
-{
+void Robot::locateBattery(){
     QPoint battery;
     do{
         battery = getRandDot();
@@ -132,16 +132,14 @@ void Robot::drawRobot(){
 }
  void Robot::drawTarget() {
     QPainter qp(this);
-    qp.setBrush(Qt::red);
-    qp.drawEllipse(m_target.x()*DOT_WIDTH, m_target.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
+    qp.drawPixmap(m_target.x()*DOT_WIDTH, m_target.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT, m_targetPM);
  }
 
  void Robot::drawBattery(){
      QPainter qp(this);
-     qp.setBrush(Qt::green);
      for(auto &b:m_battery){
         if(b.x() >= 0){
-            qp.drawEllipse(b.x()*DOT_WIDTH, b.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
+            qp.drawPixmap(b.x()*DOT_WIDTH, b.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT, m_batteryPM);
         }
      }
  }
@@ -195,41 +193,33 @@ void Robot::drawRobot(){
 
  void Robot::checkBattery(){
     if(m_battery.contains(m_pos)) {
-        m_energy[1] = MAX_ENERGY;
+        m_energy = MAX_ENERGY;
+        m_curColor = green;
+        m_tmpColor = white;
         m_battery.removeAll(m_pos);
 
     }
  }
 
  void Robot::checkEnergy(){
-    int proc_energy[2]{m_energy[0]%100, m_energy[1]%100};
-    if(proc_energy[1]>0){
-        if(proc_energy[1]>30){
-            if(proc_energy[1]>50&&m_tmpColor == white){
-                m_curColor = green;
-            }
-            else if(m_curColor == green){
-                m_curColor = yellow;
-                locateBattery();
-            }
-        }
-        else if(m_curColor == yellow){
+    if(m_energy>0){
+        if(m_energy>30&&m_energy<=50&&(m_curColor==green||m_tmpColor==green)){
+            m_curColor = yellow;
+            locateBattery();
+        }else if((m_curColor == yellow||m_tmpColor==yellow)&&m_energy<30){
             m_curColor = red;
             locateBattery();
         }
     }
  }
 
- void Robot::reduceEnergy(){
-     m_energy[0]=m_energy[1];
-     m_energy[1]--;
- }
+
 
  void Robot::gameOver(){
-     QRect rect = frameGeometry();
-     rect.moveCenter(QGuiApplication::primaryScreen()->availableGeometry().center());
+//     QRect rect = frameGeometry();
+//     rect.moveCenter(QGuiApplication::primaryScreen()->availableGeometry().center());
      QMessageBox msgb;
-     msgb.setGeometry(rect);
+//     msgb.setGeometry(rect);
      msgb.setText("<p align='center'>Game Over</p>");
      msgb.setInformativeText("<p align='center'>Try again?</p>");
      msgb.setStandardButtons(QMessageBox::Close | QMessageBox::Retry);
@@ -241,10 +231,20 @@ void Robot::drawRobot(){
      }
      else {
          killTimer(m_timer);
-         killTimer(m_animation);
+         killTimer(m_anim_timer);
          QCoreApplication::quit();
      }
-  }
+ }
+
+ void Robot::updateScore(){
+     m_steps++;
+     if(m_steps<m_shortWay){m_score++;}
+     else {m_score--;}
+ }
+
+ void Robot::findShortWay(){
+
+ }
 
 //void Robot::SetState(bool (*state)()){
 //    ActiveState = state;

@@ -7,13 +7,18 @@
 #include "Maze.h"
 
 class Robot : public Maze{
+protected:
+    QString m_name;
+    int m_score;
+    int m_energy;
+    int m_timer;
 private:
+    int m_steps;
+    int m_shortWay;
     static const int T_DELAY = 30;
     static const int A_DELAY = 300;
     static const int MAX_ENERGY = 100;
-    int m_energy[2];
-    int m_timer;
-    int m_animation;
+    int m_anim_timer;
     QVector<QPoint> m_battery;
     QPoint m_target;
     QPoint m_pos;
@@ -24,6 +29,8 @@ private:
         white, green, yellow, red
     }m_curColor, m_tmpColor;
 
+    QPixmap m_batteryPM{"../icons/battery"};
+    QPixmap m_targetPM{"../icons/target"};
     QVector<QPixmap> m_white{
         QPixmap("../icons/VC_wt_lt"),
         QPixmap("../icons/VC_wt_rt"),
@@ -69,11 +76,12 @@ private:
     void checkTarget();
     void checkBattery();
     void checkEnergy();
-    void reduceEnergy();
     void drawRobot();
     void drawTarget();
     void drawBattery();
     void gameOver();
+    void updateScore();
+    void findShortWay();
 
     bool (*ActiveState)()= nullptr; // указатель на активное состояние автомата
 

@@ -11,12 +11,16 @@ CONFIG += c++17
 SOURCES += \
     Maze.cpp \
     Robot.cpp \
-    main.cpp
+    main.cpp \
+    mainwindow.cpp \
+    status.cpp
 
 
 HEADERS += \
     Maze.h \
-    Robot.h
+    Robot.h \
+    mainwindow.h \
+    status.h
 
 
 # Default rules for deployment.

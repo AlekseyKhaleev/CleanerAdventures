@@ -10,9 +10,9 @@
 
 
 Maze::Maze(){
-    QRect rect = frameGeometry();
-    rect.moveCenter(QGuiApplication::primaryScreen()->availableGeometry().center());
-    this->setGeometry(rect);
+//    QRect rect = frameGeometry();
+//    rect.moveCenter(QGuiApplication::primaryScreen()->availableGeometry().center());
+//    this->setGeometry(rect);
     this->resize(DOT_WIDTH*FIELD_WIDTH, DOT_HEIGHT*FIELD_HEIGHT);
     this->setWindowTitle("Course work: FSM robot");
     initMaze();

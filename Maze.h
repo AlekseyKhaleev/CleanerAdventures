@@ -13,10 +13,10 @@ public:
 
 protected:
 
-    static const int DOT_WIDTH    = 30;
-    static const int DOT_HEIGHT   = 30;
-    static const int FIELD_WIDTH  = 25;
-    static const int FIELD_HEIGHT = 25;
+    static const int DOT_WIDTH    = 35;
+    static const int DOT_HEIGHT   = 35;
+    static const int FIELD_WIDTH  = 45;
+    static const int FIELD_HEIGHT = 21;
 
     void paintEvent(QPaintEvent *event) override;
     QSet<QPoint> m_walls;
