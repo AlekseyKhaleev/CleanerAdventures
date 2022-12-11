@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
         QLabel *energy = new EnergyWidget(game);
         energy->setFixedSize(energy->size());
         energy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        energy->setFixedSize(250,85);
+        energy->setFixedSize(600,85);
 //        energy->setAlignment(Qt::AlignLeft);
 //        energy->setStyleSheet("QWidget {background-color: white; color: black;}");
 

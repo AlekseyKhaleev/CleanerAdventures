@@ -40,6 +40,8 @@ void EnergyWidget::drawStatus(){
 
     QPainter qp(this);
     qp.drawPixmap(0,0, m_enStatusPM[m_enStatus].width()*0.32, m_enStatusPM[m_enStatus].height()*0.32,m_enStatusPM[m_enStatus]);
-    qp.drawText(m_enStatusPM[m_enStatus].width()*0.32, m_enStatusPM[m_enStatus].height()*0.32/2,QString::number(m_robot->getEnergy()));
+    qp.drawText(m_enStatusPM[m_enStatus].width()*0.32, m_enStatusPM[m_enStatus].height()*0.32/2,"Energy: " + QString::number(m_robot->getEnergy()));
+    qp.drawText(m_enStatusPM[m_enStatus].width()*0.32+100, m_enStatusPM[m_enStatus].height()*0.32/2,"Score: " + QString::number(m_robot->getScore()));
+    qp.drawText(m_enStatusPM[m_enStatus].width()*0.32+200, m_enStatusPM[m_enStatus].height()*0.32/2,"Steps: " + QString::number(m_robot->getSteps()));
 
 }

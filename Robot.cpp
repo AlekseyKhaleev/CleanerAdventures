@@ -27,6 +27,7 @@ Robot::~Robot() = default;
 void Robot::initRobot(){
     locateSelf();
     locateTarget();
+    findShortWay();
     m_curColor = green;
     m_tmpColor = white;
     m_robTimer = startTimer(T_DELAY);
@@ -34,9 +35,8 @@ void Robot::initRobot(){
     if(!m_battery.empty()){m_battery.clear();}
     m_battery.push_back(QPoint{-1,-1});
     m_steps = 0;
-    findShortWay();
+
     m_energy = m_shortWay;
-    m_name = "Name";
 }
 
 
@@ -45,6 +45,7 @@ void Robot::keyPressEvent(QKeyEvent *event){
     case Qt::Key_Left: {
         m_dest = Directions::left;
         if(m_energy){m_energy--;}
+        updateScore();
         break;
     }
     case Qt::Key_Right:{
@@ -56,21 +57,27 @@ void Robot::keyPressEvent(QKeyEvent *event){
     case Qt::Key_Up:{
         m_dest = Directions::up;
         if(m_energy){m_energy--;}
+        updateScore();
         break;
     }
     case Qt::Key_Down:{
         m_dest = Directions::down;
         if(m_energy){m_energy--;}
+        updateScore();
         break;
     }
     case Qt::Key_Space:{
         if(moveRobot()){
             checkTarget();
             if(m_energy){m_energy--;}
-            checkBattery();            
+            checkBattery();
+            updateScore(event);
         }
         break;
     }
+    case Qt::Key_Backspace:{
+            stepBack();
+        }
     default:break;
     }
 }
@@ -84,7 +91,7 @@ void Robot::paintEvent(QPaintEvent *event){
         drawBattery();
     }
     else{
-        gameOver();
+        levelDone();
     }
 }
 
@@ -93,13 +100,14 @@ int Robot::getEnergy()
     return m_energy*100/m_shortWay;
 }
 
-QString Robot::getName()
-{
-    return m_name;
-}
 int Robot::getScore()
 {
     return m_score;
+}
+
+int Robot::getSteps()
+{
+    return m_steps;
 }
 
 void Robot::timerEvent(QTimerEvent *event){
@@ -134,7 +142,7 @@ void Robot::locateBattery(){
     do{
         battery = getRandDot();
     }while(m_walls.contains(battery)||m_pos == battery||m_target == battery||
-           (abs(battery.x()-m_pos.x())>FIELD_WIDTH/2)||(abs(battery.y()-m_pos.y())>FIELD_HEIGHT/2));
+           (abs(battery.x()-m_pos.x())>FIELD_WIDTH/4)||(abs(battery.y()-m_pos.y())>FIELD_HEIGHT/2));
     m_battery.push_back(battery);
 }
 
@@ -142,12 +150,13 @@ void Robot::drawRobot(){
     QPainter qp(this);
     qp.drawPixmap(m_pos.x()*DOT_WIDTH, m_pos.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT, m_scin[m_curColor][m_dest]);
 }
- void Robot::drawTarget() {
+
+void Robot::drawTarget() {
     QPainter qp(this);
     qp.drawPixmap(m_target.x()*DOT_WIDTH, m_target.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT, m_targetPM);
  }
 
- void Robot::drawBattery(){
+void Robot::drawBattery(){
      QPainter qp(this);
      for(auto &b:m_battery){
         if(b.x() >= 0){
@@ -156,7 +165,7 @@ void Robot::drawRobot(){
      }
  }
 
- bool Robot::moveRobot(){
+bool Robot::moveRobot(){
      QPoint tar_pos = m_pos;
      switch(m_dest){
      case left: {
@@ -195,15 +204,15 @@ void Robot::drawRobot(){
      }
  }
 
- bool Robot::checkWall(QPoint dest){
+bool Robot::checkWall(QPoint dest){
      return !(m_walls.contains(dest)||dest.x() >= FIELD_WIDTH||dest.x() < 0||dest.y() >= FIELD_HEIGHT||dest.y() < 0);
  }
 
- void Robot::checkTarget(){
+void Robot::checkTarget(){
      if(m_pos == m_target) {m_inGame = false;}
  }
 
- void Robot::checkBattery(){
+void Robot::checkBattery(){
     if(m_battery.contains(m_pos)) {
         m_energy = m_shortWay;
         m_curColor = green;
@@ -213,7 +222,7 @@ void Robot::drawRobot(){
     }
  }
 
- void Robot::checkEnergy(){
+void Robot::checkEnergy(){
     int curEnergy = getEnergy();
     if(curEnergy <= 70) {
         if(m_curColor == green){
@@ -239,20 +248,10 @@ void Robot::drawRobot(){
         m_curColor = white;
         m_tmpColor = white;
     }
-//    if(energy<80){
-//        if(energy>=50&&(m_curColor==green)){
-//            m_curColor = yellow;
-//            locateBattery();
-//        }else if(m_curColor == yellow){
-//            m_curColor = red;
-//            locateBattery();
-//        }
-//    }
+
  }
 
-
-
- void Robot::gameOver(){
+void Robot::levelDone(){
      QMessageBox msgb;
      msgb.setText("<p align='center'>Game Over</p>");
      msgb.setInformativeText("<p align='center'>Try again?</p>");
@@ -270,15 +269,19 @@ void Robot::drawRobot(){
      }
  }
 
- void Robot::updateScore(){
+void Robot::updateScore(QKeyEvent *keyEvent){
      m_steps++;
      if(m_steps<m_shortWay){m_score++;}
-     else {m_score--;}
+     else if(m_score&& keyEvent != nullptr){m_score--;}
  }
 
- void Robot::findShortWay(){
-    m_shortWay = 100;
+void Robot::findShortWay(){
+     m_shortWay = 100;
  }
+
+void Robot::stepBack(){
+
+}
 
 //void Robot::SetState(bool (*state)()){
 //    ActiveState = state;

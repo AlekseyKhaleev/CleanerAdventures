@@ -11,9 +11,7 @@ class Robot : public Maze{
 //    Q_OBJECT
 
 private:
-    QString m_name;
     int m_score{0};
-
     int m_energy;
     int m_steps;
     int m_shortWay;
@@ -68,10 +66,12 @@ private:
     void keyPressEvent(QKeyEvent *event) override;
     void paintEvent(QPaintEvent *event)  override;
 
+    void initRobot();
+    void findShortWay();
     void locateSelf();
     void locateTarget();
     void locateBattery();
-    void initRobot();
+
     bool moveRobot();
     bool checkWall(QPoint dest);
     void checkTarget();
@@ -80,9 +80,10 @@ private:
     void drawRobot();
     void drawTarget();
     void drawBattery();
-    void gameOver();
-    void updateScore();
-    void findShortWay();
+    void levelDone();
+    void updateScore(QKeyEvent *keyEvent=nullptr);
+
+    void stepBack();
 
     bool (*ActiveState)()= nullptr; // указатель на активное состояние автомата
 
@@ -101,9 +102,10 @@ public:
     Robot();           // открытый конструктор
     ~Robot() override; // открытый деструктор
     int getEnergy();
-    QString getName();
+
     int getScore();
     int m_robTimer;
+    int getSteps();
 };
 
 
