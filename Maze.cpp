@@ -10,9 +10,6 @@
 
 
 Maze::Maze(){
-//    QRect rect = frameGeometry();
-//    rect.moveCenter(QGuiApplication::primaryScreen()->availableGeometry().center());
-//    this->setGeometry(rect);
     this->resize(DOT_WIDTH*FIELD_WIDTH, DOT_HEIGHT*FIELD_HEIGHT);
     this->setWindowTitle("Course work: FSM robot");
     initMaze();
@@ -118,20 +115,3 @@ QVector<QPoint> Maze::getNeighbours(QPoint current){
     }
     return curNeighbours;
 }
-
-//}
-
-////void Game::timerEvent(QTimerEvent *event){
-//    Q_UNUSED(event);
-
-//    if(m_inGame){
-//        check_apple();
-//        move();
-//        check_field();
-//    }
-//    this->repaint();
-//}
-
-
-
-

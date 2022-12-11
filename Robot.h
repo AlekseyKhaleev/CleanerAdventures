@@ -5,19 +5,20 @@
 #include <QPoint>
 #include <QMap>
 #include "Maze.h"
+#include <QObject>
 
 class Robot : public Maze{
-protected:
-    QString m_name;
-    int m_score;
-    int m_energy;
-    int m_timer;
+//    Q_OBJECT
+
 private:
+    QString m_name;
+    int m_score{0};
+
+    int m_energy;
     int m_steps;
     int m_shortWay;
     static const int T_DELAY = 30;
     static const int A_DELAY = 300;
-    static const int MAX_ENERGY = 100;
     int m_anim_timer;
     QVector<QPoint> m_battery;
     QPoint m_target;
@@ -99,6 +100,10 @@ public:
 //    QPoint SigHandle(signal sig) override;
     Robot();           // открытый конструктор
     ~Robot() override; // открытый деструктор
+    int getEnergy();
+    QString getName();
+    int getScore();
+    int m_robTimer;
 };
 
 

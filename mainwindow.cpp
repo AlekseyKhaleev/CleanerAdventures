@@ -6,7 +6,8 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QContextMenuEvent>
-#include "status.h"
+#include "energyWidget.h"
+#include <QFontDatabase>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -14,20 +15,28 @@ MainWindow::MainWindow(QWidget *parent)
 {
     QWidget *widget = new QWidget;
         setCentralWidget(widget);
+        widget->setStyleSheet("QWidget {background-color: black; color: white;}");
 
         QWidget *topFiller = new QWidget;
         topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-        QWidget *status = new Status;
-        status->setFixedSize(status->size());
-        status->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        status->setFixedHeight(70);
-
-
-        QWidget *game = new Robot;
+        Robot *game = new Robot;
         game->setFixedSize(game->size());
         game->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         game->setFocusPolicy(Qt::StrongFocus);
+        game->setStyleSheet("QWidget {background-color: white; color: black;}");
+
+
+        QLabel *energy = new EnergyWidget(game);
+        energy->setFixedSize(energy->size());
+        energy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        energy->setFixedSize(250,85);
+//        energy->setAlignment(Qt::AlignLeft);
+//        energy->setStyleSheet("QWidget {background-color: white; color: black;}");
+
+        QHBoxLayout *displayStatus = new QHBoxLayout;
+        displayStatus->setContentsMargins(2,2,2,2);
+        displayStatus->addWidget(energy,1,Qt::AlignLeft);
 
 //        infoLabel = new QLabel(tr("<i>Choose a menu option, or right-click to "
 //                                  "invoke a context menu</i>"));
@@ -39,8 +48,9 @@ MainWindow::MainWindow(QWidget *parent)
 
         QVBoxLayout *layout = new QVBoxLayout;
         layout->setContentsMargins(5, 5, 5, 5);
+
         layout->addWidget(topFiller);
-        layout->addWidget(status);
+        layout->addLayout(displayStatus);
         layout->addWidget(game);
         layout->addWidget(bottomFiller);
         widget->setLayout(layout);

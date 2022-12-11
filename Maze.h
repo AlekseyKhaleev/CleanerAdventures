@@ -4,19 +4,22 @@
 #include <QVector>
 #include <QPoint>
 #include <QMap>
+#include <QObject>
 
 
 class Maze: public QWidget
 {
+//    Q_OBJECT
 public:
     Maze();
-
-protected:
-
     static const int DOT_WIDTH    = 35;
     static const int DOT_HEIGHT   = 35;
     static const int FIELD_WIDTH  = 45;
     static const int FIELD_HEIGHT = 21;
+
+protected:
+
+
 
     void paintEvent(QPaintEvent *event) override;
     QSet<QPoint> m_walls;

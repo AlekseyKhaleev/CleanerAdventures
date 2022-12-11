@@ -29,13 +29,14 @@ void Robot::initRobot(){
     locateTarget();
     m_curColor = green;
     m_tmpColor = white;
-    m_timer = startTimer(T_DELAY);
-    m_anim_timer = startTimer(A_DELAY);
-    m_energy = MAX_ENERGY%100;
+    m_robTimer = startTimer(T_DELAY);
+    m_anim_timer = startTimer(A_DELAY);    
     if(!m_battery.empty()){m_battery.clear();}
     m_battery.push_back(QPoint{-1,-1});
     m_steps = 0;
     findShortWay();
+    m_energy = m_shortWay;
+    m_name = "Name";
 }
 
 
@@ -43,35 +44,30 @@ void Robot::keyPressEvent(QKeyEvent *event){
     switch (event->key()) {
     case Qt::Key_Left: {
         m_dest = Directions::left;
-        m_energy--;
-        checkEnergy();
+        if(m_energy){m_energy--;}
         break;
     }
     case Qt::Key_Right:{
         m_dest = Directions::right;
-        m_energy--;
-        checkEnergy();
+        if(m_energy){m_energy--;}
         updateScore();
         break;
     }
     case Qt::Key_Up:{
         m_dest = Directions::up;
-        m_energy--;
-        checkEnergy();
+        if(m_energy){m_energy--;}
         break;
     }
     case Qt::Key_Down:{
         m_dest = Directions::down;
-        m_energy--;
-        checkEnergy();
+        if(m_energy){m_energy--;}
         break;
     }
     case Qt::Key_Space:{
         if(moveRobot()){
             checkTarget();
-            m_energy--;
-            checkBattery();
-            checkEnergy();
+            if(m_energy){m_energy--;}
+            checkBattery();            
         }
         break;
     }
@@ -92,8 +88,23 @@ void Robot::paintEvent(QPaintEvent *event){
     }
 }
 
+int Robot::getEnergy()
+{
+    return m_energy*100/m_shortWay;
+}
+
+QString Robot::getName()
+{
+    return m_name;
+}
+int Robot::getScore()
+{
+    return m_score;
+}
+
 void Robot::timerEvent(QTimerEvent *event){
-    if(event->timerId() == m_timer){
+    if(event->timerId() == m_robTimer){
+        checkEnergy();
         repaint();
     }
     else if(event->timerId() == m_anim_timer){qSwap(m_curColor, m_tmpColor);}
@@ -122,7 +133,8 @@ void Robot::locateBattery(){
     QPoint battery;
     do{
         battery = getRandDot();
-    }while(m_walls.contains(battery)||m_pos == battery||m_target == battery);
+    }while(m_walls.contains(battery)||m_pos == battery||m_target == battery||
+           (abs(battery.x()-m_pos.x())>FIELD_WIDTH/2)||(abs(battery.y()-m_pos.y())>FIELD_HEIGHT/2));
     m_battery.push_back(battery);
 }
 
@@ -193,7 +205,7 @@ void Robot::drawRobot(){
 
  void Robot::checkBattery(){
     if(m_battery.contains(m_pos)) {
-        m_energy = MAX_ENERGY;
+        m_energy = m_shortWay;
         m_curColor = green;
         m_tmpColor = white;
         m_battery.removeAll(m_pos);
@@ -202,24 +214,46 @@ void Robot::drawRobot(){
  }
 
  void Robot::checkEnergy(){
-    if(m_energy>0){
-        if(m_energy>30&&m_energy<=50&&(m_curColor==green||m_tmpColor==green)){
+    int curEnergy = getEnergy();
+    if(curEnergy <= 70) {
+        if(m_curColor == green){
             m_curColor = yellow;
             locateBattery();
-        }else if((m_curColor == yellow||m_tmpColor==yellow)&&m_energy<30){
-            m_curColor = red;
+        }
+        else if(m_tmpColor == green){
+            m_tmpColor = yellow;
             locateBattery();
         }
     }
+    if(curEnergy <= 30) {
+        if(m_curColor == yellow){
+            m_curColor = red;
+            locateBattery();
+        }
+        else if(m_tmpColor == yellow){
+            m_tmpColor = red;
+            locateBattery();
+        }
+    }
+    if(curEnergy==0){
+        m_curColor = white;
+        m_tmpColor = white;
+    }
+//    if(energy<80){
+//        if(energy>=50&&(m_curColor==green)){
+//            m_curColor = yellow;
+//            locateBattery();
+//        }else if(m_curColor == yellow){
+//            m_curColor = red;
+//            locateBattery();
+//        }
+//    }
  }
 
 
 
  void Robot::gameOver(){
-//     QRect rect = frameGeometry();
-//     rect.moveCenter(QGuiApplication::primaryScreen()->availableGeometry().center());
      QMessageBox msgb;
-//     msgb.setGeometry(rect);
      msgb.setText("<p align='center'>Game Over</p>");
      msgb.setInformativeText("<p align='center'>Try again?</p>");
      msgb.setStandardButtons(QMessageBox::Close | QMessageBox::Retry);
@@ -230,7 +264,7 @@ void Robot::drawRobot(){
          initRobot();
      }
      else {
-         killTimer(m_timer);
+         killTimer(m_robTimer);
          killTimer(m_anim_timer);
          QCoreApplication::quit();
      }
@@ -243,7 +277,7 @@ void Robot::drawRobot(){
  }
 
  void Robot::findShortWay(){
-
+    m_shortWay = 100;
  }
 
 //void Robot::SetState(bool (*state)()){
