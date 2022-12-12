@@ -16,7 +16,9 @@ Maze::Maze(){
 }
 
 void Maze::initMaze(){
-    m_inGame=true;
+//    if(!m_cells.isEmpty()){
+//        m_cells.clear();
+//    }
     locateWalls();
 }
 
@@ -60,13 +62,16 @@ void Maze::locateWalls(){
             }
         }
     }
-
+    QSet<QPoint> cells;
+    for (auto k: qAsConst(m_cells)){
+        cells.insert(k);
+    }
     QPoint current = getRandDot();
     QPoint next;
     QVector<QPoint> neighbours;
     QStack<QPoint> way;
     do{
-        neighbours = getNeighbours(current);
+        neighbours = getNeighbours(current, cells);
         if(neighbours.size() != 0){
             next = neighbours[rand()%neighbours.size()];
             way.push(current);
@@ -77,40 +82,40 @@ void Maze::locateWalls(){
             toDel.ry() = current.y()+((next.y()-current.y())/std::abs(next.y()-current.y()));
             }
             m_walls.remove(toDel);
+            m_cells.insert(toDel);
             current = next;
-            m_cells.remove(current);
-            m_steps ++;
+            cells.remove(current);
         } else if(way.size()>0){
             current = way.pop();
         }
         else{
             QPoint key;
-            for (auto k: qAsConst(m_cells)){
+            for (auto k: qAsConst(cells)){
                 key = k;
                 break;
             }
             current = key;
         }
-    }while(m_cells.size() > 0);
+    }while(cells.size() > 0);
 }
 
-QVector<QPoint> Maze::getNeighbours(QPoint current){
+QVector<QPoint> Maze::getNeighbours(QPoint current, QSet<QPoint> cells){
     QVector<QPoint> curNeighbours;
     current.rx()+=2;
-    if(m_cells.contains(current)){
+    if(cells.contains(current)){
         curNeighbours.push_back(current);
     }
     current.rx()-=4;
-    if(m_cells.contains(current)){
+    if(cells.contains(current)){
         curNeighbours.push_back(current);
     }
     current.rx()+=2;
     current.ry()+=2;
-    if(m_cells.contains(current)){
+    if(cells.contains(current)){
         curNeighbours.push_back(current);
     }
     current.ry()-=4;
-    if(m_cells.contains(current)){
+    if(cells.contains(current)){
         curNeighbours.push_back(current);
     }
     return curNeighbours;

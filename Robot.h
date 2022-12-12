@@ -6,21 +6,15 @@
 #include <QMap>
 #include "Maze.h"
 #include <QObject>
+#include <QStack>
 
 class Robot : public Maze{
 //    Q_OBJECT
 
 private:
-    int m_score{0};
-    int m_energy;
-    int m_steps;
-    int m_shortWay;
     static const int T_DELAY = 30;
     static const int A_DELAY = 300;
-    int m_anim_timer;
-    QVector<QPoint> m_battery;
-    QPoint m_target;
-    QPoint m_pos;
+
     enum Directions{
         left, right, up, down
     } m_dest;
@@ -61,13 +55,53 @@ private:
         m_red
     };
 
+    struct State{
+        QPoint POSITION;
+        QVector<QPoint> BATTERY;
+        int SCORE;
+        int ENERGY;
+        int STEPS;
+        Directions DESTINATION;
+        Colors CURRENT_COLOR;
+        Colors TEMPORARY_COLOR;
+
+        State()=default;
+        State(QPoint pos, QVector<QPoint> bat, int scr, int enrg, int stps, Directions dest, Colors cur, Colors tmp){
+            POSITION = pos;
+            BATTERY = bat;
+            SCORE = scr;
+            ENERGY = enrg;
+            STEPS = stps;
+            DESTINATION = dest;
+            CURRENT_COLOR = cur;
+            TEMPORARY_COLOR = tmp;
+
+        }
+    };
+
+
+    bool m_inGame;
+    int m_robTimer;
+    int m_anim_timer;
+
+    QPoint m_target;
+    QPoint m_pos;
+    QVector<QPoint> m_battery;
+    int m_score{0};
+    int m_energy;
+    int m_steps;
+    int m_trueWay;
+    QStack<QPoint> m_way;
+    QStack<State> m_states;
+
+
 
     void timerEvent(QTimerEvent *event)  override;
     void keyPressEvent(QKeyEvent *event) override;
     void paintEvent(QPaintEvent *event)  override;
 
     void initRobot();
-    void findShortWay();
+    void findTrueWay();
     void locateSelf();
     void locateTarget();
     void locateBattery();
@@ -81,9 +115,12 @@ private:
     void drawTarget();
     void drawBattery();
     void levelDone();
+    void gameOver();
     void updateScore(QKeyEvent *keyEvent=nullptr);
-
+    void doStep(QKeyEvent *event=nullptr);
     void stepBack();
+    void setState(State curState);
+    QVector<QPoint> getNeighbours(QPoint current, QSet<QPoint> cells) override;
 
     bool (*ActiveState)()= nullptr; // указатель на активное состояние автомата
 
@@ -104,8 +141,9 @@ public:
     int getEnergy();
 
     int getScore();
-    int m_robTimer;
+    int getStates();
     int getSteps();
+    int getTrueWay();
 };
 
 

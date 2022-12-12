@@ -43,5 +43,7 @@ void EnergyWidget::drawStatus(){
     qp.drawText(m_enStatusPM[m_enStatus].width()*0.32, m_enStatusPM[m_enStatus].height()*0.32/2,"Energy: " + QString::number(m_robot->getEnergy()));
     qp.drawText(m_enStatusPM[m_enStatus].width()*0.32+100, m_enStatusPM[m_enStatus].height()*0.32/2,"Score: " + QString::number(m_robot->getScore()));
     qp.drawText(m_enStatusPM[m_enStatus].width()*0.32+200, m_enStatusPM[m_enStatus].height()*0.32/2,"Steps: " + QString::number(m_robot->getSteps()));
+    qp.drawText(m_enStatusPM[m_enStatus].width()*0.32+300, m_enStatusPM[m_enStatus].height()*0.32/2,"States: " + QString::number(m_robot->getStates()));
+    qp.drawText(m_enStatusPM[m_enStatus].width()*0.32+400, m_enStatusPM[m_enStatus].height()*0.32/2,"ShortWay: " + QString::number(m_robot->getTrueWay()));
 
 }
