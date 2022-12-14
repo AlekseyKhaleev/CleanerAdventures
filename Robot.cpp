@@ -15,6 +15,7 @@
 #include <QMessageBox>
 #include "Robot.h"
 #include <QDebug>
+#include <QStyleOption>
 
 
 
@@ -40,12 +41,15 @@ void Robot::initRobot(){
     m_states.push(State(m_pos, m_battery, m_score, m_energy, m_steps, m_dest, m_curColor, m_tmpColor));
     m_animTimerId = startTimer(A_DELAY);
     m_repaintTimerId = startTimer(0);
-
 }
 
 void Robot::timerEvent(QTimerEvent *event){
     if(event->timerId() == m_repaintTimerId){
         repaint();
+        emit scoreChanged(m_score);
+        emit levelChanged(m_level);
+        emit energyChanged(getEnergy());
+
     }
     else if(event->timerId() == m_animTimerId){qSwap(m_curColor, m_tmpColor);}
 }
@@ -88,12 +92,18 @@ void Robot::keyPressEvent(QKeyEvent *event){
 }
 
 void Robot::paintEvent(QPaintEvent *event){
-    Q_UNUSED(event);
+    QStyleOption opt;
+    opt.initFrom(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+    QWidget::paintEvent(event);
+
     if(m_inGame){
-        Maze::drawMaze();
+        drawMaze();
         drawRobot();
         drawTarget();
         drawBattery();
+
     }
     else if(m_energy != 0){
         levelDone();
@@ -157,6 +167,14 @@ void Robot::locateBattery(){
     }while(m_pos == battery||m_target == battery||
            (abs(battery.x()-m_pos.x())>FIELD_WIDTH/4)||(abs(battery.y()-m_pos.y())>FIELD_HEIGHT/2));
     m_battery.push_back(battery);
+}
+
+void Robot::drawMaze(){
+    QPainter qp(this);
+    for(auto &w:qAsConst(m_walls)){
+        qp.setBrush(Qt::black);
+        qp.drawRect(w.x()*DOT_WIDTH, w.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
+    }
 }
 
 void Robot::drawRobot(){
@@ -238,6 +256,7 @@ void Robot::checkBattery(){
 
 void Robot::checkEnergy(){
     int curEnergy = getEnergy();
+    emit energyChanged(curEnergy);
     if(curEnergy <= 70) {
         if(m_curColor == green){
             m_curColor = yellow;
@@ -278,6 +297,8 @@ void Robot::levelDone(){
      if (ret == QMessageBox::Retry){
          initMaze();
          initRobot();
+         m_level++;
+//         emit levelChanged(m_level);
      }
      else {
          QCoreApplication::quit();
@@ -296,6 +317,7 @@ void Robot::gameOver(){
         initMaze();
         initRobot();
         m_score = 0;
+        m_level = 1;
     }
     else {
         killTimer(m_repaintTimerId);
@@ -306,8 +328,14 @@ void Robot::gameOver(){
 
 void Robot::updateScore(QKeyEvent *keyEvent){
      m_steps++;
-     if(m_steps<=m_trueWay){m_score++;}
-     else if(m_score&& keyEvent != nullptr){m_score--;}
+     if(m_steps<=m_trueWay){
+        m_score++;
+//        emit scoreChanged(m_score);
+     }
+     else if(m_score&& keyEvent != nullptr){
+         m_score--;
+//         emit scoreChanged(m_score);
+     }
 }
 
 void Robot::doStep(QKeyEvent *event){
@@ -360,6 +388,8 @@ void Robot::stepBack(){
             m_states.push(State(m_pos, m_battery, m_score, m_energy, m_steps, m_dest, m_curColor, m_tmpColor));
         }
     }
+//    emit energyChanged(getEnergy());
+//    emit scoreChanged(m_score);
 }
 
 void Robot::setState(State curState){

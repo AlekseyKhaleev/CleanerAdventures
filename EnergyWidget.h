@@ -1,19 +1,25 @@
 #pragma once
 
-#include <QWidget>
-#include "Robot.h"
 #include <QObject>
+#include <QWidget>
 #include <QLabel>
 
-class EnergyWidget : public QLabel
+class EnergyWidget : public QWidget
 {
-//    Q_OBJECT
+    Q_OBJECT
 public:
-    EnergyWidget(Robot *object);
+    explicit EnergyWidget(QWidget *parent=nullptr);
+    ~EnergyWidget();
+
+    void paintEvent(QPaintEvent *event)  override;
+
+signals:
+    void statusChanged();
+
+public slots:
+    void setEnergyStatus(int energy);
+
 private:
-    static const int STATUS_HEIGHT = 70;
-    int m_statTimer;
-    Robot *m_robot;
     enum Energy{
         en_0, en_10, en_30, en_50, en_70, en_80, en_90
     } m_enStatus;
@@ -27,11 +33,6 @@ private:
         QPixmap("../icons/en_80"),
         QPixmap("../icons/en_90")
     };
-
-    void timerEvent(QTimerEvent *event)  override;
-    void paintEvent(QPaintEvent *event)  override;
-
-    void setEnergyStatus();
     void drawStatus();
 };
 

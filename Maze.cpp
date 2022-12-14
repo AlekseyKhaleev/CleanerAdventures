@@ -1,30 +1,21 @@
 #include "Maze.h"
-#include <QKeyEvent>
-#include <QPainter>
 #include <qrandom.h>
+#include <QGuiApplication>
+#include <QScreen>
 #include <QTime>
-#include <QMessageBox>
-#include <QStyle>
-#include <QtGui>
+#include <QStack>
 
 
 
-Maze::Maze(){
-    this->resize(DOT_WIDTH*FIELD_WIDTH, DOT_HEIGHT*FIELD_HEIGHT);
+Maze::Maze(){    
+    initFieldSize();
     initMaze();
+//    this->resize(DOT_WIDTH*FIELD_WIDTH, DOT_HEIGHT*FIELD_HEIGHT);
 }
 
-void Maze::initMaze(){
+void Maze::initMaze(){    
     initDefaultMazeMap();
     locateWalls();
-}
-
-void Maze::drawMaze(){
-    QPainter qp(this); 
-    for(auto &w:qAsConst(m_walls)){
-        qp.setBrush(Qt::black);
-        qp.drawRect(w.x()*DOT_WIDTH, w.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
-    }
 }
 
 QPoint Maze::getRandDot(){
@@ -44,7 +35,6 @@ void Maze::locateWalls(){
         cells.insert(k);
     }
     QPoint current = getRandDot();
-    qDebug()<<m_walls.contains(current);
     QPoint next;
     QVector<QPoint> neighbours;
     QStack<QPoint> way;
@@ -97,6 +87,14 @@ QVector<QPoint> Maze::getMazeNeighbours(QPoint current, QSet<QPoint> cells){
         curNeighbours.push_back(current);
     }
     return curNeighbours;
+}
+
+void Maze::initFieldSize(){
+    auto const rec = QGuiApplication::primaryScreen()->size();
+    FIELD_WIDTH = rec.width()/DOT_WIDTH;
+//    FIELD_WIDTH = FIELD_WIDTH+(FIELD_WIDTH % 2)-1;
+    FIELD_HEIGHT = rec.height()*0.8/DOT_HEIGHT;
+//    FIELD_HEIGHT = FIELD_HEIGHT+(FIELD_HEIGHT % 2)-1;
 }
 
 void Maze::initDefaultMazeMap(){

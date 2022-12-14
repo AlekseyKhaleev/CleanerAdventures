@@ -9,7 +9,20 @@
 #include <QStack>
 
 class Robot : public Maze{
-//    Q_OBJECT
+    Q_OBJECT
+
+public:
+    Robot();
+    ~Robot();
+
+signals:
+    void energyChanged(int energy);
+    void scoreChanged(int score);
+    void levelChanged(int level);
+
+public slots:
+    void initRobot();
+    void checkEnergy();
 
 private:
     static const int T_DELAY = 30;
@@ -88,6 +101,7 @@ private:
     QPoint m_pos;
     QVector<QPoint> m_battery;
     int m_score{0};
+    int m_level{1};
     int m_energy;
     int m_steps;
     int m_trueWay;
@@ -99,20 +113,23 @@ private:
     void keyPressEvent(QKeyEvent *event) override;
     void paintEvent(QPaintEvent *event)  override;
 
-    void initRobot();
+
+    int getEnergy();
+    int getScore();
+    int getStates();
+    int getSteps();
+    int getTrueWay();
+
     void findTrueWay();
     void locateSelf();
     void locateTarget();
     void locateBattery();
-
     bool moveRobot();
+
     bool checkWall(QPoint dest);
     void checkTarget();
-    void checkBattery();
-    void checkEnergy();
-    void drawRobot();
-    void drawTarget();
-    void drawBattery();
+    void checkBattery();    
+
     void levelDone();
     void gameOver();
     void updateScore(QKeyEvent *keyEvent=nullptr);
@@ -121,16 +138,11 @@ private:
     void setState(State curState);
     QVector<QPoint> getWallsNeighbours(QPoint current, QSet<QPoint> cells);
 
-public:
 
-    Robot();           // открытый конструктор
-    ~Robot() override; // открытый деструктор
-
-    int getEnergy();
-    int getScore();
-    int getStates();
-    int getSteps();
-    int getTrueWay();
+    void drawMaze();
+    void drawRobot();
+    void drawTarget();
+    void drawBattery();
 };
 
 

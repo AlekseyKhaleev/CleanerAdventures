@@ -5,19 +5,24 @@
 #include <QPoint>
 #include <QMap>
 #include <QObject>
+#include <QGuiApplication>
+#include <QScreen>
+
 
 
 class Maze: public QWidget
 {
-//    Q_OBJECT
+    Q_OBJECT
 public:
     Maze();
-    static const int DOT_WIDTH    = 30;
-    static const int DOT_HEIGHT   = 30;
-    static const int FIELD_WIDTH  = 53;//45
-    static const int FIELD_HEIGHT = 23;//21
+
 
 protected:
+    static const int DOT_WIDTH    = 34;
+    static const int DOT_HEIGHT   = 34;
+    int FIELD_WIDTH;  //= 47;
+    int FIELD_HEIGHT; //= 21;
+
     QSet<QPoint> m_walls;
     QSet<QPoint> m_cells;
 
@@ -29,6 +34,7 @@ protected:
     QVector<QPoint> getMazeNeighbours(QPoint current, QSet<QPoint> cells);
 
 private:
+    void initFieldSize();
     void initDefaultMazeMap();
     void locateWalls();
 };
