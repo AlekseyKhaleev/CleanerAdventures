@@ -26,13 +26,12 @@ GameWidget::GameWidget(QWidget *parent)
             levelLcd, qOverload<int>(&QLCDNumber::display));
 
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(createLabel(tr("ENERGY")), 0, 0);
-    layout->addWidget(energyStatus,1,0,3,1);
-    layout->addWidget(createLabel(tr("LEVEL")), 0, 1);
-    layout->addWidget(levelLcd, 1, 1, 3, 1);
-    layout->addWidget(createLabel(tr("SCORE")), 0, 2);
-    layout->addWidget(scoreLcd, 1, 2, 3, 1);
-    layout->addWidget(createLabel(tr("")), 5, 0);
+    layout->addWidget(createLabel(tr("<b>ENERGY</b>")), 0, 0, 2, 1);
+    layout->addWidget(energyStatus,2,0,3,1);
+    layout->addWidget(createLabel(tr("<b>LEVEL</b>")), 0, 1, 2, 1);
+    layout->addWidget(levelLcd, 2, 1, 3, 1);
+    layout->addWidget(createLabel(tr("<b>SCORE</b>")), 0, 2, 2, 1);
+    layout->addWidget(scoreLcd, 2, 2, 3, 1);
     layout->addWidget(robot, 6, 0, 20, 3);
 
     setLayout(layout);
