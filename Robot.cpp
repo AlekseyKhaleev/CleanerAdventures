@@ -14,6 +14,7 @@
 #include <QtGui>
 #include <QMessageBox>
 #include "Robot.h"
+#include <QDebug>
 
 
 
@@ -31,21 +32,22 @@ void Robot::initRobot(){
     findTrueWay();
     m_curColor = green;
     m_tmpColor = white;
-    m_robTimer = startTimer(T_DELAY);
-    m_anim_timer = startTimer(A_DELAY);    
     if(!m_battery.empty()){m_battery.clear();}
     m_battery.push_back(QPoint{-1,-1});
     m_steps = 0;
     m_energy = m_trueWay;
     if(!m_states.isEmpty()) { m_states.clear();}
     m_states.push(State(m_pos, m_battery, m_score, m_energy, m_steps, m_dest, m_curColor, m_tmpColor));
+    m_animTimerId = startTimer(A_DELAY);
+    m_repaintTimerId = startTimer(0);
+
 }
 
 void Robot::timerEvent(QTimerEvent *event){
-    if(event->timerId() == m_robTimer){
+    if(event->timerId() == m_repaintTimerId){
         repaint();
     }
-    else if(event->timerId() == m_anim_timer){qSwap(m_curColor, m_tmpColor);}
+    else if(event->timerId() == m_animTimerId){qSwap(m_curColor, m_tmpColor);}
 }
 
 void Robot::keyPressEvent(QKeyEvent *event){
@@ -93,7 +95,7 @@ void Robot::paintEvent(QPaintEvent *event){
         drawTarget();
         drawBattery();
     }
-    else if(getEnergy() != 0){
+    else if(m_energy != 0){
         levelDone();
     }
     else{
@@ -152,7 +154,7 @@ void Robot::locateBattery(){
     QPoint battery;
     do{
         battery = getRandDot();
-    }while(m_walls.contains(battery)||m_pos == battery||m_target == battery||
+    }while(m_pos == battery||m_target == battery||
            (abs(battery.x()-m_pos.x())>FIELD_WIDTH/4)||(abs(battery.y()-m_pos.y())>FIELD_HEIGHT/2));
     m_battery.push_back(battery);
 }
@@ -160,10 +162,6 @@ void Robot::locateBattery(){
 void Robot::drawRobot(){
     QPainter qp(this);
     qp.drawPixmap(m_pos.x()*DOT_WIDTH, m_pos.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT, m_scin[m_curColor][m_dest]);
-//    for(auto w:qAsConst(m_way)){
-//        qp.setBrush(Qt::red);
-//        qp.drawRect(w.x()*DOT_WIDTH, w.y()*DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT);
-//    }
 }
 
 void Robot::drawTarget() {
@@ -260,7 +258,7 @@ void Robot::checkEnergy(){
             locateBattery();
         }
     }
-    if(curEnergy==0){
+    if(m_energy==0){
         m_curColor = white;
         m_tmpColor = white;
         m_inGame = false;
@@ -269,6 +267,8 @@ void Robot::checkEnergy(){
  }
 
 void Robot::levelDone(){
+    killTimer(m_repaintTimerId);
+    killTimer(m_animTimerId);
      QMessageBox msgb;
      msgb.setText("<p align='center'>Level done, great! </p>");
      msgb.setInformativeText("<p align='center'>Wanna go next?</p>");
@@ -280,13 +280,12 @@ void Robot::levelDone(){
          initRobot();
      }
      else {
-         killTimer(m_robTimer);
-         killTimer(m_anim_timer);
          QCoreApplication::quit();
      }
 }
 
 void Robot::gameOver(){
+
     QMessageBox msgb;
     msgb.setText("<p align='center'>Ohh no! You lose! </p>");
     msgb.setInformativeText("<p align='center'>Wanna try again?</p>");
@@ -298,16 +297,16 @@ void Robot::gameOver(){
         initRobot();
         m_score = 0;
     }
-else {
-    killTimer(m_robTimer);
-    killTimer(m_anim_timer);
-    QCoreApplication::quit();
-}
+    else {
+        killTimer(m_repaintTimerId);
+        killTimer(m_animTimerId);
+        QCoreApplication::quit();
+    }
 }
 
 void Robot::updateScore(QKeyEvent *keyEvent){
      m_steps++;
-     if(m_steps<m_trueWay){m_score++;}
+     if(m_steps<=m_trueWay){m_score++;}
      else if(m_score&& keyEvent != nullptr){m_score--;}
 }
 
@@ -329,27 +328,23 @@ void Robot::findTrueWay(){
     QStack<QPoint> way;
     cells.remove(current);
     while(current != m_target){
-        neighbours = getNeighbours(current, cells);
+        neighbours = getWallsNeighbours(current, cells);
         if(neighbours.size() != 0){
             way.push(current);
             current = neighbours[rand()%neighbours.size()];
             cells.remove(current);
-
         }
         else if(!way.isEmpty()){
             current = way.pop();
         }
         else{break;}
     }
-    for (auto k: qAsConst(way)){
-        m_way.push(k);
-    }
     m_trueWay+=way.size();
     for(int i=1;i<way.size()-1;i++){
         if((way[i-1].x()==way[i].x()&&way[i+1].y()==way[i].y())||(way[i-1].y()==way[i].y()&&way[i+1].x()==way[i].x())){
             m_trueWay++;
         }
-    }
+    }    
  }
 
 void Robot::stepBack(){
@@ -378,7 +373,7 @@ void Robot::setState(State curState){
     m_tmpColor = curState.TEMPORARY_COLOR;
 }
 
-QVector<QPoint> Robot::getNeighbours(QPoint current, QSet<QPoint> cells){
+QVector<QPoint> Robot::getWallsNeighbours(QPoint current, QSet<QPoint> cells){
     QVector<QPoint> curNeighbours;
     current.rx()+=1;
     if(cells.contains(current)){
@@ -398,63 +393,4 @@ QVector<QPoint> Robot::getNeighbours(QPoint current, QSet<QPoint> cells){
         curNeighbours.push_back(current);
     }
     return curNeighbours;
-
 }
-
-//void Robot::SetState(bool (*state)()){
-//    ActiveState = state;
-//}
-
-//void Robot::Update(){
-//    if (ActiveState != nullptr) {
-//        ActiveState();
-//    }
-//}
-
-
-bool Robot::wait(){
-
-    std::cout<<u8' ';
-    //move_cursor(CS);
-    //std::cout<<GetArrow();
-    //move_coursor(title);
-    //std::cout<<"Current position (x,y): << CS;
-    return 1;
-}
-
-bool Robot::analyze()
-{
-    return 0;
-}
-
-bool Robot::turn()
-{
-    return 0;
-}
-
-
-
-bool Robot::exit()
-{
-    return 0;
-}
-
-bool Robot::g_left()
-{
-    return 0;
-}
-
-bool Robot::g_right()
-{
-    return 0;
-}
-
-//QPoint Robot::SigHandle(signal sig){
-//    if (sig[1]) {
-//        SetState(analyze);
-//        Update();
-//    }
-//    return CS;
-//}
-
-

@@ -81,8 +81,8 @@ private:
 
 
     bool m_inGame;
-    int m_robTimer;
-    int m_anim_timer;
+    int m_repaintTimerId;
+    int m_animTimerId;
 
     QPoint m_target;
     QPoint m_pos;
@@ -91,7 +91,6 @@ private:
     int m_energy;
     int m_steps;
     int m_trueWay;
-    QStack<QPoint> m_way;
     QStack<State> m_states;
 
 
@@ -120,26 +119,14 @@ private:
     void doStep(QKeyEvent *event=nullptr);
     void stepBack();
     void setState(State curState);
-    QVector<QPoint> getNeighbours(QPoint current, QSet<QPoint> cells) override;
-
-    bool (*ActiveState)()= nullptr; // указатель на активное состояние автомата
-
-    void SetState(bool (*state)());
-    void Update();
-
-    static bool wait();
-    static bool analyze();
-    static bool turn();
-    static bool exit();
-    static bool g_left();
-    static bool g_right();
+    QVector<QPoint> getWallsNeighbours(QPoint current, QSet<QPoint> cells);
 
 public:
-//    QPoint SigHandle(signal sig) override;
+
     Robot();           // открытый конструктор
     ~Robot() override; // открытый деструктор
-    int getEnergy();
 
+    int getEnergy();
     int getScore();
     int getStates();
     int getSteps();

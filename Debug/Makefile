@@ -1046,7 +1046,9 @@ Robot.o: ../Robot.cpp ../../Qt/6.4.1/gcc_64/include/QtGui/QPainter \
 		../../Qt/6.4.1/gcc_64/include/QtCore/QPoint \
 		../../Qt/6.4.1/gcc_64/include/QtCore/QMap \
 		../Maze.h \
-		../../Qt/6.4.1/gcc_64/include/QtWidgets/QWidget
+		../../Qt/6.4.1/gcc_64/include/QtWidgets/QWidget \
+		../../Qt/6.4.1/gcc_64/include/QtCore/QStack \
+		../../Qt/6.4.1/gcc_64/include/QtCore/qstack.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Robot.o ../Robot.cpp
 
 energyWidget.o: ../energyWidget.cpp ../energyWidget.h \
@@ -1191,6 +1193,8 @@ energyWidget.o: ../energyWidget.cpp ../energyWidget.h \
 		../Maze.h \
 		../../Qt/6.4.1/gcc_64/include/QtCore/QVector \
 		../../Qt/6.4.1/gcc_64/include/QtCore/qvector.h \
+		../../Qt/6.4.1/gcc_64/include/QtCore/QStack \
+		../../Qt/6.4.1/gcc_64/include/QtCore/qstack.h \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/QLabel \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/qlabel.h \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/qframe.h \
@@ -1369,6 +1373,8 @@ main.o: ../main.cpp ../Maze.h \
 		../../Qt/6.4.1/gcc_64/include/QtCore/qlocale.h \
 		../../Qt/6.4.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		../Robot.h \
+		../../Qt/6.4.1/gcc_64/include/QtCore/QStack \
+		../../Qt/6.4.1/gcc_64/include/QtCore/qstack.h \
 		../mainwindow.h \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1530,6 +1536,8 @@ mainwindow.o: ../mainwindow.cpp ../mainwindow.h \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/QWidget \
 		../../Qt/6.4.1/gcc_64/include/QtCore/QVector \
 		../../Qt/6.4.1/gcc_64/include/QtCore/qvector.h \
+		../../Qt/6.4.1/gcc_64/include/QtCore/QStack \
+		../../Qt/6.4.1/gcc_64/include/QtCore/qstack.h \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/QVBoxLayout \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/qboxlayout.h \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/qlayout.h \
@@ -1544,7 +1552,9 @@ mainwindow.o: ../mainwindow.cpp ../mainwindow.h \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/QMenuBar \
 		../../Qt/6.4.1/gcc_64/include/QtWidgets/qmenubar.h \
 		../../Qt/6.4.1/gcc_64/include/QtGui/QContextMenuEvent \
-		../energyWidget.h
+		../energyWidget.h \
+		../../Qt/6.4.1/gcc_64/include/QtGui/QFontDatabase \
+		../../Qt/6.4.1/gcc_64/include/QtGui/qfontdatabase.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../mainwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

@@ -18,10 +18,6 @@ public:
     static const int FIELD_HEIGHT = 23;//21
 
 protected:
-
-
-
-    void paintEvent(QPaintEvent *event) override;
     QSet<QPoint> m_walls;
     QSet<QPoint> m_cells;
 
@@ -30,14 +26,10 @@ protected:
     void initMaze();
     void gameOver();
     void drawMaze();
-    virtual QVector<QPoint> getNeighbours(QPoint current, QSet<QPoint> cells);
-
-
+    QVector<QPoint> getMazeNeighbours(QPoint current, QSet<QPoint> cells);
 
 private:
-
+    void initDefaultMazeMap();
     void locateWalls();
-
-
 };
 
