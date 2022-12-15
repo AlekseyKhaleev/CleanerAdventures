@@ -20,6 +20,7 @@
 
 
 
+
 Robot::Robot():Maze(){
     initRobot();
 }
@@ -136,26 +137,6 @@ int Robot::getProcentEnergy()
 {
     return m_energy * 100 / m_trueWaySteps;
 }
-
-int Robot::getScore()
-{
-    return m_score;
-}
-
-int Robot::getStates(){
-    return m_states.size();
-}
-
-int Robot::getSteps()
-{
-    return m_steps;
-}
-
-int Robot::getTrueWaySteps()
-{
-    return m_trueWaySteps;
-}
-
 /*************************************************************/
 
 
@@ -272,7 +253,7 @@ bool Robot::moveRobot(){
  }
 
 bool Robot::checkWall(QPoint dest){
-     return !(m_walls.contains(dest));
+     return !m_walls.contains(dest);
 }
 
 void Robot::checkTarget()

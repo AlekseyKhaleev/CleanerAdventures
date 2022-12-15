@@ -4,23 +4,25 @@
 #include <QWidget>
 #include <QLabel>
 
-class EnergyWidget : public QWidget
-{
-    Q_OBJECT
+class EnergyWidget : public QWidget {
+Q_OBJECT
 public:
-    explicit EnergyWidget(QWidget *parent=nullptr);
-    ~EnergyWidget();
+    explicit EnergyWidget(QWidget *parent = nullptr);
 
-    void paintEvent(QPaintEvent *event)  override;
+    ~EnergyWidget() override;
+
+    void paintEvent(QPaintEvent *event) override;
 
 signals:
+
     void statusChanged();
 
 public slots:
+
     void setEnergyStatus(int energy);
 
 private:
-    enum Energy{
+    enum Energy {
         en_0, en_10, en_30, en_50, en_70, en_80, en_90
     } m_enStatus;
 
@@ -33,6 +35,7 @@ private:
         QImage("../icons/en_80"),
         QImage("../icons/en_90")
     };
+
     void drawStatus();
 };
 

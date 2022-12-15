@@ -7,6 +7,9 @@
 #include <QObject>
 #include <QGuiApplication>
 #include <QScreen>
+#include <QSet>
+
+inline uint qHash(const QPoint &key) { return (key.x() << 16) + key.y(); }
 
 
 
@@ -29,9 +32,7 @@ protected:
     QPoint getRandDot();
 
     void initMaze();
-    void gameOver();
-    void drawMaze();
-    QVector<QPoint> getMazeNeighbours(QPoint current, QSet<QPoint> cells);
+    static QVector<QPoint> getMazeNeighbours(QPoint current, const QSet<QPoint>& cells);
 
 private:
     void initFieldSize();

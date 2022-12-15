@@ -1,9 +1,13 @@
 #include "Maze.h"
-#include <qrandom.h>
 #include <QGuiApplication>
-#include <QScreen>
 #include <QTime>
 #include <QStack>
+#include <qset.h>
+#include <qpoint.h>
+#include <QWidget>
+#include <QVector>
+
+
 
 
 
@@ -39,7 +43,7 @@ void Maze::locateWalls(){
     QStack<QPoint> way;
     do{
         neighbours = getMazeNeighbours(current, cells);
-        if(neighbours.size() != 0){
+        if(!neighbours.isEmpty()){
             next = neighbours[rand()%neighbours.size()];
             way.push(current);
             QPoint toDel = current;
@@ -52,7 +56,7 @@ void Maze::locateWalls(){
             m_cells.insert(toDel);
             current = next;
             cells.remove(current);
-        } else if(way.size()>0){
+        } else if(!way.empty()){
             current = way.pop();
         }
         else{
@@ -63,10 +67,10 @@ void Maze::locateWalls(){
             }
             current = key;
         }
-    }while(cells.size() > 0);
+    }while(!cells.empty());
 }
 
-QVector<QPoint> Maze::getMazeNeighbours(QPoint current, QSet<QPoint> cells){
+QVector<QPoint> Maze::getMazeNeighbours(QPoint current, const QSet<QPoint>& cells){
     QVector<QPoint> curNeighbours;
     current.rx()+=2;
     if(cells.contains(current)){

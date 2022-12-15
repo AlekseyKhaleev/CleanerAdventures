@@ -9,12 +9,14 @@
 #include <iostream>
 #include <memory>
 
+//inline uint qHash(const QPoint &key) { return (key.x() << 16) + key.y(); }
+
 class Robot : public Maze{
     Q_OBJECT
 
 public:
     Robot();
-    ~Robot();
+    ~Robot() override;
 
 signals:
     void energyChanged(int energy);
@@ -112,11 +114,6 @@ private:
     void paintEvent(QPaintEvent *event) override;
 
     int getProcentEnergy();
-    int getScore();
-    int getStates();
-    int getSteps();
-    int getTrueWaySteps();
-
     void initRobot();
     void findTrueWay();
     QVector<QPoint> getWallsNeighbours(QPoint current, QSet<QPoint> cells);
