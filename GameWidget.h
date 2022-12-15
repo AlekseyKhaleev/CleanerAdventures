@@ -13,9 +13,9 @@ public:
     explicit GameWidget(QWidget *parent = nullptr);
 private:
     QLabel *createLabel(const QString &text);
-    Robot *robot;
-    QWidget *energyStatus;
-    QLCDNumber *levelLcd;
-    QLCDNumber *scoreLcd;
+    Robot *m_robot;
+    QWidget *m_energyStatus;
+    QLCDNumber *m_levelLcd;
+    QLCDNumber *m_scoreLcd;
 };
 

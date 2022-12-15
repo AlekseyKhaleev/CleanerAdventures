@@ -10,7 +10,6 @@
 Maze::Maze(){    
     initFieldSize();
     initMaze();
-//    this->resize(DOT_WIDTH*FIELD_WIDTH, DOT_HEIGHT*FIELD_HEIGHT);
 }
 
 void Maze::initMaze(){    
@@ -103,14 +102,11 @@ void Maze::initDefaultMazeMap(){
     QPoint dot;
     for(int y=0;y<FIELD_HEIGHT;y++){
         for(int x=0;x<FIELD_WIDTH;x++){
-            if((x%2 !=0 && y%2 !=0) &&
-                    (y <FIELD_HEIGHT-1 &&x < FIELD_WIDTH-1)){
+            if ((x % 2 != 0 && y % 2 != 0) && (y < FIELD_HEIGHT - 1 && x < FIELD_WIDTH - 1)) {
                 dot.rx() = x;
                 dot.ry()= y;
                 m_cells.insert(dot);
-
-            }
-            else{
+            } else {
                 dot.rx() = x;
                 dot.ry()= y;
                 m_walls.insert(dot);

@@ -26,7 +26,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_Robot_t {
-    uint offsetsAndSizes[20];
+    uint offsetsAndSizes[16];
     char stringdata0[6];
     char stringdata1[14];
     char stringdata2[1];
@@ -35,8 +35,6 @@ struct qt_meta_stringdata_Robot_t {
     char stringdata5[6];
     char stringdata6[13];
     char stringdata7[6];
-    char stringdata8[10];
-    char stringdata9[12];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_Robot_t::offsetsAndSizes) + ofs), len 
@@ -49,9 +47,7 @@ Q_CONSTINIT static const qt_meta_stringdata_Robot_t qt_meta_stringdata_Robot = {
         QT_MOC_LITERAL(28, 12),  // "scoreChanged"
         QT_MOC_LITERAL(41, 5),  // "score"
         QT_MOC_LITERAL(47, 12),  // "levelChanged"
-        QT_MOC_LITERAL(60, 5),  // "level"
-        QT_MOC_LITERAL(66, 9),  // "initRobot"
-        QT_MOC_LITERAL(76, 11)   // "checkEnergy"
+        QT_MOC_LITERAL(60, 5)   // "level"
     },
     "Robot",
     "energyChanged",
@@ -60,9 +56,7 @@ Q_CONSTINIT static const qt_meta_stringdata_Robot_t qt_meta_stringdata_Robot = {
     "scoreChanged",
     "score",
     "levelChanged",
-    "level",
-    "initRobot",
-    "checkEnergy"
+    "level"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -73,7 +67,7 @@ Q_CONSTINIT static const uint qt_meta_data_Robot[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -81,22 +75,14 @@ Q_CONSTINIT static const uint qt_meta_data_Robot[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   44,    2, 0x06,    1 /* Public */,
-       4,    1,   47,    2, 0x06,    3 /* Public */,
-       6,    1,   50,    2, 0x06,    5 /* Public */,
-
- // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       8,    0,   53,    2, 0x0a,    7 /* Public */,
-       9,    0,   54,    2, 0x0a,    8 /* Public */,
+       1,    1,   32,    2, 0x06,    1 /* Public */,
+       4,    1,   35,    2, 0x06,    3 /* Public */,
+       6,    1,   38,    2, 0x06,    5 /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::Int,    5,
     QMetaType::Void, QMetaType::Int,    7,
-
- // slots: parameters
-    QMetaType::Void,
-    QMetaType::Void,
 
        0        // eod
 };
@@ -118,11 +104,7 @@ Q_CONSTINIT const QMetaObject Robot::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'levelChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        // method 'initRobot'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'checkEnergy'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<int, std::false_type>
     >,
     nullptr
 } };
@@ -136,8 +118,6 @@ void Robot::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         case 0: _t->energyChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 1: _t->scoreChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 2: _t->levelChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 3: _t->initRobot(); break;
-        case 4: _t->checkEnergy(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -185,13 +165,13 @@ int Robot::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 3;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 3)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 5;
+        _id -= 3;
     }
     return _id;
 }

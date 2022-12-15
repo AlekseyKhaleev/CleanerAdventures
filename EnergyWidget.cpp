@@ -33,6 +33,6 @@ void EnergyWidget::setEnergyStatus(int energy){
 
 void EnergyWidget::drawStatus(){
     QPainter qp(this);
-    qp.drawPixmap(this->width()/2-this->width()*0.3, 0,
-                  this->width()*0.6,this->height(),m_enStatusPM[m_enStatus]);
+    qp.drawImage(QRect(this->width()/2-this->width()*0.3, 0,
+                       this->width()*0.6,this->height()),m_enStatusPM[m_enStatus]);
 }
