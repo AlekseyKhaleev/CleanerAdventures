@@ -26,7 +26,7 @@ GameWidget::GameWidget(QWidget *parent)
     connect(m_robot, &Robot::levelChanged,
             m_levelLcd, qOverload<int>(&QLCDNumber::display));
 
-    QGridLayout *layout = new QGridLayout;
+    auto *layout = new QGridLayout;
     layout->addWidget(createLabel(tr("<b>ENERGY</b>")), 0, 0, 2, 1);
     layout->addWidget(m_energyStatus,2,0,3,1);
     layout->addWidget(createLabel(tr("<b>LEVEL</b>")), 0, 1, 2, 1);
@@ -38,9 +38,9 @@ GameWidget::GameWidget(QWidget *parent)
     setLayout(layout);
     setWindowTitle(tr("Robot"));
 }
-QLabel *GameWidget::createLabel(const QString &text)
-{
-    QLabel *label = new QLabel(text);
+
+QLabel *GameWidget::createLabel(const QString &text){
+    auto *label = new QLabel(text);
     label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     return label;
 }

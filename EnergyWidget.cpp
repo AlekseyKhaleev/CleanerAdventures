@@ -4,14 +4,23 @@
 #include <QObject>
 
 
-EnergyWidget::EnergyWidget(QWidget *parent) : QWidget{parent} {
+EnergyWidget::EnergyWidget(QWidget *parent) :
+QWidget{parent}, m_enStatusImgs(QVector<QImage*>{
+        new QImage(":/images/en_0"),
+        new QImage(":/images/en_10"),
+        new QImage(":/images/en_30"),
+        new QImage(":/images/en_50"),
+        new QImage(":/images/en_70"),
+        new QImage(":/images/en_80"),
+        new QImage(":/images/en_90")
+}) {
     connect(this, SIGNAL(statusChanged()), this, SLOT(repaint()));
 }
 
 EnergyWidget::~EnergyWidget() = default;
 
 void EnergyWidget::paintEvent(QPaintEvent *event) {
-    Q_UNUSED(event);
+    Q_UNUSED(event)
     drawStatus();
 }
 
@@ -30,5 +39,5 @@ void EnergyWidget::setEnergyStatus(int energy) {
 void EnergyWidget::drawStatus() {
     QPainter qp(this);
     qp.drawImage(QRect(this->width() / 2 - this->width() * 0.3, 0, this->width() * 0.6, this->height()),
-                 m_enStatusPM[m_enStatus]);
+                 *m_enStatusImgs[m_enStatus]);
 }

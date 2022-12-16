@@ -8,20 +8,46 @@
 
 #include <QPainter>
 #include <QKeyEvent>
-#include <QPixmap>
 #include <QVector>
 #include <QSet>
 #include <QtGui>
 #include <QMessageBox>
 #include "Robot.h"
-#include <QDebug>
 #include <QStyleOption>
+#include <QDebug>
 
 
 
 
-
-Robot::Robot():Maze(){
+Robot::Robot():
+Maze(),
+m_targetImage(new  QImage(":/images/target.png")),
+m_batteryImage(new QImage(":/images/battery.png")),
+m_white(QVector<QImage*>{
+        new QImage(":/images/VC_wt_lt"),
+        new QImage(":/images/VC_wt_rt"),
+        new QImage(":/images/VC_wt_up"),
+        new QImage(":/images/VC_wt_dn")
+}),
+m_green(QVector<QImage*>{
+        new QImage(":/images/VC_gr_lt"),
+        new QImage(":/images/VC_gr_rt"),
+        new QImage(":/images/VC_gr_up"),
+        new QImage(":/images/VC_gr_dn")
+}),
+m_yellow(QVector<QImage*>{
+        new QImage(":/images/VC_yw_lt"),
+        new QImage(":/images/VC_yw_rt"),
+        new QImage(":/images/VC_yw_up"),
+        new QImage(":/images/VC_yw_dn")
+}),
+m_red(QVector<QImage*>{
+        new QImage(":/images/VC_rd_lt"),
+        new QImage(":/images/VC_rd_rt"),
+        new QImage(":/images/VC_rd_up"),
+        new QImage(":/images/VC_rd_dn")
+})
+{
     initRobot();
 }
 
@@ -58,7 +84,7 @@ void Robot::timerEvent(QTimerEvent *event){
     if(event->timerId() == m_repaintTimerId){
         emit scoreChanged(m_score);
         emit levelChanged(m_level);
-        emit energyChanged(getProcentEnergy());
+        emit energyChanged(getPercentEnergy());
         repaint();
     } else if (event->timerId() == m_animationTimerId) {
         qSwap(m_curColor, m_tmpColor);
@@ -133,7 +159,7 @@ void Robot::paintEvent(QPaintEvent *event){
 }
 
 /******************** Getters  *************/
-int Robot::getProcentEnergy()
+int Robot::getPercentEnergy() const
 {
     return m_energy * 100 / m_trueWaySteps;
 }
@@ -190,7 +216,7 @@ void Robot::drawRobot(){
                        m_robotPosition.y() * DOT_HEIGHT,
                        DOT_WIDTH,
                        DOT_HEIGHT),
-                 m_robotSkin[m_curColor][m_robotDestination]);
+                 *m_robotSkin[m_curColor][m_robotDestination]);
 }
 
 void Robot::drawTarget()
@@ -200,7 +226,7 @@ void Robot::drawTarget()
                        m_targetPosition.y() * DOT_HEIGHT,
                        DOT_WIDTH,
                        DOT_HEIGHT),
-                 m_targetImage);
+                 *m_targetImage);
 }
 
 void Robot::drawBattery(){
@@ -208,7 +234,7 @@ void Robot::drawBattery(){
     for (auto &b : m_batteries) {
         if (b.x() >= 0) {
             qp.drawImage(QRect(b.x() * DOT_WIDTH, b.y() * DOT_HEIGHT, DOT_WIDTH, DOT_HEIGHT),
-                         m_batteryImage);
+                         *m_batteryImage);
         }
     }
  }
@@ -277,7 +303,7 @@ void Robot::checkBattery()
 
 void Robot::checkEnergy()
 {
-     int curEnergy = getProcentEnergy();
+     int curEnergy = getPercentEnergy();
      emit energyChanged(curEnergy);
      if (curEnergy <= 70) {
         if(m_curColor == green){
@@ -382,7 +408,7 @@ void Robot::findTrueWay(){
     cells.remove(current);
     while (current != m_targetPosition) {
         neighbours = getWallsNeighbours(current, cells);
-        if(neighbours.size() != 0){
+        if(!neighbours.empty()){
             way.push(current);
             current = neighbours[rand()%neighbours.size()];
             cells.remove(current);
@@ -422,7 +448,7 @@ void Robot::stepBack(){
     }
 }
 
-void Robot::setState(State curState){
+void Robot::setState(const State& curState){
     m_robotPosition = curState.POSITION;
     m_batteries = curState.BATTERIES;
     m_score = curState.SCORE;
@@ -433,7 +459,7 @@ void Robot::setState(State curState){
     m_tmpColor = curState.TEMPORARY_COLOR;
 }
 
-QVector<QPoint> Robot::getWallsNeighbours(QPoint current, QSet<QPoint> cells){
+QVector<QPoint> Robot::getWallsNeighbours(QPoint current, const QSet<QPoint>& cells){
     QVector<QPoint> curNeighbours;
     current.rx()+=1;
     if(cells.contains(current)){

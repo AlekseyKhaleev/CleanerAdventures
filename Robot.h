@@ -14,6 +14,7 @@
 class Robot : public Maze{
     Q_OBJECT
 
+
 public:
     Robot();
     ~Robot() override;
@@ -64,34 +65,13 @@ private:
         }
     };
 
-    QImage m_batteryImage{"../icons/battery"};
-    QImage m_targetImage{"../icons/target"};
-    QVector<QImage> m_white{
-        QImage("../icons/VC_wt_lt"),
-        QImage("../icons/VC_wt_rt"),
-        QImage("../icons/VC_wt_up"),
-        QImage("../icons/VC_wt_dn"),
-    };
-    QVector<QImage> m_green{
-        QImage("../icons/VC_gr_lt"),
-        QImage("../icons/VC_gr_rt"),
-        QImage("../icons/VC_gr_up"),
-        QImage("../icons/VC_gr_dn"),
-    };
-    QVector<QImage> m_yellow{
-        QImage("../icons/VC_yw_lt"),
-        QImage("../icons/VC_yw_rt"),
-        QImage("../icons/VC_yw_up"),
-        QImage("../icons/VC_yw_dn"),
-    };
-    QVector<QImage> m_red{
-        QImage("../icons/VC_rd_lt"),
-        QImage("../icons/VC_rd_rt"),
-        QImage("../icons/VC_rd_up"),
-        QImage("../icons/VC_rd_dn"),
-    };
-    QVector<QVector<QImage>> m_robotSkin{m_white, m_green, m_yellow, m_red};
-
+    QImage *m_batteryImage;
+    QImage *m_targetImage;
+    QVector<QImage*> m_white;
+    QVector<QImage*> m_green;
+    QVector<QImage*> m_yellow;
+    QVector<QImage*> m_red;
+    QVector<QVector<QImage*>> m_robotSkin{m_white, m_green, m_yellow, m_red};
     QPoint m_targetPosition;
     QPoint m_robotPosition;
     QVector<QPoint> m_batteries;
@@ -113,10 +93,10 @@ private:
     void keyPressEvent(QKeyEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
-    int getProcentEnergy();
+    int getPercentEnergy() const;
     void initRobot();
     void findTrueWay();
-    QVector<QPoint> getWallsNeighbours(QPoint current, QSet<QPoint> cells);
+    static QVector<QPoint> getWallsNeighbours(QPoint current, const QSet<QPoint>& cells);
 
     void locateSelf();
     void locateTarget();
@@ -130,7 +110,7 @@ private:
     bool moveRobot();
     void updateScore(QKeyEvent *keyEvent=nullptr);
     void doStep(QKeyEvent *event=nullptr);
-    void setState(State curState);
+    void setState(const State& curState);
     void stepBack();
 
     void drawMaze();
