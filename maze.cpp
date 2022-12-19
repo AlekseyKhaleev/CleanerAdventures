@@ -8,7 +8,7 @@
 #include <QVector>
 #include <QWidget>
 
-Maze::Maze(){    
+Maze::Maze(QWidget *parent): QWidget(parent){
     initFieldSize();
     initMaze();
 }

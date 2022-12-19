@@ -29,7 +29,7 @@ set(PROJECT_SOURCES
         maze.h
         robot.cpp
         robot.h
-)
+        RobotView.cpp RobotView.h RobotController.cpp RobotController.h)
 
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -15,7 +15,7 @@ class Maze: public QWidget
 {
     Q_OBJECT
 public:
-    Maze();
+    Maze(QWidget *parent = nullptr);
 
 
 protected:
