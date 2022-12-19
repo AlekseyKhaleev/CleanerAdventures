@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QPoint>
 #include <QStack>
-#include "Maze.h"
+#include "maze.h"
 #include <iostream>
 #include <memory>
 

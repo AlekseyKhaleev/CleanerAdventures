@@ -1,10 +1,11 @@
 #pragma once
 
 #include <QObject>
-#include <QWidget>
-#include <QLCDNumber>
 #include <QLabel>
-#include "Robot.h"
+#include <QLCDNumber>
+#include <QWidget>
+
+#include "robot.h"
 
 class GameWidget : public QWidget
 {

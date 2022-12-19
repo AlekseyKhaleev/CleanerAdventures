@@ -1,7 +1,8 @@
-#include "EnergyWidget.h"
+#include "energywidget.h"
+
 #include <QPainter>
 #include <QWidget>
-#include <QObject>
+
 
 
 EnergyWidget::EnergyWidget(QWidget *parent) :

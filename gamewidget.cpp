@@ -1,10 +1,11 @@
 #include "gamewidget.h"
-#include "EnergyWidget.h"
-#include "Robot.h"
 
-#include <QLCDNumber>
 #include <QCoreApplication>
 #include <QLayout>
+#include <QLCDNumber>
+
+#include "energywidget.h"
+#include "robot.h"
 
 GameWidget::GameWidget(QWidget *parent)
         : QWidget{parent}, m_robot(new Robot), m_energyStatus(new EnergyWidget)

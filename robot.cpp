@@ -12,7 +12,7 @@
 #include <QSet>
 #include <QtGui>
 #include <QMessageBox>
-#include "Robot.h"
+#include "robot.h"
 #include <QStyleOption>
 #include <QDebug>
 

@@ -1,17 +1,15 @@
 #pragma once
 
-#include <QWidget>
-#include <QVector>
-#include <QPoint>
+#include <QGuiApplication>
 #include <QMap>
 #include <QObject>
-#include <QGuiApplication>
+#include <QPoint>
+#include <QVector>
 #include <QScreen>
 #include <QSet>
+#include <QWidget>
 
 inline uint qHash(const QPoint &key) { return (key.x() << 16) + key.y(); }
-
-
 
 class Maze: public QWidget
 {
