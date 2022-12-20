@@ -1,6 +1,7 @@
 
-#include "Controller.h"
+#include "headers/Controller.h"
 
+#include <QCoreApplication>
 #include <QTime>
 
 Controller::Controller(const Robot::Model &robotModel, const Maze::Model &mazeModel, QObject *parent) :
@@ -98,17 +99,17 @@ void Controller::checkBattery()
 {
     if (m_mazeModel.batteries.contains(m_robotModel.robotPosition)) {
         emit scoreIncreaseChanged(false);
-        emit robotEnergyChanged(m_robotModel.trueWaySteps);
+        emit EnergyChanged(m_robotModel.trueWaySteps);
         emit curColorChanged(Robot::GREEN);
         emit tmpColorChanged(Robot::WHITE);
         emit batteryFinded(m_robotModel.robotPosition);
-        emit robotScoreChanged(m_robotModel.score + 50);
+        emit ScoreChanged(m_robotModel.score + 50);
     }
 }
 void Controller::checkTarget()
 {
     if (m_robotModel.robotPosition == m_mazeModel.targetPosition) {
-        emit inGameChanged(false);
+        emit gameWon();
     }
 }
 int Controller::getPercentEnergy() const
@@ -121,7 +122,7 @@ bool Controller::moveRobot(){
         case Robot::LEFT: {
             tar_pos.rx()-=1;
             if (checkWall(tar_pos)) {
-                emit robotPositionChanged(tar_pos);
+                emit PositionChanged(tar_pos);
                 return true;
             }
             return false;
@@ -129,7 +130,7 @@ bool Controller::moveRobot(){
         case Robot::RIGHT:{
             tar_pos.rx()+=1;
             if (checkWall(tar_pos)) {
-                emit robotPositionChanged(tar_pos);
+                emit PositionChanged(tar_pos);
                 return true;
             }
             return false;
@@ -137,7 +138,7 @@ bool Controller::moveRobot(){
         case Robot::UP:{
             tar_pos.ry()-=1;
             if (checkWall(tar_pos)) {
-                emit robotPositionChanged(tar_pos);
+                emit PositionChanged(tar_pos);
                 return true;
             }
             return false;
@@ -145,7 +146,7 @@ bool Controller::moveRobot(){
         case Robot::DOWN:{
             tar_pos.ry()+=1;
             if (checkWall(tar_pos)) {
-                emit robotPositionChanged(tar_pos);
+                emit PositionChanged(tar_pos);
                 return true;
             }
             return false;
@@ -159,8 +160,8 @@ bool Controller::checkWall(QPoint dest){
 }
 
 void Controller::doStep(QKeyEvent *event){
-    if(m_robotModel.energy){emit robotEnergyChanged(m_robotModel.energy-1);}
-    emit robotStepsChanged(m_robotModel.steps + 1);
+    if(m_robotModel.energy){emit EnergyChanged(m_robotModel.energy - 1);}
+    emit StepsChanged(m_robotModel.steps + 1);
     updateScore(event);
     checkEnergy();
     m_states.push(State(m_robotModel.robotPosition,
@@ -176,9 +177,9 @@ void Controller::doStep(QKeyEvent *event){
 void Controller::updateScore(QKeyEvent *event)
 {
     if ((m_robotModel.steps <= m_robotModel.trueWaySteps) && m_robotModel.scoreIncrease)
-            emit robotScoreChanged(m_robotModel.score + 1);
+            emit ScoreChanged(m_robotModel.score + 1);
     else if (m_robotModel.score && event != nullptr) {
-        emit robotScoreChanged(m_robotModel.score - 1);
+        emit ScoreChanged(m_robotModel.score - 1);
     }
 }
 
@@ -208,7 +209,7 @@ void Controller::checkEnergy()
     if(m_robotModel.energy==0){
         emit curColorChanged(Robot::WHITE);
         emit tmpColorChanged(Robot::WHITE);
-        emit inGameChanged(false);
+        emit gameLosed();
     }
 }
 
@@ -239,6 +240,17 @@ void Controller::updateRobotModel(Robot::Model model) {
 
 void Controller::updateMazeModel(Maze::Model model) {
     m_mazeModel = model;
+}
+
+void Controller::endGame() {
+    QCoreApplication::quit();
+}
+
+void Controller::startGame(int levelIncrease) {
+    emit resetMaze(levelIncrease);
+    emit resetRobot(m_mazeModel);
+    if(levelIncrease){ emit ScoreChanged(m_robotModel.score + 100); }
+    else{ emit ScoreChanged(0); }
 }
 
 Controller::~Controller()=default;

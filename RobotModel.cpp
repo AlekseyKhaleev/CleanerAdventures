@@ -1,15 +1,15 @@
-#include "RobotModel.h"
+#include "headers/RobotModel.h"
 
 
-#include <QPainter>
+
 #include <QKeyEvent>
-#include <QVector>
 #include <QSet>
-#include <QtGui>
-#include <QMessageBox>
 #include <QStyleOption>
+#include <QtGui>
+#include <QVector>
+#include <utility>
 
-#include "MazeModel.h"
+#include "headers/MazeModel.h"
 
 
 
@@ -20,11 +20,9 @@ using namespace Robot;
 //Constructor
 RobotModel::RobotModel(const Maze::Model &maze, QObject *parent):
 QObject(parent),
-m_robotState(new Model),
-m_mazeState(&maze)
+m_robotState(new Model)
 {
-
-    initRobot();
+    initRobot(maze);
 }
 
 //Destructor
@@ -34,9 +32,9 @@ RobotModel::~RobotModel(){
 
 //*****************************************************
 
-void RobotModel::initRobot(){
-
-    m_robotState->inGame = true;
+void RobotModel::initRobot(Maze::Model maze){
+    m_mazeState = maze;
+    m_robotState->robotPosition = QPoint{1,1};
     m_robotState->scoreIncrease = true;
     m_robotState->curColor = GREEN;
     m_robotState->tmpColor = WHITE;
@@ -46,71 +44,17 @@ void RobotModel::initRobot(){
 }
 
 
-
-
-//    else if(m_energy != 0){
-////        levelDone();
-//    }
-//    else{
-////        gameOver();
-//    }
-//}
-
-//void RobotModel::levelDone(){
-//    killTimer(m_repaintTimerId);
-//    killTimer(m_animationTimerId);
-//    QMessageBox msgb;
-//    msgb.setText("<p align='center'>Level done, great! </p>");
-//    msgb.setInformativeText("<p align='center'>Wanna go next?</p>");
-//    msgb.setStandardButtons(QMessageBox::Close | QMessageBox::Retry);
-//    msgb.setDefaultButton(QMessageBox::Retry);
-//    int ret = msgb.exec();
-//    if (ret == QMessageBox::Retry) {
-//        initMaze();
-//        initRobot();
-//        m_level++;
-//        m_score += 100;
-//    } else {
-//        QCoreApplication::quit();
-//    }
-//}
-//
-//void RobotModel::gameOver(){
-//
-//    QMessageBox msgb;
-//    msgb.setText("<p align='center'>Ohh no! You lose! </p>");
-//    msgb.setInformativeText("<p align='center'>Wanna try again?</p>");
-//    msgb.setStandardButtons(QMessageBox::Close | QMessageBox::Retry);
-//    msgb.setDefaultButton(QMessageBox::Retry);
-//    int ret = msgb.exec();
-//    if (ret == QMessageBox::Retry){
-//        initMaze();
-//        initRobot();
-//        m_score = 0;
-//        m_level = 1;
-//    }
-//    else {
-//        killTimer(m_repaintTimerId);
-//        killTimer(m_animationTimerId);
-//        QCoreApplication::quit();
-//    }
-//}
-
-
-
-
-
 void RobotModel::findTrueWay(){
     m_robotState->trueWaySteps = 2;
     QSet<QPoint> cells;
-    for (auto k: qAsConst(m_mazeState->cells)){
+    for (auto k: qAsConst(m_mazeState.cells)){
         cells.insert(k);
     }
     QPoint current = m_robotState->robotPosition;
     QVector<QPoint> neighbours;
     QStack<QPoint> way;
     cells.remove(current);
-    while (current != m_mazeState->targetPosition) {
+    while (current != m_mazeState.targetPosition) {
         neighbours = getWayNeighbours(current, cells);
         if(!neighbours.empty()){
             way.push(current);
@@ -161,11 +105,6 @@ QVector<QPoint> RobotModel::getWayNeighbours(QPoint current, const QSet<QPoint>&
         curNeighbours.push_back(current);
     }
     return curNeighbours;
-}
-
-void RobotModel::setInGame(bool value) {
-    m_robotState->inGame = value;
-    emit modelChanged(*m_robotState);
 }
 
 void RobotModel::setDestination(Robot::Directions dir) {

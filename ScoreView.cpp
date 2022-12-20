@@ -1,5 +1,5 @@
 
-#include "ScoreView.h"
+#include "headers/ScoreView.h"
 #include "QHBoxLayout"
 
 ScoreView::ScoreView(int numDigits, const Robot::Model &targetModel, RobotView *parent )

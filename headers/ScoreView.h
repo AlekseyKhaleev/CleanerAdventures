@@ -5,6 +5,7 @@
 
 #include "RobotView.h"
 
+
 class ScoreView : public RobotView{
 Q_OBJECT
 

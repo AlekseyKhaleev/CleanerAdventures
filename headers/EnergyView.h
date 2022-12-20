@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QWidget>
 
-//#include "RobotModel.h"
 #include "RobotView.h"
 
 class EnergyView : public RobotView {
@@ -17,11 +16,14 @@ public:
     ~EnergyView() override;
 
 public slots:
-    void paintEvent(QPaintEvent *event) override;
-    void setEnergyStatus();
+
     void updateModel(Robot::Model model) override;
 
 private:
+
+    void paintEvent(QPaintEvent *event) override;
+
+    void setEnergyStatus();
 
     enum Energy {
         en_0, en_10, en_30, en_50, en_70, en_80, en_90

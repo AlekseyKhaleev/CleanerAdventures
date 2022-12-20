@@ -25,7 +25,6 @@ private:
     void drawMaze();
     void drawTarget();
     void drawBattery();
-
 };
 
 

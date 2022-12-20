@@ -1,5 +1,5 @@
 
-#include "RobotView.h"
+#include "headers/RobotView.h"
 
 #include <QCoreApplication>
 #include <QKeyEvent>
@@ -43,11 +43,6 @@ m_red(QVector<QImage*>{
 
 void RobotView::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event);
-//    QStyleOption opt;
-//    opt.initFrom(this);
-//    QPainter p(this);
-//    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-
     drawRobot();
 }
 void RobotView::keyPressEvent(QKeyEvent *event){

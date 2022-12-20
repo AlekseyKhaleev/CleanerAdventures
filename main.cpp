@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QPainter>
 
-#include "gamewidget.h"
+#include "headers/GameWidget.h"
 
 
 using namespace std;

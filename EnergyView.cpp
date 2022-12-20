@@ -1,9 +1,9 @@
-#include "EnergyView.h"
+#include "headers/EnergyView.h"
 
 #include <QPainter>
 #include <QWidget>
 
-#include "RobotView.h"
+#include "headers/RobotView.h"
 
 EnergyView::EnergyView(const Robot::Model &targetModel, RobotView *parent) :
         RobotView(targetModel, parent), m_enStatusImgs(QVector<QImage*>{

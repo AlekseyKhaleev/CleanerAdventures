@@ -4,9 +4,9 @@
 #include <QMap>
 #include <QObject>
 #include <QPoint>
-#include <QVector>
 #include <QScreen>
 #include <QSet>
+#include <QVector>
 #include <QWidget>
 
 inline uint qHash(const QPoint &key) { return (key.x() << 16) + key.y(); }
@@ -14,12 +14,12 @@ inline uint qHash(const QPoint &key) { return (key.x() << 16) + key.y(); }
 namespace Maze {
 
     struct Model {
+        static const int DOT_SIDE{34};
+        int level{1}, fieldWidth{}, fieldHeight{};
 
         QSet<QPoint> walls, cells;
         QVector<QPoint> batteries;
         QPoint targetPosition;
-        int level{0}, fieldWidth, fieldHeight;
-        static const int DOT_SIDE{34};
         Model() = default;
     };
 
@@ -41,14 +41,16 @@ namespace Maze {
 
         void setMazeState(const Maze::Model &state);
 
-        Model& getMazeModel() const;
+        void initMaze(int levelIncrease=0);
+
+        Model getMazeModel();
 
     private:
         Model *m_mazeState;
 
         QPoint getRandDot();
 
-        void initMaze();
+
 
         static QVector<QPoint> getMazeNeighbours(QPoint current, const QSet<QPoint> &cells);
 

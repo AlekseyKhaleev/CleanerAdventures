@@ -8,12 +8,17 @@
 class Controller: public QObject {
     Q_OBJECT
 signals:
-    void inGameChanged(bool value);
+    void gameLosed();
+    void gameWon();
+
+    void resetMaze(int levelIncrease);
+    void resetRobot(Maze::Model model);
+
     void destinationChanged(Robot::Directions dir);
-    void robotPositionChanged(QPoint tar_pos);
-    void robotEnergyChanged(int value);
-    void robotStepsChanged(int value);
-    void robotScoreChanged(int value);
+    void PositionChanged(QPoint tar_pos);
+    void EnergyChanged(int value);
+    void StepsChanged(int value);
+    void ScoreChanged(int value);
     void curColorChanged(Robot::Colors value);
     void tmpColorChanged(Robot::Colors value);
     void batteryLocated(QPoint value);
@@ -27,6 +32,8 @@ public slots:
     void keyEventAction(QKeyEvent event);
     void updateRobotModel(Robot::Model model);
     void updateMazeModel(Maze::Model model);
+    void startGame(int levelIncrease);
+    void endGame();
 
 public:
     Controller(const Robot::Model &robotModel, const Maze::Model &mazeModel, QObject *parent= nullptr);

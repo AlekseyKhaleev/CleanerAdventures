@@ -1,17 +1,19 @@
 #pragma once
 
-#include <QObject>
 #include <QLabel>
 #include <QLCDNumber>
+#include <QMessageBox>
+#include <QObject>
 #include <QWidget>
 
 #include "Controller.h"
+#include "GameOverView.h"
 #include "EnergyView.h"
+#include "LevelView.h"
 #include "MazeModel.h"
 #include "MazeView.h"
 #include "RobotModel.h"
 #include "RobotView.h"
-#include "LevelView.h"
 #include "ScoreView.h"
 
 
@@ -34,5 +36,7 @@ private:
 
     LevelView *m_levelView;
     ScoreView *m_scoreView;
+
+     GameOverView *m_gameOverView;
 };
 

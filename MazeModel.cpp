@@ -1,4 +1,4 @@
-#include "MazeModel.h"
+#include "headers/MazeModel.h"
 
 #include <QGuiApplication>
 #include <qpoint.h>
@@ -16,7 +16,6 @@ using namespace Maze;
 MazeModel::MazeModel(QObject *parent):
 QObject(parent),
 m_mazeState(new Model)
-
 {
     initFieldSize();
     initMaze();
@@ -29,7 +28,7 @@ MazeModel::~MazeModel() {
 
 //******************************************************
 
-void MazeModel::initMaze(){
+void MazeModel::initMaze(int levelIncrease){
     initDefaultMazeMap();
     locateWalls();
     if (!m_mazeState->batteries.empty()) {
@@ -37,7 +36,7 @@ void MazeModel::initMaze(){
     }
     m_mazeState->batteries.push_back(QPoint{-1, -1});
     m_mazeState->targetPosition = QPoint(m_mazeState->fieldWidth-2,m_mazeState->fieldHeight-2);
-    m_mazeState->level++;
+    m_mazeState->level += levelIncrease;
     emit modelChanged(*m_mazeState);
 }
 
@@ -149,7 +148,7 @@ void MazeModel::delBattery(QPoint value) {
     emit modelChanged(*m_mazeState);
 }
 
-Model& MazeModel::getMazeModel() const{
+Model MazeModel::getMazeModel(){
     return *m_mazeState;
 
 }

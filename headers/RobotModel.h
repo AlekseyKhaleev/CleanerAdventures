@@ -24,12 +24,12 @@ namespace Robot {
 
 
     struct Model {
-        bool inGame, scoreIncrease;
-        Colors curColor, tmpColor;
-        int score{0}, energy, steps, trueWaySteps;
+        bool scoreIncrease{};
+        Colors curColor{}, tmpColor{};
+        int score{0}, energy{}, steps{}, trueWaySteps{};
         static const int DOT_SIDE{34};
         Directions robotDestination{UP};
-        QPoint robotPosition{1,1};
+        QPoint robotPosition;
     };
 
 
@@ -39,7 +39,7 @@ namespace Robot {
 
     public:
 
-        RobotModel(const Maze::Model &maze, QObject *parent = nullptr);
+        explicit RobotModel(const Maze::Model &maze, QObject *parent = nullptr);
 
         ~RobotModel() override;
 
@@ -51,7 +51,7 @@ namespace Robot {
 
     public slots:
 
-        void setInGame(bool value);
+        void initRobot(Maze::Model maze);
 
         void setDestination(Robot::Directions dir);
 
@@ -78,10 +78,9 @@ namespace Robot {
 
     private:
 
-        Model             *m_robotState;
-        const Maze::Model *m_mazeState;
+        Model *m_robotState;
 
-        void initRobot();
+        Maze::Model m_mazeState;
 
         void findTrueWay();
 

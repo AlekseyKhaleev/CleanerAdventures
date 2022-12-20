@@ -2,6 +2,7 @@
 
 #include <QLCDNumber>
 #include <QWidget>
+
 #include "MazeView.h"
 
 class LevelView : public MazeView{

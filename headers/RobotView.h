@@ -5,7 +5,6 @@
 #include "RobotModel.h"
 
 
-
 class RobotView :public QWidget{
 
 Q_OBJECT

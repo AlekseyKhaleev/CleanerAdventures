@@ -1,4 +1,4 @@
-#include "MazeView.h"
+#include "headers/MazeView.h"
 
 #include <QPainter>
 #include <QKeyEvent>
@@ -6,7 +6,7 @@
 #include <QSet>
 #include <QtGui>
 #include <QMessageBox>
-#include "RobotModel.h"
+#include "headers/RobotModel.h"
 #include <QStyleOption>
 
 using namespace Maze;
