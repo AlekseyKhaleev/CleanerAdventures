@@ -20,8 +20,10 @@ public:
     explicit RobotView(const Robot::Model &targetModel, QWidget *parent= nullptr);
     ~RobotView() override;
 
-private:
+protected:
     Robot::Model m_viewModel;
+private:
+
     QVector<QImage*> m_white;
     QVector<QImage*> m_green;
     QVector<QImage*> m_yellow;

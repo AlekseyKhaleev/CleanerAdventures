@@ -14,9 +14,11 @@ GameWidget::GameWidget(QWidget *parent)
 {
     m_robotModel = new Robot::RobotModel(m_mazeModel->getMazeModel());
     m_controller = new Controller{m_robotModel->getRobotModel(), m_mazeModel->getMazeModel()};
-    m_robotView = new RobotView{m_robotModel->getRobotModel()};
-    m_mazeView = new MazeView{m_mazeModel->getMazeModel()};
+    m_robotView  = new RobotView{m_robotModel->getRobotModel()};
+    m_mazeView   = new MazeView{m_mazeModel->getMazeModel()};
     m_energyView = new EnergyView{m_robotModel->getRobotModel()};
+    m_levelView   = new LevelView{4, m_mazeModel->getMazeModel()};
+    m_scoreView   = new ScoreView{4, m_robotModel->getRobotModel()};
 
     this->setStyleSheet("QWidget {background-color: black; color: WHITE;}");
 
@@ -24,22 +26,19 @@ GameWidget::GameWidget(QWidget *parent)
 
     m_mazeView->setStyleSheet("MazeView {background-color: WHITE; color: black;}");
 
-    m_scoreLcd = new QLCDNumber(4);
-    m_scoreLcd->setSegmentStyle(QLCDNumber::Filled);
-    m_levelLcd = new QLCDNumber(4);
-    m_levelLcd->setSegmentStyle(QLCDNumber::Filled);
-
 
     //****************************************** CONNECTIONS *********************************************************
 
     //********* m_mazeModel sender ***********
     connect(m_mazeModel, SIGNAL(modelChanged(Maze::Model)),m_controller, SLOT(updateMazeModel(Maze::Model)));
     connect(m_mazeModel, SIGNAL(modelChanged(Maze::Model)),m_mazeView, SLOT(updateModel(Maze::Model)));
+    connect(m_mazeModel, SIGNAL(modelChanged(Maze::Model)), m_levelView, SLOT(updateModel(Maze::Model)));
 
     //********* m_robotModel sender ************
     connect(m_robotModel, SIGNAL(modelChanged(Robot::Model)),m_controller, SLOT(updateRobotModel(Robot::Model)));
     connect(m_robotModel, SIGNAL(modelChanged(Robot::Model)),m_robotView, SLOT(updateModel(Robot::Model)));
     connect(m_robotModel, SIGNAL(modelChanged(Robot::Model)),m_energyView, SLOT(updateModel(Robot::Model)));
+    connect(m_robotModel, SIGNAL(modelChanged(Robot::Model)), m_scoreView, SLOT(updateModel(Robot::Model)));
 
     //********* m_robotView sender *************
     connect(m_robotView, SIGNAL(keyHandled(QKeyEvent)), m_controller, SLOT(keyEventAction(QKeyEvent)));
@@ -61,13 +60,6 @@ GameWidget::GameWidget(QWidget *parent)
     connect(m_controller, SIGNAL(robotStepsChanged(int)),               m_robotModel, SLOT(setRobotSteps(int)));
     connect(m_controller, SIGNAL(scoreIncreaseChanged(bool)),           m_robotModel, SLOT(setScoreIncrease(bool)));
 
-//    connect(m_robotModel, SIGNAL(energyChanged(int)),
-//            m_energyStatus, SLOT(setEnergyStatus(int)));
-//    connect(m_robotModel, &RobotModel::scoreChanged,
-//            m_scoreLcd, qOverload<int>(&QLCDNumber::display));
-//    connect(m_robot, &RobotModel::levelChanged,
-//            m_levelLcd, qOverload<int>(&QLCDNumber::display));
-
     auto gameLay = new QStackedLayout;
     gameLay->setStackingMode(QStackedLayout::StackAll);
     gameLay->addWidget(m_mazeView);
@@ -75,13 +67,13 @@ GameWidget::GameWidget(QWidget *parent)
 
     auto *layout = new QGridLayout;
     layout->addWidget(createLabel(tr("<b>ENERGY</b>")), 0, 0, 2, 1);
-//    layout->addWidget(m_energyStatus,2,0,3,1);
+    layout->addWidget(m_energyView,2,0,3,1);
     layout->addWidget(createLabel(tr("<b>LEVEL</b>")), 0, 1, 2, 1);
-    layout->addWidget(m_levelLcd, 2, 1, 3, 1);
+    layout->addWidget(m_levelView, 2, 1, 3, 1);
     layout->addWidget(createLabel(tr("<b>SCORE</b>")), 0, 2, 2, 1);
-    layout->addWidget(m_scoreLcd, 2, 2, 3, 1);
+    layout->addWidget(m_scoreView, 2, 2, 3, 1);
     layout->addLayout(gameLay, 6, 0, 20, 3);
-//    layout->addLayout(gameLay, 6, 0, 20, 3);
+
 
     setLayout(layout);
     setWindowTitle(tr("RobotModel"));

@@ -13,10 +13,12 @@ public:
     ~MazeView() override;
 public slots:
     void paintEvent(QPaintEvent *event) override;
-    void updateModel(Maze::Model model);
+    virtual void updateModel(Maze::Model model);
 
-private:
+protected:
     Maze::Model m_viewModel;
+private:
+
     QImage *m_batteryImage;
     QImage *m_targetImage;
 

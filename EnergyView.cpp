@@ -14,7 +14,9 @@ EnergyView::EnergyView(const Robot::Model &targetModel, RobotView *parent) :
         new QImage(":/images/en_70"),
         new QImage(":/images/en_80"),
         new QImage(":/images/en_90")
-}) {
+})
+{
+    m_enStatus = en_90;
     repaint();
 }
 
@@ -26,8 +28,8 @@ void EnergyView::paintEvent(QPaintEvent *event) {
 }
 
 
-void EnergyView::setEnergyStatus(int energy) {
-    int percEnergy = energy * 100 / m_viewModel.trueWaySteps;
+void EnergyView::setEnergyStatus() {
+    int percEnergy = m_viewModel.energy * 100 / m_viewModel.trueWaySteps;
     if (percEnergy == 0) { m_enStatus = en_0; }
     else if (percEnergy <= 10) { m_enStatus = en_10; }
     else if (percEnergy <= 30) { m_enStatus = en_30; }
@@ -45,6 +47,6 @@ void EnergyView::drawStatus() {
 
 void EnergyView::updateModel(Robot::Model model) {
     m_viewModel = model;
-    setEnergyStatus(m_viewModel.energy);
+    setEnergyStatus();
     repaint();
 }

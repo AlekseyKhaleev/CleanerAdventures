@@ -11,6 +11,8 @@
 #include "MazeView.h"
 #include "RobotModel.h"
 #include "RobotView.h"
+#include "LevelView.h"
+#include "ScoreView.h"
 
 
 class GameWidget : public QWidget
@@ -30,7 +32,7 @@ private:
     Controller *m_controller;
     EnergyView *m_energyView;
 
-    QLCDNumber *m_levelLcd;
-    QLCDNumber *m_scoreLcd;
+    LevelView *m_levelView;
+    ScoreView *m_scoreView;
 };
 

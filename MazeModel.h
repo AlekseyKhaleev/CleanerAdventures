@@ -18,7 +18,7 @@ namespace Maze {
         QSet<QPoint> walls, cells;
         QVector<QPoint> batteries;
         QPoint targetPosition;
-        int level{1}, fieldWidth, fieldHeight;
+        int level{0}, fieldWidth, fieldHeight;
         static const int DOT_SIDE{34};
         Model() = default;
     };
