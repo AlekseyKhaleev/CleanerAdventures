@@ -7,7 +7,6 @@
 #include <QStyleOption>
 #include <QtGui>
 #include <QVector>
-#include <utility>
 
 #include "headers/MazeModel.h"
 

@@ -36,7 +36,7 @@ public slots:
     void endGame();
 
 public:
-    Controller(const Robot::Model &robotModel, const Maze::Model &mazeModel, QObject *parent= nullptr);
+    Controller(const Robot::Model &robotModel, Maze::Model mazeModel, QObject *parent= nullptr);
     ~Controller() override;
 private:
 
@@ -76,7 +76,7 @@ private:
 
     void checkTarget();
 
-    [[nodiscard]] int getPercentEnergy() const;
+    int getPercentEnergy();
 
     bool moveRobot();
 

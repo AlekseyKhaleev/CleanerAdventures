@@ -4,7 +4,8 @@
 #include <QCoreApplication>
 #include <QTime>
 
-Controller::Controller(const Robot::Model &robotModel, const Maze::Model &mazeModel, QObject *parent) :
+
+Controller::Controller(const Robot::Model &robotModel, Maze::Model mazeModel, QObject *parent) :
 m_robotModel(robotModel), m_mazeModel(mazeModel), QObject(parent)
 {
     if(!m_states.isEmpty()) { m_states.clear();}
@@ -112,10 +113,13 @@ void Controller::checkTarget()
         emit gameWon();
     }
 }
-int Controller::getPercentEnergy() const
-{
+
+
+int Controller::getPercentEnergy(){
     return m_robotModel.energy * 100 / m_robotModel.trueWaySteps;
 }
+
+
 bool Controller::moveRobot(){
     QPoint tar_pos = m_robotModel.robotPosition;
     switch (m_robotModel.robotDestination) {
