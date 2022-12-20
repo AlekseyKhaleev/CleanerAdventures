@@ -6,7 +6,7 @@
 #include <QWidget>
 
 #include "RobotModel.h"
-#include "RobotController.h"
+#include "Controller.h"
 #include "RobotView.h"
 
 #include "MazeModel.h"
@@ -20,7 +20,7 @@ public:
 private:
     static QLabel *createLabel(const QString &text);
     Robot::RobotModel *m_robotModel;
-    RobotController *m_robotController;
+    Controller *m_controller;
     RobotView *m_robotView;
 
     Maze::MazeModel *m_mazeModel;

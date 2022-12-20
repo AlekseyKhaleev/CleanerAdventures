@@ -32,7 +32,7 @@ namespace Maze {
         ~MazeModel() override;
 
     signals:
-        void modelChanged();
+        void modelChanged(Maze::Model model);
 
     public slots:
         void addBattery(QPoint value);

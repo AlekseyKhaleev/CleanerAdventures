@@ -14,12 +14,15 @@ signals:
     void keyHandled(QKeyEvent event);
     void skinAnimated();
 
+public slots:
+    void updateModel(Robot::Model model);
+
 public:
     explicit RobotView(const Robot::Model &targetModel, QWidget *parent= nullptr);
     ~RobotView() override;
 
 private:
-    const Robot::Model *m_viewModel;
+    Robot::Model m_viewModel;
     QVector<QImage*> m_white;
     QVector<QImage*> m_green;
     QVector<QImage*> m_yellow;

@@ -13,7 +13,7 @@ using namespace Maze;
 
 MazeView::MazeView(const Model &targetModel, QWidget *parent):
 QWidget(parent),
-m_viewModel(&targetModel),
+m_viewModel(targetModel),
 m_targetImage(new  QImage(":/images/target.png")),
 m_batteryImage(new QImage(":/images/battery.png"))
 {
@@ -39,7 +39,7 @@ void MazeView::paintEvent(QPaintEvent *event) {
 
 void MazeView::drawMaze(){
     QPainter qp(this);
-    for(auto &w:qAsConst(m_viewModel->walls)){
+    for(auto &w:qAsConst(m_viewModel.walls)){
         qp.setBrush(Qt::black);
         qp.drawRect(w.x()*Maze::Model::DOT_SIDE, w.y()*Maze::Model::DOT_SIDE, Maze::Model::DOT_SIDE, Maze::Model::DOT_SIDE);
     }
@@ -47,14 +47,14 @@ void MazeView::drawMaze(){
 
 void MazeView::drawTarget(){
     QPainter qp(this);
-    qp.drawImage(QRect(m_viewModel->targetPosition.x() * Maze::Model::DOT_SIDE,
-                       m_viewModel->targetPosition.y() * Maze::Model::DOT_SIDE,
+    qp.drawImage(QRect(m_viewModel.targetPosition.x() * Maze::Model::DOT_SIDE,
+                       m_viewModel.targetPosition.y() * Maze::Model::DOT_SIDE,
                        Maze::Model::DOT_SIDE, Maze::Model::DOT_SIDE), *m_targetImage);
 }
 
 void MazeView::drawBattery(){
     QPainter qp(this);
-    for (auto &b : m_viewModel->batteries) {
+    for (auto &b : m_viewModel.batteries) {
         if (b.x() >= 0) {
             qp.drawImage(QRect(b.x() * Maze::Model::DOT_SIDE, b.y() * Maze::Model::DOT_SIDE, Maze::Model::DOT_SIDE, Maze::Model::DOT_SIDE),
                          *m_batteryImage);
@@ -62,7 +62,8 @@ void MazeView::drawBattery(){
     }
 }
 
-void MazeView::updateModel() {
+void MazeView::updateModel(Maze::Model model) {
+    m_viewModel = model;
     repaint();
 }
 

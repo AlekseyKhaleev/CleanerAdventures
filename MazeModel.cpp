@@ -38,7 +38,7 @@ void MazeModel::initMaze(){
     m_mazeState->batteries.push_back(QPoint{-1, -1});
     m_mazeState->targetPosition = QPoint(m_mazeState->fieldWidth-2,m_mazeState->fieldHeight-2);
     m_mazeState->level++;
-    emit modelChanged();
+    emit modelChanged(*m_mazeState);
 }
 
 QPoint MazeModel::getRandDot(){
@@ -141,12 +141,12 @@ void MazeModel::initDefaultMazeMap(){
 
 void MazeModel::addBattery(QPoint value) {
     m_mazeState->batteries.push_back(value);
-    emit modelChanged();
+    emit modelChanged(*m_mazeState);
 }
 
 void MazeModel::delBattery(QPoint value) {
     m_mazeState->batteries.removeAll(value);
-    emit modelChanged();
+    emit modelChanged(*m_mazeState);
 }
 
 Model& MazeModel::getMazeModel() const{
@@ -156,7 +156,7 @@ Model& MazeModel::getMazeModel() const{
 
 void MazeModel::setMazeState(const Maze::Model &state) {
     m_mazeState->batteries = state.batteries;
-    emit modelChanged();
+    emit modelChanged(*m_mazeState);
 }
 
 

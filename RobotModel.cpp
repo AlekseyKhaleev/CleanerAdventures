@@ -138,7 +138,7 @@ void RobotModel::setRobotState(Robot::Model state){
     m_robotState->robotDestination = state.robotDestination;
     m_robotState->curColor = state.curColor;
     m_robotState->tmpColor = state.tmpColor;
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 QVector<QPoint> RobotModel::getWayNeighbours(QPoint current, const QSet<QPoint>& cells){
@@ -165,47 +165,47 @@ QVector<QPoint> RobotModel::getWayNeighbours(QPoint current, const QSet<QPoint>&
 
 void RobotModel::setInGame(bool value) {
     m_robotState->inGame = value;
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 void RobotModel::setDestination(Robot::Directions dir) {
     m_robotState->robotDestination = dir;
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 void RobotModel::setRobotPosition(QPoint tar_pos) {
     m_robotState->robotPosition = tar_pos;
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 void RobotModel::setRobotEnergy(int value) {
     m_robotState->energy = value;
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 void RobotModel::setRobotSteps(int value) {
     m_robotState->steps = value;
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 void RobotModel::setRobotScore(int value) {
     m_robotState->score = value;
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 void RobotModel::setCurColor(Robot::Colors value) {
     m_robotState->curColor = value;
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 void RobotModel::setTmpColor(Robot::Colors value) {
     m_robotState->tmpColor = value;
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 void RobotModel::setScoreIncrease(bool value) {
     m_robotState->scoreIncrease = value;
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 
@@ -215,7 +215,7 @@ Model RobotModel::getRobotModel() {
 
 void RobotModel::animateSkin() {
     qSwap(m_robotState->curColor, m_robotState->tmpColor);
-    emit modelChanged();
+    emit modelChanged(*m_robotState);
 }
 
 

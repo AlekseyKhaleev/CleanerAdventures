@@ -5,10 +5,9 @@
 
 #include "RobotModel.h"
 
-class RobotController: public QObject {
+class Controller: public QObject {
     Q_OBJECT
 signals:
-//    void modelChanged(RobotModel::Model currentModel);
     void inGameChanged(bool value);
     void destinationChanged(Robot::Directions dir);
     void robotPositionChanged(QPoint tar_pos);
@@ -26,10 +25,12 @@ signals:
 
 public slots:
     void keyEventAction(QKeyEvent event);
+    void updateRobotModel(Robot::Model model);
+    void updateMazeModel(Maze::Model model);
 
 public:
-    RobotController(const Robot::Model &robotModel, const Maze::Model &mazeModel, QObject *parent= nullptr);
-    ~RobotController() override;
+    Controller(const Robot::Model &robotModel, const Maze::Model &mazeModel, QObject *parent= nullptr);
+    ~Controller() override;
 private:
 
     static const int ANIMATION_DELAY = 300;
@@ -63,8 +64,8 @@ private:
     };
     QStack<State> m_states;
 
-    const Robot::Model *m_robotModel;
-    const Maze::Model *m_mazeModel;
+    Robot::Model m_robotModel;
+    Maze::Model m_mazeModel;
 
     void checkTarget();
 

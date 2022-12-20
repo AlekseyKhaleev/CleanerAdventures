@@ -26,7 +26,7 @@ namespace Robot {
     struct Model {
         bool inGame, scoreIncrease;
         Colors curColor, tmpColor;
-        int dotWidth, dotHeight, score{0}, energy, steps, trueWaySteps;
+        int score{0}, energy, steps, trueWaySteps;
         static const int DOT_SIDE{34};
         Directions robotDestination{UP};
         QPoint robotPosition{1,1};
@@ -47,7 +47,7 @@ namespace Robot {
 
     signals:
 
-        void modelChanged();
+        void modelChanged(Robot::Model model);
 
     public slots:
 

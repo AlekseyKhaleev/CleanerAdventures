@@ -12,7 +12,7 @@
 
 RobotView::RobotView(const Robot::Model &targetModel, QWidget *parent):
 QWidget(parent),
-m_viewModel(&targetModel),
+m_viewModel(targetModel),
 m_white(QVector<QImage*>{
         new QImage(":/images/VC_wt_lt"),
         new QImage(":/images/VC_wt_rt"),
@@ -43,10 +43,10 @@ m_red(QVector<QImage*>{
 
 void RobotView::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event);
-    QStyleOption opt;
-    opt.initFrom(this);
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+//    QStyleOption opt;
+//    opt.initFrom(this);
+//    QPainter p(this);
+//    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 
     drawRobot();
 }
@@ -57,15 +57,18 @@ void RobotView::keyPressEvent(QKeyEvent *event){
 void RobotView::drawRobot(){
     QPainter qp(this);
 
-    qp.drawImage(QRect(m_viewModel->robotPosition.x() * m_viewModel->dotWidth,
-                       m_viewModel->robotPosition.y() * m_viewModel->dotHeight,
-                       m_viewModel->dotWidth,
-                       m_viewModel->dotHeight),
-                 *m_robotSkin[m_viewModel->curColor][m_viewModel->robotDestination]);
+    qp.drawImage(QRect(m_viewModel.robotPosition.x() * Robot::Model::DOT_SIDE,
+                       m_viewModel.robotPosition.y() * Robot::Model::DOT_SIDE,
+                       Robot::Model::DOT_SIDE,
+                       Robot::Model::DOT_SIDE),
+                 *m_robotSkin[m_viewModel.curColor][m_viewModel.robotDestination]);
 }
 
-RobotView::~RobotView(){
-    delete m_viewModel;
-};
+void RobotView::updateModel(Robot::Model model) {
+    m_viewModel = model;
+    repaint();
+}
+
+RobotView::~RobotView()=default;
 
 
