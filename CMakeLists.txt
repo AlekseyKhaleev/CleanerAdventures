@@ -25,11 +25,11 @@ set(PROJECT_SOURCES
         gamewidget.h
         energywidget.cpp
         energywidget.h
-        maze.cpp
-        maze.h
-        robot.cpp
-        robot.h
-        RobotView.cpp RobotView.h RobotController.cpp RobotController.h)
+        MazeModel.cpp
+        MazeModel.h
+        RobotModel.cpp
+        RobotModel.h
+        RobotView.cpp RobotView.h RobotController.cpp RobotController.h MazeView.cpp MazeView.h)
 
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

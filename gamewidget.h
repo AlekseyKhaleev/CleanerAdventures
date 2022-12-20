@@ -5,7 +5,7 @@
 #include <QLCDNumber>
 #include <QWidget>
 
-#include "robot.h"
+#include "RobotModel.h"
 #include "RobotController.h"
 #include "RobotView.h"
 
@@ -16,7 +16,7 @@ public:
     explicit GameWidget(QWidget *parent = nullptr);
 private:
     static QLabel *createLabel(const QString &text);
-    Robot *m_robot;
+    RobotModel *m_robot;
     RobotController *m_robotController;
     RobotView *m_robotView;
 

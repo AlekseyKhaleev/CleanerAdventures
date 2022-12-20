@@ -1,4 +1,4 @@
-#include "maze.h"
+#include "MazeModel.h"
 
 #include <QGuiApplication>
 #include <qpoint.h>
@@ -8,30 +8,53 @@
 #include <QVector>
 #include <QWidget>
 
-Maze::Maze(QWidget *parent): QWidget(parent){
+using namespace Maze;
+
+//************************************************
+
+//Constructor
+MazeModel::MazeModel(QWidget *parent):
+QWidget(parent),
+m_mazeState(new Model)
+
+{
     initFieldSize();
     initMaze();
 }
 
-void Maze::initMaze(){    
-    initDefaultMazeMap();
-    locateWalls();
+//Destructor
+MazeModel::~MazeModel() {
+    delete m_mazeState;
 }
 
-QPoint Maze::getRandDot(){
+//******************************************************
+
+void MazeModel::initMaze(){
+    initDefaultMazeMap();
+    locateWalls();
+    if (!m_mazeState->batteries.empty()) {
+        m_mazeState->batteries.clear();
+    }
+    m_mazeState->batteries.push_back(QPoint{-1, -1});
+    m_mazeState->targetPosition = QPoint(m_mazeState->fieldWidth-2,m_mazeState->fieldHeight-2);
+    m_mazeState->level++;
+    emit modelChanged();
+}
+
+QPoint MazeModel::getRandDot(){
     QTime time = QTime::currentTime();
     srand((uint) time.msec());
     QPoint dot;
     do{
-        dot.rx() = rand() % FIELD_WIDTH;
-        dot.ry() = rand() % FIELD_HEIGHT;
-    }while(m_walls.contains(dot));
+        dot.rx() = rand() % m_mazeState->fieldWidth;
+        dot.ry() = rand() % m_mazeState->fieldHeight;
+    }while(m_mazeState->walls.contains(dot));
     return dot;
 }
 
-void Maze::locateWalls(){
+void MazeModel::locateWalls(){
     QSet<QPoint> cells;
-    for (auto &k: qAsConst(m_cells)){
+    for (auto &k: qAsConst(m_mazeState->cells)){
         cells.insert(k);
     }
     QPoint current = getRandDot();
@@ -49,8 +72,8 @@ void Maze::locateWalls(){
             }else{
             toDel.ry() = current.y()+((next.y()-current.y())/std::abs(next.y()-current.y()));
             }
-            m_walls.remove(toDel);
-            m_cells.insert(toDel);
+            m_mazeState->walls.remove(toDel);
+            m_mazeState->cells.insert(toDel);
             current = next;
             cells.remove(current);
         } else if(!way.empty()){
@@ -67,7 +90,7 @@ void Maze::locateWalls(){
     }while(!cells.empty());
 }
 
-QVector<QPoint> Maze::getMazeNeighbours(QPoint current, const QSet<QPoint>& cells){
+QVector<QPoint> MazeModel::getMazeNeighbours(QPoint current, const QSet<QPoint>& cells){
     QVector<QPoint> curNeighbours;
     current.rx()+=2;
     if(cells.contains(current)){
@@ -89,29 +112,50 @@ QVector<QPoint> Maze::getMazeNeighbours(QPoint current, const QSet<QPoint>& cell
     return curNeighbours;
 }
 
-void Maze::initFieldSize(){
+void MazeModel::initFieldSize(){
     auto const rec = QGuiApplication::primaryScreen()->size();
-    FIELD_WIDTH = rec.width()/DOT_WIDTH;
+    m_mazeState->fieldWidth = rec.width()/Maze::Model::DOT_SIDE;
 //    FIELD_WIDTH = FIELD_WIDTH+(FIELD_WIDTH % 2)-1;
-    FIELD_HEIGHT = rec.height()*0.8/DOT_HEIGHT;
+    m_mazeState->fieldHeight = rec.height()*0.8/Maze::Model::DOT_SIDE;
 //    FIELD_HEIGHT = FIELD_HEIGHT+(FIELD_HEIGHT % 2)-1;
 }
 
-void Maze::initDefaultMazeMap(){
-    m_cells.clear();
-    m_walls.clear();
+void MazeModel::initDefaultMazeMap(){
+    m_mazeState->cells.clear();
+    m_mazeState->walls.clear();
     QPoint dot;
-    for(int y=0;y<FIELD_HEIGHT;y++){
-        for(int x=0;x<FIELD_WIDTH;x++){
-            if ((x % 2 != 0 && y % 2 != 0) && (y < FIELD_HEIGHT - 1 && x < FIELD_WIDTH - 1)) {
+    for(int y=0;y<m_mazeState->fieldHeight;y++){
+        for(int x=0;x<m_mazeState->fieldWidth;x++){
+            if ((x % 2 != 0 && y % 2 != 0) && (y < m_mazeState->fieldHeight - 1 && x < m_mazeState->fieldWidth - 1)) {
                 dot.rx() = x;
                 dot.ry()= y;
-                m_cells.insert(dot);
+                m_mazeState->cells.insert(dot);
             } else {
                 dot.rx() = x;
                 dot.ry()= y;
-                m_walls.insert(dot);
+                m_mazeState->walls.insert(dot);
             }
         }
     }
 }
+
+void MazeModel::addBattery(QPoint value) {
+    m_mazeState->batteries.push_back(value);
+    emit modelChanged();
+}
+
+void MazeModel::delBattery(QPoint value) {
+    m_mazeState->batteries.removeAll(value);
+    emit modelChanged();
+}
+
+Model MazeModel::getMazeModel() {
+    return *m_mazeState;
+    emit modelChanged();
+}
+
+void MazeModel::setMazeState(const Model &state) {
+    m_mazeState->batteries = state.batteries;
+}
+
+

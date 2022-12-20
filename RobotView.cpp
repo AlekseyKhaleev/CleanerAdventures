@@ -8,8 +8,9 @@
 #include <QStyleOption>
 #include <QTimerEvent>
 
+using namespace Robot;
 
-RobotView::RobotView(Model targetModel, QWidget *parent):
+RobotView::RobotView(const Model &targetModel, QWidget *parent):
 QWidget(parent),
 m_viewModel(new Model(targetModel)),
 m_white(QVector<QImage*>{
@@ -41,11 +42,12 @@ m_red(QVector<QImage*>{
 }
 
 void RobotView::paintEvent(QPaintEvent *event) {
+    Q_UNUSED(event);
     QStyleOption opt;
     opt.initFrom(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-    QWidget::paintEvent(event);
+
     drawRobot();
 }
 void RobotView::keyPressEvent(QKeyEvent *event){

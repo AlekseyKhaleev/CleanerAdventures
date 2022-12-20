@@ -1,21 +1,22 @@
 #pragma once
 
 #include <QWidget>
-#include "robot.h"
 
-using namespace RobotModel;
+#include "RobotModel.h"
+
+using namespace Robot;
 
 class RobotView :public QWidget{
 
 Q_OBJECT
 
 public slots:
-    void updateModel(RobotModel::Model currentModel);
+    void updateModel(Model currentModel);
 signals:
     void keyHandled(QKeyEvent event);
 
 public:
-    RobotView(Model targetModel, QWidget *parent= nullptr);
+    explicit RobotView(const Model &targetModel, QWidget *parent= nullptr);
     ~RobotView() override;
 private:
 
