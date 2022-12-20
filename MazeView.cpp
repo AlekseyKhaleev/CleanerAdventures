@@ -17,7 +17,7 @@ m_viewModel(&targetModel),
 m_targetImage(new  QImage(":/images/target.png")),
 m_batteryImage(new QImage(":/images/battery.png"))
 {
-
+    repaint();
 }
 
 MazeView::~MazeView()=default;
@@ -25,11 +25,12 @@ MazeView::~MazeView()=default;
 
 
 void MazeView::paintEvent(QPaintEvent *event) {
+    Q_UNUSED(event)
+
     QStyleOption opt;
     opt.initFrom(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-    QWidget::paintEvent(event);
 
     drawMaze();
     drawTarget();
@@ -59,6 +60,10 @@ void MazeView::drawBattery(){
                          *m_batteryImage);
         }
     }
+}
+
+void MazeView::updateModel() {
+    repaint();
 }
 
 

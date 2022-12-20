@@ -22,6 +22,7 @@ signals:
     void batteryFinded(QPoint value);
     void robotStateChanged(Robot::Model state);
     void mazeStateChanged(Maze::Model state);
+    void skinAnimated();
 
 public slots:
     void keyEventAction(QKeyEvent event);
@@ -30,6 +31,12 @@ public:
     RobotController(const Robot::Model &robotModel, const Maze::Model &mazeModel, QObject *parent= nullptr);
     ~RobotController() override;
 private:
+
+    static const int ANIMATION_DELAY = 300;
+    int m_animationTimerId;
+
+    void timerEvent(QTimerEvent *event)  override;
+
     struct State
     {
         Robot::Model robotState;

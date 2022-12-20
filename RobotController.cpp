@@ -15,6 +15,13 @@ m_robotModel(&robotModel), m_mazeModel(&mazeModel), QObject(parent)
                         m_robotModel->robotDestination,
                         m_robotModel->curColor,
                         m_robotModel->tmpColor));
+    m_animationTimerId = startTimer(ANIMATION_DELAY);
+}
+
+void RobotController::timerEvent(QTimerEvent *event) {
+    if(event->timerId()==m_animationTimerId){
+        emit skinAnimated();
+    }
 }
 
 void RobotController::keyEventAction(QKeyEvent event) {

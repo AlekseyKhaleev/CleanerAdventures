@@ -23,12 +23,12 @@ namespace Maze {
         Model() = default;
     };
 
-    class MazeModel : public QWidget {
+    class MazeModel : public QObject {
 
     Q_OBJECT
 
     public:
-        explicit MazeModel(QWidget *parent = nullptr);
+        explicit MazeModel(QObject *parent = nullptr);
         ~MazeModel() override;
 
     signals:
@@ -39,7 +39,9 @@ namespace Maze {
 
         void delBattery(QPoint value);
 
-        void setMazeState(const Model &state);
+        void setMazeState(const Maze::Model &state);
+
+        Model& getMazeModel() const;
 
     private:
         Model *m_mazeState;
@@ -55,8 +57,6 @@ namespace Maze {
         void initDefaultMazeMap();
 
         void locateWalls();
-
-        Model getMazeModel();
     };
 }
 

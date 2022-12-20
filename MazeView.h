@@ -4,19 +4,22 @@
 
 #include "MazeModel.h"
 
-using namespace Maze;
 
 class MazeView : public QWidget{
 
     Q_OBJECT
 public:
-    explicit MazeView(const Model &targetModel, QWidget *parent= nullptr);
+    explicit MazeView(const Maze::Model &targetModel, QWidget *parent= nullptr);
     ~MazeView() override;
+public slots:
+    void paintEvent(QPaintEvent *event) override;
+    void updateModel();
+
 private:
-    const Model *m_viewModel;
+    const Maze::Model *m_viewModel;
     QImage *m_batteryImage;
     QImage *m_targetImage;
-    void paintEvent(QPaintEvent *event) override;
+
     void drawMaze();
     void drawTarget();
     void drawBattery();

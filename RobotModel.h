@@ -53,7 +53,7 @@ namespace Robot {
 
         void setInGame(bool value);
 
-        void setDestination(Directions dir);
+        void setDestination(Robot::Directions dir);
 
         void setRobotPosition(QPoint tar_pos);
 
@@ -63,20 +63,22 @@ namespace Robot {
 
         void setRobotScore(int value);
 
-        void setCurColor(Colors value);
+        void setCurColor(Robot::Colors value);
 
-        void setTmpColor(Colors value);
+        void setTmpColor(Robot::Colors value);
 
         void setScoreIncrease(bool value);
 
-        void setRobotState(Model state);
+        void setRobotState(Robot::Model state);
+
+        void animateSkin();
 
 
 
 
     private:
 
-        Model       *m_robotState;
+        Model             *m_robotState;
         const Maze::Model *m_mazeState;
 
         void initRobot();

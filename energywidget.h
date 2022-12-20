@@ -11,14 +11,13 @@ public:
 
     ~EnergyWidget() override;
 
-    void paintEvent(QPaintEvent *event) override;
-
 signals:
 
     void statusChanged();
 
 public slots:
 
+    void paintEvent(QPaintEvent *event) override;
     void setEnergyStatus(int energy);
 
 private:

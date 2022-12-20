@@ -8,11 +8,11 @@
 #include <QStyleOption>
 #include <QTimerEvent>
 
-using namespace Robot;
 
-RobotView::RobotView(const Model &targetModel, QWidget *parent):
+
+RobotView::RobotView(const Robot::Model &targetModel, QWidget *parent):
 QWidget(parent),
-m_viewModel(new Model(targetModel)),
+m_viewModel(&targetModel),
 m_white(QVector<QImage*>{
         new QImage(":/images/VC_wt_lt"),
         new QImage(":/images/VC_wt_rt"),
@@ -38,7 +38,7 @@ m_red(QVector<QImage*>{
         new QImage(":/images/VC_rd_dn")
 })
 {
-    m_animationTimerId = startTimer(ANIMATION_DELAY);
+    repaint();
 }
 
 void RobotView::paintEvent(QPaintEvent *event) {
@@ -62,17 +62,6 @@ void RobotView::drawRobot(){
                        m_viewModel->dotWidth,
                        m_viewModel->dotHeight),
                  *m_robotSkin[m_viewModel->curColor][m_viewModel->robotDestination]);
-}
-
-void RobotView::timerEvent(QTimerEvent *event) {
-    QObject::timerEvent(event);
-    qSwap(m_viewModel->curColor, m_viewModel->tmpColor);
-}
-
-void RobotView::updateModel(RobotModel::Model currentModel) {
-    Model *tmpModel = m_viewModel;
-    m_viewModel = new Model(currentModel);
-    delete[] tmpModel;
 }
 
 RobotView::~RobotView(){

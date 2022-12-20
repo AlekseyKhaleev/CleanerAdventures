@@ -9,6 +9,9 @@
 #include "RobotController.h"
 #include "RobotView.h"
 
+#include "MazeModel.h"
+#include "MazeView.h"
+
 class GameWidget : public QWidget
 {
 Q_OBJECT
@@ -16,9 +19,12 @@ public:
     explicit GameWidget(QWidget *parent = nullptr);
 private:
     static QLabel *createLabel(const QString &text);
-    RobotModel *m_robot;
+    Robot::RobotModel *m_robotModel;
     RobotController *m_robotController;
     RobotView *m_robotView;
+
+    Maze::MazeModel *m_mazeModel;
+    MazeView *m_mazeView;
 
     QWidget *m_energyStatus;
     QLCDNumber *m_levelLcd;

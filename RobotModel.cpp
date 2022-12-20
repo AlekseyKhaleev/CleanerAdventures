@@ -130,7 +130,7 @@ void RobotModel::findTrueWay(){
     }    
  }
 
-void RobotModel::setRobotState(Model state){
+void RobotModel::setRobotState(Robot::Model state){
     m_robotState->robotPosition = state.robotPosition;
     m_robotState->score = state.score;
     m_robotState->energy = state.energy;
@@ -168,7 +168,7 @@ void RobotModel::setInGame(bool value) {
     emit modelChanged();
 }
 
-void RobotModel::setDestination(Directions dir) {
+void RobotModel::setDestination(Robot::Directions dir) {
     m_robotState->robotDestination = dir;
     emit modelChanged();
 }
@@ -193,12 +193,12 @@ void RobotModel::setRobotScore(int value) {
     emit modelChanged();
 }
 
-void RobotModel::setCurColor(Colors value) {
+void RobotModel::setCurColor(Robot::Colors value) {
     m_robotState->curColor = value;
     emit modelChanged();
 }
 
-void RobotModel::setTmpColor(Colors value) {
+void RobotModel::setTmpColor(Robot::Colors value) {
     m_robotState->tmpColor = value;
     emit modelChanged();
 }
@@ -211,6 +211,11 @@ void RobotModel::setScoreIncrease(bool value) {
 
 Model RobotModel::getRobotModel() {
     return *m_robotState;
+}
+
+void RobotModel::animateSkin() {
+    qSwap(m_robotState->curColor, m_robotState->tmpColor);
+    emit modelChanged();
 }
 
 

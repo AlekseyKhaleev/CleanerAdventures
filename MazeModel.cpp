@@ -13,8 +13,8 @@ using namespace Maze;
 //************************************************
 
 //Constructor
-MazeModel::MazeModel(QWidget *parent):
-QWidget(parent),
+MazeModel::MazeModel(QObject *parent):
+QObject(parent),
 m_mazeState(new Model)
 
 {
@@ -115,9 +115,9 @@ QVector<QPoint> MazeModel::getMazeNeighbours(QPoint current, const QSet<QPoint>&
 void MazeModel::initFieldSize(){
     auto const rec = QGuiApplication::primaryScreen()->size();
     m_mazeState->fieldWidth = rec.width()/Maze::Model::DOT_SIDE;
-//    FIELD_WIDTH = FIELD_WIDTH+(FIELD_WIDTH % 2)-1;
+//    m_mazeState->fieldWidth = m_mazeState->fieldWidth+(m_mazeState->fieldWidth % 2)-1;
     m_mazeState->fieldHeight = rec.height()*0.8/Maze::Model::DOT_SIDE;
-//    FIELD_HEIGHT = FIELD_HEIGHT+(FIELD_HEIGHT % 2)-1;
+//    m_mazeState->fieldHeight = m_mazeState->fieldHeight+(m_mazeState->fieldHeight % 2)-1;
 }
 
 void MazeModel::initDefaultMazeMap(){
@@ -149,13 +149,14 @@ void MazeModel::delBattery(QPoint value) {
     emit modelChanged();
 }
 
-Model MazeModel::getMazeModel() {
+Model& MazeModel::getMazeModel() const{
     return *m_mazeState;
-    emit modelChanged();
+
 }
 
-void MazeModel::setMazeState(const Model &state) {
+void MazeModel::setMazeState(const Maze::Model &state) {
     m_mazeState->batteries = state.batteries;
+    emit modelChanged();
 }
 
 
