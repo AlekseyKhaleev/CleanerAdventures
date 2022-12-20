@@ -23,8 +23,8 @@ set(PROJECT_SOURCES
         main.cpp
         gamewidget.cpp
         gamewidget.h
-        energywidget.cpp
-        energywidget.h
+        EnergyView.cpp
+        EnergyView.h
         MazeModel.cpp
         MazeModel.h
         RobotModel.cpp

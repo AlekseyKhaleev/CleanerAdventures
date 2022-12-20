@@ -5,27 +5,22 @@
 #include <QLCDNumber>
 #include <QStackedLayout>
 
-#include "energywidget.h"
+#include "EnergyView.h"
 #include "RobotModel.h"
 #include "MazeModel.h"
 
-GameWidget::GameWidget(QWidget *parent):
-QWidget{parent},
-m_mazeModel(new Maze::MazeModel)
-//m_robotModel(new RobotModel(m_mazeModel->getMazeModel())),
-//m_controller(new Controller{m_robot->getRobotModel(), m_robot->getMazeModel()}),
-//m_robotView(new RobotView{m_robot->getRobotModel()}),
-//m_energyStatus(new EnergyWidget)
+GameWidget::GameWidget(QWidget *parent)
+: QWidget{parent}, m_mazeModel(new Maze::MazeModel)
 {
     m_robotModel = new Robot::RobotModel(m_mazeModel->getMazeModel());
     m_controller = new Controller{m_robotModel->getRobotModel(), m_mazeModel->getMazeModel()};
     m_robotView = new RobotView{m_robotModel->getRobotModel()};
     m_mazeView = new MazeView{m_mazeModel->getMazeModel()};
+    m_energyView = new EnergyView{m_robotModel->getRobotModel()};
 
     this->setStyleSheet("QWidget {background-color: black; color: WHITE;}");
 
     m_robotView->setFocusPolicy(Qt::StrongFocus);
-//    m_robotView->setStyleSheet("RobotView {background-color: WHITE; color: black;}");
 
     m_mazeView->setStyleSheet("MazeView {background-color: WHITE; color: black;}");
 
@@ -44,6 +39,7 @@ m_mazeModel(new Maze::MazeModel)
     //********* m_robotModel sender ************
     connect(m_robotModel, SIGNAL(modelChanged(Robot::Model)),m_controller, SLOT(updateRobotModel(Robot::Model)));
     connect(m_robotModel, SIGNAL(modelChanged(Robot::Model)),m_robotView, SLOT(updateModel(Robot::Model)));
+    connect(m_robotModel, SIGNAL(modelChanged(Robot::Model)),m_energyView, SLOT(updateModel(Robot::Model)));
 
     //********* m_robotView sender *************
     connect(m_robotView, SIGNAL(keyHandled(QKeyEvent)), m_controller, SLOT(keyEventAction(QKeyEvent)));

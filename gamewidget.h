@@ -5,12 +5,13 @@
 #include <QLCDNumber>
 #include <QWidget>
 
-#include "RobotModel.h"
 #include "Controller.h"
-#include "RobotView.h"
-
+#include "EnergyView.h"
 #include "MazeModel.h"
 #include "MazeView.h"
+#include "RobotModel.h"
+#include "RobotView.h"
+
 
 class GameWidget : public QWidget
 {
@@ -19,14 +20,16 @@ public:
     explicit GameWidget(QWidget *parent = nullptr);
 private:
     static QLabel *createLabel(const QString &text);
+
     Robot::RobotModel *m_robotModel;
-    Controller *m_controller;
     RobotView *m_robotView;
 
     Maze::MazeModel *m_mazeModel;
     MazeView *m_mazeView;
 
-    QWidget *m_energyStatus;
+    Controller *m_controller;
+    EnergyView *m_energyView;
+
     QLCDNumber *m_levelLcd;
     QLCDNumber *m_scoreLcd;
 };

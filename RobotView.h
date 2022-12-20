@@ -12,10 +12,9 @@ Q_OBJECT
 
 signals:
     void keyHandled(QKeyEvent event);
-    void skinAnimated();
 
 public slots:
-    void updateModel(Robot::Model model);
+    virtual void updateModel(Robot::Model model);
 
 public:
     explicit RobotView(const Robot::Model &targetModel, QWidget *parent= nullptr);
