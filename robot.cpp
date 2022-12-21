@@ -1,23 +1,13 @@
-/*********************************************************************************************************************
-* Данный модуль содержит определения иерархии классов, предназначенных для работы с таблицей данных отдела кадров
-* (приложение Lab5-2)
-*********************************************************************************************************************/
 
-/* Подключение модулей */
+#include "robot.h"
 
-
-#include <QPainter>
-#include <QKeyEvent>
-#include <QVector>
-#include <QSet>
 #include <QtGui>
+#include <QKeyEvent>
 #include <QMessageBox>
-#include "Robot.h"
+#include <QPainter>
+#include <QSet>
 #include <QStyleOption>
-#include <QDebug>
-
-
-
+#include <QVector>
 
 Robot::Robot():
 Maze(),

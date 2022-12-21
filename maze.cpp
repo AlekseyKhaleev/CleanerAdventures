@@ -1,15 +1,12 @@
-#include "Maze.h"
+#include "maze.h"
+
 #include <QGuiApplication>
-#include <QTime>
-#include <QStack>
-#include <qset.h>
 #include <qpoint.h>
-#include <QWidget>
+#include <qset.h>
+#include <QStack>
+#include <QTime>
 #include <QVector>
-
-
-
-
+#include <QWidget>
 
 Maze::Maze(){    
     initFieldSize();
