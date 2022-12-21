@@ -9,7 +9,8 @@
 #include <iostream>
 #include <memory>
 
-#include "MazeModel.h"
+//#include "MazeModel.h"
+
 
 //inline uint qHash(const QPoint &key) { return (key.x() << 16) + key.y(); }
 
@@ -24,11 +25,12 @@ namespace Robot {
 
 
     struct Model {
+        static const int DOT_SIDE{34};
+
         bool scoreIncrease{};
         Colors curColor{}, tmpColor{};
-        int score{0}, energy{}, steps{}, trueWaySteps{};
-        static const int DOT_SIDE{34};
-        Directions robotDestination{UP};
+        int score{0}, steps{};
+        Directions robotDestination{};
         QPoint robotPosition;
     };
 
@@ -39,11 +41,11 @@ namespace Robot {
 
     public:
 
-        explicit RobotModel(const Maze::Model &maze, QObject *parent = nullptr);
+        explicit RobotModel(QObject *parent = nullptr);
 
         ~RobotModel() override;
 
-        Model getRobotModel();
+        Robot::Model getModel();
 
     signals:
 
@@ -51,13 +53,11 @@ namespace Robot {
 
     public slots:
 
-        void initRobot(Maze::Model maze);
+        void initRobot();
 
         void setDestination(Robot::Directions dir);
 
         void setRobotPosition(QPoint tar_pos);
-
-        void setRobotEnergy(int value);
 
         void setRobotSteps(int value);
 
@@ -73,21 +73,10 @@ namespace Robot {
 
         void animateSkin();
 
-
-
-
     private:
 
         Model *m_robotState;
 
-        Maze::Model m_mazeState;
-
-        void findTrueWay();
-
-        static QVector<QPoint> getWayNeighbours(QPoint current, const QSet<QPoint> &cells);
-
-//    void levelDone();
-//    void gameOver();
     };
 }
 

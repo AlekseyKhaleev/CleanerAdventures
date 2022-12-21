@@ -1,5 +1,5 @@
 
-#include "headers/RobotView.h"
+#include "RobotView.h"
 
 #include <QCoreApplication>
 #include <QKeyEvent>
@@ -10,39 +10,39 @@
 
 
 
-RobotView::RobotView(const Robot::Model &targetModel, QWidget *parent):
+RobotView::RobotView(Robot::Model targetModel, QWidget *parent):
 QWidget(parent),
 m_viewModel(targetModel),
-m_white(QVector<QImage*>{
-        new QImage(":/images/VC_wt_lt"),
-        new QImage(":/images/VC_wt_rt"),
-        new QImage(":/images/VC_wt_up"),
-        new QImage(":/images/VC_wt_dn")
+m_white(QVector<QImage>{
+        QImage(":/images/VC_wt_lt"),
+        QImage(":/images/VC_wt_rt"),
+        QImage(":/images/VC_wt_up"),
+        QImage(":/images/VC_wt_dn")
 }),
-m_green(QVector<QImage*>{
-        new QImage(":/images/VC_gr_lt"),
-        new QImage(":/images/VC_gr_rt"),
-        new QImage(":/images/VC_gr_up"),
-        new QImage(":/images/VC_gr_dn")
+m_green(QVector<QImage>{
+        QImage(":/images/VC_gr_lt"),
+        QImage(":/images/VC_gr_rt"),
+        QImage(":/images/VC_gr_up"),
+        QImage(":/images/VC_gr_dn")
 }),
-m_yellow(QVector<QImage*>{
-        new QImage(":/images/VC_yw_lt"),
-        new QImage(":/images/VC_yw_rt"),
-        new QImage(":/images/VC_yw_up"),
-        new QImage(":/images/VC_yw_dn")
+m_yellow(QVector<QImage>{
+        QImage(":/images/VC_yw_lt"),
+        QImage(":/images/VC_yw_rt"),
+        QImage(":/images/VC_yw_up"),
+        QImage(":/images/VC_yw_dn")
 }),
-m_red(QVector<QImage*>{
-        new QImage(":/images/VC_rd_lt"),
-        new QImage(":/images/VC_rd_rt"),
-        new QImage(":/images/VC_rd_up"),
-        new QImage(":/images/VC_rd_dn")
+m_red(QVector<QImage>{
+        QImage(":/images/VC_rd_lt"),
+        QImage(":/images/VC_rd_rt"),
+        QImage(":/images/VC_rd_up"),
+        QImage(":/images/VC_rd_dn")
 })
 {
     repaint();
 }
 
 void RobotView::paintEvent(QPaintEvent *event) {
-    Q_UNUSED(event);
+    Q_UNUSED(event)
     drawRobot();
 }
 void RobotView::keyPressEvent(QKeyEvent *event){
@@ -56,7 +56,7 @@ void RobotView::drawRobot(){
                        m_viewModel.robotPosition.y() * Robot::Model::DOT_SIDE,
                        Robot::Model::DOT_SIDE,
                        Robot::Model::DOT_SIDE),
-                 *m_robotSkin[m_viewModel.curColor][m_viewModel.robotDestination]);
+                 m_robotSkin[m_viewModel.curColor][m_viewModel.robotDestination]);
 }
 
 void RobotView::updateModel(Robot::Model model) {

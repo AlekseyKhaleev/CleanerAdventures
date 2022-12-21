@@ -16,18 +16,18 @@ public slots:
     virtual void updateModel(Robot::Model model);
 
 public:
-    explicit RobotView(const Robot::Model &targetModel, QWidget *parent= nullptr);
+    explicit RobotView(Robot::Model targetModel, QWidget *parent= nullptr);
     ~RobotView() override;
 
 protected:
     Robot::Model m_viewModel;
 private:
 
-    QVector<QImage*> m_white;
-    QVector<QImage*> m_green;
-    QVector<QImage*> m_yellow;
-    QVector<QImage*> m_red;
-    QVector<QVector<QImage*>> m_robotSkin{m_white, m_green, m_yellow, m_red};
+    QVector<QImage> m_white;
+    QVector<QImage> m_green;
+    QVector<QImage> m_yellow;
+    QVector<QImage> m_red;
+    QVector<QVector<QImage>> m_robotSkin{m_white, m_green, m_yellow, m_red};
 
 
     void keyPressEvent(QKeyEvent *event) override;

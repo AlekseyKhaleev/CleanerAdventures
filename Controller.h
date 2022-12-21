@@ -4,26 +4,27 @@
 #include <QObject>
 
 #include "RobotModel.h"
+#include "MazeModel.h"
 
 class Controller: public QObject {
     Q_OBJECT
 signals:
-    void gameLosed();
-    void gameWon();
+    void levelLost();
+    void levelDone();
 
-    void resetMaze(int levelIncrease);
-    void resetRobot(Maze::Model model);
+    void resetMaze();
+    void resetRobot();
 
     void destinationChanged(Robot::Directions dir);
-    void PositionChanged(QPoint tar_pos);
-    void EnergyChanged(int value);
-    void StepsChanged(int value);
-    void ScoreChanged(int value);
+    void positionChanged(QPoint tar_pos);
+    void energyChanged(int percEnergy);
+    void stepsChanged(int value);
+    void scoreChanged(int value);
     void curColorChanged(Robot::Colors value);
     void tmpColorChanged(Robot::Colors value);
     void batteryLocated(QPoint value);
     void scoreIncreaseChanged(bool value);
-    void batteryFinded(QPoint value);
+    void batteryFound(QPoint value);
     void robotStateChanged(Robot::Model state);
     void mazeStateChanged(Maze::Model state);
     void skinAnimated();
@@ -32,12 +33,14 @@ public slots:
     void keyEventAction(QKeyEvent event);
     void updateRobotModel(Robot::Model model);
     void updateMazeModel(Maze::Model model);
-    void startGame(int levelIncrease);
+    void startGame();
     void endGame();
+    void clearMemory();
 
 public:
-    Controller(const Robot::Model &robotModel, Maze::Model mazeModel, QObject *parent= nullptr);
+    Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *parent= nullptr);
     ~Controller() override;
+    friend Robot::RobotModel;
 private:
 
     static const int ANIMATION_DELAY = 300;
@@ -53,7 +56,6 @@ private:
         State(QPoint position,
               QVector<QPoint> batteries,
               int score,
-              int energy,
               int steps,
               Robot::Directions destination,
               Robot::Colors current,
@@ -61,7 +63,6 @@ private:
         {
             robotState.robotPosition = position;
             robotState.score = score;
-            robotState.energy = energy;
             robotState.steps = steps;
             robotState.robotDestination = destination;
             robotState.curColor = current;
@@ -76,7 +77,7 @@ private:
 
     void checkTarget();
 
-    int getPercentEnergy();
+    int getPercentEnergy() const;
 
     bool moveRobot();
 

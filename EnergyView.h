@@ -6,24 +6,22 @@
 
 #include "RobotView.h"
 
-class EnergyView : public RobotView {
+class EnergyView : public QWidget {
 
 Q_OBJECT
 
 public:
-    explicit EnergyView(const Robot::Model &targetModel, RobotView *parent = nullptr);
+    explicit EnergyView(QWidget *parent = nullptr);
 
     ~EnergyView() override;
 
 public slots:
 
-    void updateModel(Robot::Model model) override;
+    void updateModel(int percEnergy);
 
 private:
 
     void paintEvent(QPaintEvent *event) override;
-
-    void setEnergyStatus();
 
     enum Energy {
         en_0, en_10, en_30, en_50, en_70, en_80, en_90

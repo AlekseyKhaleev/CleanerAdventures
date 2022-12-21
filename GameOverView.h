@@ -16,10 +16,10 @@ public:
     ~GameOverView() override;
 
 signals:
-    void gameStarted(int levelIncrease);
+    void gameStarted();
     void gameEnded();
 
 public slots:
-    void levelDefeated();
+    void levelLost();
     void levelDone();
 };

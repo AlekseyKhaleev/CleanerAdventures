@@ -15,7 +15,7 @@ namespace Maze {
 
     struct Model {
         static const int DOT_SIDE{34};
-        int level{1}, fieldWidth{}, fieldHeight{};
+        int level{0}, fieldWidth{}, fieldHeight{}, maxEnergy{};
 
         QSet<QPoint> walls, cells;
         QVector<QPoint> batteries;
@@ -41,24 +41,28 @@ namespace Maze {
 
         void setMazeState(const Maze::Model &state);
 
-        void initMaze(int levelIncrease=0);
+        void initMaze();
+
+        void resetLevel();
 
         Model getMazeModel();
 
     private:
         Model *m_mazeState;
 
-        QPoint getRandDot();
-
-
-
-        static QVector<QPoint> getMazeNeighbours(QPoint current, const QSet<QPoint> &cells);
-
         void initFieldSize();
 
         void initDefaultMazeMap();
 
         void locateWalls();
+
+        QPoint getRandDot();
+
+        void setMaxEnergy();
+
+        static QVector<QPoint> getMazeNeighbours(QPoint current, const QSet<QPoint> &cells);
+
+        static QVector<QPoint> getWayNeighbours(QPoint current, const QSet<QPoint> &cells);
     };
 }
 

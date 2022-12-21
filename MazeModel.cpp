@@ -1,4 +1,4 @@
-#include "headers/MazeModel.h"
+#include "MazeModel.h"
 
 #include <QGuiApplication>
 #include <qpoint.h>
@@ -28,7 +28,7 @@ MazeModel::~MazeModel() {
 
 //******************************************************
 
-void MazeModel::initMaze(int levelIncrease){
+void MazeModel::initMaze(){
     initDefaultMazeMap();
     locateWalls();
     if (!m_mazeState->batteries.empty()) {
@@ -36,7 +36,8 @@ void MazeModel::initMaze(int levelIncrease){
     }
     m_mazeState->batteries.push_back(QPoint{-1, -1});
     m_mazeState->targetPosition = QPoint(m_mazeState->fieldWidth-2,m_mazeState->fieldHeight-2);
-    m_mazeState->level += levelIncrease;
+    setMaxEnergy();
+    m_mazeState->level ++;
     emit modelChanged(*m_mazeState);
 }
 
@@ -89,27 +90,6 @@ void MazeModel::locateWalls(){
     }while(!cells.empty());
 }
 
-QVector<QPoint> MazeModel::getMazeNeighbours(QPoint current, const QSet<QPoint>& cells){
-    QVector<QPoint> curNeighbours;
-    current.rx()+=2;
-    if(cells.contains(current)){
-        curNeighbours.push_back(current);
-    }
-    current.rx()-=4;
-    if(cells.contains(current)){
-        curNeighbours.push_back(current);
-    }
-    current.rx()+=2;
-    current.ry()+=2;
-    if(cells.contains(current)){
-        curNeighbours.push_back(current);
-    }
-    current.ry()-=4;
-    if(cells.contains(current)){
-        curNeighbours.push_back(current);
-    }
-    return curNeighbours;
-}
 
 void MazeModel::initFieldSize(){
     auto const rec = QGuiApplication::primaryScreen()->size();
@@ -156,6 +136,87 @@ Model MazeModel::getMazeModel(){
 void MazeModel::setMazeState(const Maze::Model &state) {
     m_mazeState->batteries = state.batteries;
     emit modelChanged(*m_mazeState);
+}
+
+
+void MazeModel::setMaxEnergy() {
+    m_mazeState->maxEnergy = 2;
+    QSet<QPoint> cells;
+    for (auto k: qAsConst(m_mazeState->cells)){
+        cells.insert(k);
+    }
+    QPoint current{1,1};
+    QVector<QPoint> neighbours;
+    QStack<QPoint> way;
+    cells.remove(current);
+    while (current != m_mazeState->targetPosition) {
+        neighbours = getWayNeighbours(current, cells);
+        if(!neighbours.empty()){
+            way.push(current);
+            current = neighbours[rand()%neighbours.size()];
+            cells.remove(current);
+        }
+        else if(!way.isEmpty()){
+            current = way.pop();
+        }
+        else{break;}
+    }
+    m_mazeState->maxEnergy += way.size();
+    for(int i=1;i<way.size()-1;i++){
+        if((way[i-1].x()==way[i].x()&&way[i+1].y()==way[i].y())||(way[i-1].y()==way[i].y()&&way[i+1].x()==way[i].x())){
+            m_mazeState->maxEnergy++;
+        }
+    }
+}
+
+
+QVector<QPoint> MazeModel::getMazeNeighbours(QPoint current, const QSet<QPoint>& cells){
+    QVector<QPoint> curNeighbours;
+    current.rx()+=2;
+    if(cells.contains(current)){
+        curNeighbours.push_back(current);
+    }
+    current.rx()-=4;
+    if(cells.contains(current)){
+        curNeighbours.push_back(current);
+    }
+    current.rx()+=2;
+    current.ry()+=2;
+    if(cells.contains(current)){
+        curNeighbours.push_back(current);
+    }
+    current.ry()-=4;
+    if(cells.contains(current)){
+        curNeighbours.push_back(current);
+    }
+    return curNeighbours;
+}
+
+
+QVector<QPoint> MazeModel::getWayNeighbours(QPoint current, const QSet<QPoint> &cells) {
+    QVector<QPoint> curNeighbours;
+    current.rx()+=1;
+    if(cells.contains(current)){
+        curNeighbours.push_back(current);
+    }
+    current.rx()-=2;
+    if(cells.contains(current)){
+        curNeighbours.push_back(current);
+    }
+    current.rx()+=1;
+    current.ry()+=1;
+    if(cells.contains(current)){
+        curNeighbours.push_back(current);
+    }
+    current.ry()-=2;
+    if(cells.contains(current)){
+        curNeighbours.push_back(current);
+    }
+    return curNeighbours;
+}
+
+void MazeModel::resetLevel() {
+    m_mazeState->level = 0;
 }
 
 
