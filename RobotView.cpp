@@ -46,7 +46,7 @@ void RobotView::paintEvent(QPaintEvent *event) {
     drawRobot();
 }
 void RobotView::keyPressEvent(QKeyEvent *event){
-    emit keyHandled(*event);
+    emit keyHandled(event->key());
 }
 
 void RobotView::drawRobot(){

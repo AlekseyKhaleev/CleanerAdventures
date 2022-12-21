@@ -3,7 +3,6 @@
 #include <QPainter>
 #include <QWidget>
 
-#include "RobotView.h"
 
 EnergyView::EnergyView(QWidget *parent) :
         QWidget(parent), m_enStatusImgs(QVector<QImage*>{

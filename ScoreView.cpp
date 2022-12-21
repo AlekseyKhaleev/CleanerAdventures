@@ -3,7 +3,7 @@
 #include "QHBoxLayout"
 
 ScoreView::ScoreView(int numDigits, const Robot::Model &targetModel, RobotView *parent )
-:m_viewItem(new QLCDNumber(numDigits)), RobotView(targetModel, parent)
+    :RobotView(targetModel, parent), m_viewItem(new QLCDNumber(numDigits))
 {
     m_viewItem->setSegmentStyle(QLCDNumber::Filled);
     connect(this, &ScoreView::levelUpdated, m_viewItem, qOverload<int>(&QLCDNumber::display));

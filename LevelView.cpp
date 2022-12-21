@@ -2,7 +2,7 @@
 #include "QVBoxLayout"
 
 LevelView::LevelView(int numDigits, const Maze::Model &targetModel, MazeView *parent )
-        :m_viewItem(new QLCDNumber(numDigits)), MazeView(targetModel, parent)
+    :MazeView(targetModel, parent), m_viewItem(new QLCDNumber(numDigits))
 {
     m_viewItem->setSegmentStyle(QLCDNumber::Filled);
     connect(this, &LevelView::levelUpdated, m_viewItem, qOverload<int>(&QLCDNumber::display));

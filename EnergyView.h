@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QWidget>
 
-#include "RobotView.h"
 
 class EnergyView : public QWidget {
 

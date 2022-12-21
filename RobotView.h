@@ -10,7 +10,7 @@ class RobotView :public QWidget{
 Q_OBJECT
 
 signals:
-    void keyHandled(QKeyEvent event);
+    void keyHandled(int eventKey);
 
 public slots:
     virtual void updateModel(Robot::Model model);

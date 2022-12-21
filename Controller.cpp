@@ -2,11 +2,13 @@
 #include "Controller.h"
 
 #include <QCoreApplication>
+#include <QKeyEvent>
 #include <QTime>
 
 
+
 Controller::Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *parent) :
-m_robotModel(robotModel), m_mazeModel(mazeModel), QObject(parent)
+    QObject(parent), m_robotModel(robotModel), m_mazeModel(mazeModel)
 {
     if(!m_states.isEmpty()) { m_states.clear();}
     m_states.push(State(m_robotModel.robotPosition,
@@ -25,8 +27,8 @@ void Controller::timerEvent(QTimerEvent *event) {
     }
 }
 
-void Controller::keyEventAction(QKeyEvent event) {
-    switch (event.key()) {
+void Controller::keyEventAction(int eventKey) {
+    switch (eventKey) {
         case Qt::Key_Left: {
             if(m_robotModel.robotDestination!=Robot::Directions::LEFT){
                 emit destinationChanged(Robot::Directions::LEFT);
@@ -59,7 +61,7 @@ void Controller::keyEventAction(QKeyEvent event) {
             if(moveRobot()){
                 checkTarget();
                 checkBattery();
-                doStep(&event);
+                doStep(eventKey);
             }
             break;
         }
@@ -162,9 +164,9 @@ bool Controller::checkWall(QPoint dest){
     return !m_mazeModel.walls.contains(dest);
 }
 
-void Controller::doStep(QKeyEvent *event){
+void Controller::doStep(int eventKey){
     emit stepsChanged(m_robotModel.steps + 1);
-    updateScore(event);
+    updateScore(eventKey);
     checkEnergy();
     m_states.push(State(m_robotModel.robotPosition,
                         m_mazeModel.batteries,
@@ -175,11 +177,11 @@ void Controller::doStep(QKeyEvent *event){
                         m_robotModel.tmpColor));
 }
 
-void Controller::updateScore(QKeyEvent *event)
+void Controller::updateScore(int eventKey)
 {
     if ((m_robotModel.steps <= m_mazeModel.maxEnergy) && m_robotModel.scoreIncrease)
             emit scoreChanged(m_robotModel.score + 1);
-    else if (m_robotModel.score && event != nullptr) {
+    else if (m_robotModel.score && eventKey == Qt::Key_Space) {
         emit scoreChanged(m_robotModel.score - 1);
     }
 }

@@ -11,8 +11,8 @@
 using namespace Maze;
 
 MazeView::MazeView(Model targetModel, QWidget *parent)
-: QWidget(parent), m_viewModel(std::move(targetModel)),m_targetImage(QImage(":/images/target.png")),
-m_batteryImage(QImage(":/images/battery.png"))
+    : QWidget(parent), m_viewModel(std::move(targetModel)),m_batteryImage(QImage(":/images/battery.png")),
+    m_targetImage(QImage(":/images/target.png"))
 {
     repaint();
 }

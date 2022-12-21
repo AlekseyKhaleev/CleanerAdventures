@@ -9,10 +9,9 @@
 #include <iostream>
 #include <memory>
 
-//#include "MazeModel.h"
-
 
 //inline uint qHash(const QPoint &key) { return (key.x() << 16) + key.y(); }
+
 
 namespace Robot {
     enum Directions {
@@ -25,8 +24,8 @@ namespace Robot {
 
 
     struct Model {
-        static const int DOT_SIDE{34};
 
+        static const int DOT_SIDE{34};
         bool scoreIncrease{};
         Colors curColor{}, tmpColor{};
         int score{0}, steps{};

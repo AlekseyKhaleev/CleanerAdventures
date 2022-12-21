@@ -30,7 +30,7 @@ signals:
     void skinAnimated();
 
 public slots:
-    void keyEventAction(QKeyEvent event);
+    void keyEventAction(int eventKey);
     void updateRobotModel(Robot::Model model);
     void updateMazeModel(Maze::Model model);
     void startGame();
@@ -81,9 +81,9 @@ private:
 
     bool moveRobot();
 
-    void doStep(QKeyEvent *event= nullptr);
+    void doStep(int eventKey = -1);
 
-    void updateScore(QKeyEvent *event);
+    void updateScore(int eventKey);
 
     void checkEnergy();
 

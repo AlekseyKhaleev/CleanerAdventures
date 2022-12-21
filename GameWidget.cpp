@@ -10,8 +10,8 @@
 #include "MazeModel.h"
 
 GameWidget::GameWidget(QWidget *parent)
-: QWidget{parent}, m_mazeModel(new Maze::MazeModel), m_robotModel(new Robot::RobotModel),
-m_gameOverView(new GameOverView), m_energyView(new EnergyView)
+    : QWidget{parent}, m_robotModel(new Robot::RobotModel), m_mazeModel(new Maze::MazeModel),
+    m_energyView(new EnergyView), m_gameOverView(new GameOverView)
 {
     m_controller = new Controller{m_robotModel->getModel(), m_mazeModel->getMazeModel()};
     m_robotView  = new RobotView{m_robotModel->getModel()};
@@ -44,7 +44,7 @@ m_gameOverView(new GameOverView), m_energyView(new EnergyView)
     connect(m_robotModel, SIGNAL(modelChanged(Robot::Model)),m_scoreView, SLOT(updateModel(Robot::Model)));
 
     //********* m_robotView sender *************
-    connect(m_robotView, SIGNAL(keyHandled(QKeyEvent)), m_controller, SLOT(keyEventAction(QKeyEvent)));
+    connect(m_robotView, SIGNAL(keyHandled(int)), m_controller, SLOT(keyEventAction(int)));
 
     //********* m_controller sender ************
     connect(m_controller, SIGNAL(levelLost()), m_mazeModel, SLOT(resetLevel()));

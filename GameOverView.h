@@ -3,8 +3,6 @@
 
 #include <QMessageBox>
 
-#include "RobotView.h"
-
 
 class GameOverView : public QMessageBox {
 
