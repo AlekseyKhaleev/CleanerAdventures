@@ -5,9 +5,11 @@
 #include <QObject>
 #include <QPoint>
 #include <QStack>
-#include "Maze.h"
+
 #include <iostream>
 #include <memory>
+
+#include "maze.h"
 
 //inline uint qHash(const QPoint &key) { return (key.x() << 16) + key.y(); }
 

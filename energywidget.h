@@ -1,8 +1,8 @@
 #pragma once
 
+#include <QLabel>
 #include <QObject>
 #include <QWidget>
-#include <QLabel>
 
 class EnergyWidget : public QWidget {
 Q_OBJECT

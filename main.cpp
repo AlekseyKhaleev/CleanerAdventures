@@ -1,8 +1,7 @@
-#include "gamewidget.h"
 #include <QApplication>
-#include "Maze.h"
-#include "Robot.h"
 #include <QPainter>
+
+#include "gamewidget.h"
 
 
 using namespace std;
