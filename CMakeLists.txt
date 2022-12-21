@@ -16,20 +16,19 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 #find_package(XKB_LIBRARY XKB_INCLUDE_DIR)
 
 
-
-
 set(PROJECT_SOURCES
         resources/resources.qrc
         main.cpp
-        gamewidget.cpp
-        gamewidget.h
-        energywidget.cpp
-        energywidget.h
-        maze.cpp
-        maze.h
-        robot.cpp
-        robot.h
-)
+        GameWidget.cpp   GameWidget.h
+        EnergyView.cpp   EnergyView.h
+        MazeModel.cpp    MazeModel.h
+        RobotModel.cpp   RobotModel.h
+        RobotView.cpp    RobotView.h
+        Controller.cpp   Controller.h
+        MazeView.cpp     MazeView.h
+        ScoreView.cpp    ScoreView.h
+        LevelView.cpp    LevelView.h
+        GameOverView.cpp GameOverView.h)
 
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
