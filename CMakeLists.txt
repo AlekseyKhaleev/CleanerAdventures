@@ -19,16 +19,16 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 set(PROJECT_SOURCES
         resources/resources.qrc
         main.cpp
-        GameWidget.cpp headers/GameWidget.h
-        EnergyView.cpp headers/EnergyView.h
-        MazeModel.cpp  headers/MazeModel.h
-        RobotModel.cpp headers/RobotModel.h
-        RobotView.cpp  headers/RobotView.h
-        Controller.cpp headers/Controller.h
-        MazeView.cpp   headers/MazeView.h
-        ScoreView.cpp  headers/ScoreView.h
-        LevelView.cpp  headers/LevelView.h
-        GameOverView.cpp headers/GameOverView.h)
+        GameWidget.cpp   GameWidget.h
+        EnergyView.cpp   EnergyView.h
+        MazeModel.cpp    MazeModel.h
+        RobotModel.cpp   RobotModel.h
+        RobotView.cpp    RobotView.h
+        Controller.cpp   Controller.h
+        MazeView.cpp     MazeView.h
+        ScoreView.cpp    ScoreView.h
+        LevelView.cpp    LevelView.h
+        GameOverView.cpp GameOverView.h)
 
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

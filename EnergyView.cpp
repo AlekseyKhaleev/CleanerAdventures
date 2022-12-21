@@ -1,12 +1,12 @@
-#include "headers/EnergyView.h"
+#include "EnergyView.h"
 
 #include <QPainter>
 #include <QWidget>
 
-#include "headers/RobotView.h"
+#include "RobotView.h"
 
-EnergyView::EnergyView(const Robot::Model &targetModel, RobotView *parent) :
-        RobotView(targetModel, parent), m_enStatusImgs(QVector<QImage*>{
+EnergyView::EnergyView(QWidget *parent) :
+        QWidget(parent), m_enStatusImgs(QVector<QImage*>{
         new QImage(":/images/en_0"),
         new QImage(":/images/en_10"),
         new QImage(":/images/en_30"),
@@ -28,8 +28,7 @@ void EnergyView::paintEvent(QPaintEvent *event) {
 }
 
 
-void EnergyView::setEnergyStatus() {
-    int percEnergy = m_viewModel.energy * 100 / m_viewModel.trueWaySteps;
+void EnergyView::updateModel(int percEnergy) {
     if (percEnergy == 0) { m_enStatus = en_0; }
     else if (percEnergy <= 10) { m_enStatus = en_10; }
     else if (percEnergy <= 30) { m_enStatus = en_30; }
@@ -37,6 +36,7 @@ void EnergyView::setEnergyStatus() {
     else if (percEnergy <= 70) { m_enStatus = en_70; }
     else if (percEnergy <= 80) { m_enStatus = en_80; }
     else { m_enStatus = en_90; }
+    repaint();
 }
 
 void EnergyView::drawStatus() {
@@ -45,8 +45,3 @@ void EnergyView::drawStatus() {
                  *m_enStatusImgs[m_enStatus]);
 }
 
-void EnergyView::updateModel(Robot::Model model) {
-    m_viewModel = model;
-    setEnergyStatus();
-    repaint();
-}

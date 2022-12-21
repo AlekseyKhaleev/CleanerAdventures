@@ -1,21 +1,18 @@
-#include "headers/MazeView.h"
+#include "MazeView.h"
 
 #include <QPainter>
 #include <QKeyEvent>
 #include <QVector>
-#include <QSet>
 #include <QtGui>
 #include <QMessageBox>
-#include "headers/RobotModel.h"
 #include <QStyleOption>
+#include <utility>
 
 using namespace Maze;
 
-MazeView::MazeView(const Model &targetModel, QWidget *parent):
-QWidget(parent),
-m_viewModel(targetModel),
-m_targetImage(new  QImage(":/images/target.png")),
-m_batteryImage(new QImage(":/images/battery.png"))
+MazeView::MazeView(Model targetModel, QWidget *parent)
+: QWidget(parent), m_viewModel(std::move(targetModel)),m_targetImage(QImage(":/images/target.png")),
+m_batteryImage(QImage(":/images/battery.png"))
 {
     repaint();
 }
@@ -49,7 +46,7 @@ void MazeView::drawTarget(){
     QPainter qp(this);
     qp.drawImage(QRect(m_viewModel.targetPosition.x() * Maze::Model::DOT_SIDE,
                        m_viewModel.targetPosition.y() * Maze::Model::DOT_SIDE,
-                       Maze::Model::DOT_SIDE, Maze::Model::DOT_SIDE), *m_targetImage);
+                       Maze::Model::DOT_SIDE, Maze::Model::DOT_SIDE), m_targetImage);
 }
 
 void MazeView::drawBattery(){
@@ -57,13 +54,13 @@ void MazeView::drawBattery(){
     for (auto &b : m_viewModel.batteries) {
         if (b.x() >= 0) {
             qp.drawImage(QRect(b.x() * Maze::Model::DOT_SIDE, b.y() * Maze::Model::DOT_SIDE, Maze::Model::DOT_SIDE, Maze::Model::DOT_SIDE),
-                         *m_batteryImage);
+                         m_batteryImage);
         }
     }
 }
 
 void MazeView::updateModel(Maze::Model model) {
-    m_viewModel = model;
+    m_viewModel = std::move(model);
     repaint();
 }
 

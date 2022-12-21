@@ -9,7 +9,7 @@ class MazeView : public QWidget{
 
     Q_OBJECT
 public:
-    explicit MazeView(const Maze::Model &targetModel, QWidget *parent= nullptr);
+    explicit MazeView(Maze::Model targetModel, QWidget *parent= nullptr);
     ~MazeView() override;
 public slots:
     void paintEvent(QPaintEvent *event) override;
@@ -19,8 +19,8 @@ protected:
     Maze::Model m_viewModel;
 private:
 
-    QImage *m_batteryImage;
-    QImage *m_targetImage;
+    QImage m_batteryImage;
+    QImage m_targetImage;
 
     void drawMaze();
     void drawTarget();

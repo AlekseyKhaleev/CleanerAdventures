@@ -1,4 +1,4 @@
-#include "headers/LevelView.h"
+#include "LevelView.h"
 #include "QVBoxLayout"
 
 LevelView::LevelView(int numDigits, const Maze::Model &targetModel, MazeView *parent )
