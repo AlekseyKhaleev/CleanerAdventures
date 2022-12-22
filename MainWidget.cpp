@@ -10,6 +10,8 @@
 MainWidget::MainWidget(QWidget *parent):
 QWidget(parent), m_menu(new MenuWidget), m_game(new GameWidget), m_layout(new QStackedLayout)
 {
+    this->setStyleSheet("QWidget {background-color: black; color: WHITE;}");
+
     connect(m_menu, &MenuWidget::widgetsChanged, this, &MainWidget::changeWidgets);
     connect(m_game, &GameWidget::widgetsChanged, this, &MainWidget::changeWidgets);
 

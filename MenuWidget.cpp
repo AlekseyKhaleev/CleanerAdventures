@@ -3,19 +3,32 @@
 
 #include<QPushButton>
 #include <QWidget>
-#include <QVBoxLayout>
+#include <QGridLayout>
 #include <QKeyEvent>
+#include <QLabel>
+#include <QFont>
+#include <QStyle>
 
 
-MenuWidget::MenuWidget(QWidget *parent): QWidget(parent)
+MenuWidget::MenuWidget(QWidget *parent):
+QWidget(parent), m_newGame(createButton(tr("New Game"))), m_controls(createButton("Control keys")),
+m_highscores(createButton("Highscores")), m_about(createButton("About")), m_exit(createButton("Exit"))
 {
-    auto layout = new QVBoxLayout;
-    layout->addWidget(new QPushButton("Resume"));
-    layout->addWidget(new QPushButton("New game"));
-    layout->addWidget(new QPushButton("Control keys"));
-    layout->addWidget(new QPushButton("Highscores"));
-    layout->addWidget(new QPushButton("About"));
-    layout->addWidget(new QPushButton("Exit"));
+    auto menuLabel = new QLabel(tr("Cleaner Adventures"));
+    menuLabel->setStyleSheet(
+            "font: bold;"
+            "font-size: 72px;"
+            "height: 120px;"
+            "width: 120px;");
+    menuLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+    auto layout = new QGridLayout;
+    layout->addWidget(menuLabel,0,0,4,5);
+    layout->addWidget(m_newGame,4,2,2,1);
+    layout->addWidget(m_controls,6,2,2,1);
+    layout->addWidget(m_highscores,8,2,2,1);
+    layout->addWidget(m_about,10,2,2,1);
+    layout->addWidget(m_exit,12,2,2,1);
 
     setLayout(layout);
 
@@ -26,6 +39,18 @@ void MenuWidget::keyPressEvent(QKeyEvent *event) {
         emit widgetsChanged();
     }
 
+}
+
+QPushButton *MenuWidget::createButton(const QString &text) {
+    auto *button = new QPushButton(text);
+//    button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    button->setStyleSheet("QPushButton { font: bold; border: 3px solid darkgrey; border-radius: 20px;"
+                          "outline-radius: 20px; font-size: 32px; height: 60px; width: 120px; }"
+                          "QPushButton:focus { font: bold; border: 10px solid white; border-radius: 20px;"
+                          "outline-radius: 20px; font-size: 32px }");
+
+    return button;
 }
 
 
