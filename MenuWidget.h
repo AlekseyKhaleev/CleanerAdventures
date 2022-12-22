@@ -15,6 +15,11 @@ public:
 
 signals:
     void widgetsChanged();
+    void newGameClicked();
+    void controlsClicked();
+    void highscoresClicked();
+    void aboutClicked();
+    void exitClicked();
 
 public slots:
     void keyPressEvent(QKeyEvent *event) override;

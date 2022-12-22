@@ -14,6 +14,8 @@ MenuWidget::MenuWidget(QWidget *parent):
 QWidget(parent), m_newGame(createButton(tr("New Game"))), m_controls(createButton("Control keys")),
 m_highscores(createButton("Highscores")), m_about(createButton("About")), m_exit(createButton("Exit"))
 {
+    connect(m_newGame, SIGNAL(clicked()), this, SIGNAL(newGameClicked()));
+    connect(m_exit,SIGNAL(clicked()), this, SIGNAL(exitClicked()));
     auto menuLabel = new QLabel(tr("Cleaner Adventures"));
     menuLabel->setStyleSheet(
             "font: bold;"
@@ -43,7 +45,7 @@ void MenuWidget::keyPressEvent(QKeyEvent *event) {
 
 QPushButton *MenuWidget::createButton(const QString &text) {
     auto *button = new QPushButton(text);
-//    button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    button->setDefault(true);
 
     button->setStyleSheet("QPushButton { font: bold; border: 3px solid darkgrey; border-radius: 20px;"
                           "outline-radius: 20px; font-size: 32px; height: 60px; width: 120px; }"

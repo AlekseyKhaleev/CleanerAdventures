@@ -18,6 +18,7 @@ private:
     QStackedLayout *m_layout;
 public slots:
     void changeWidgets();
+    void exit();
 };
 
 

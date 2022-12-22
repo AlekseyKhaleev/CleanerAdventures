@@ -22,6 +22,10 @@ class GameWidget : public QWidget
 Q_OBJECT
 public:
     explicit GameWidget(QWidget *parent = nullptr);
+
+signals:
+    void widgetsChanged();
+
 private:
     static QLabel *createLabel(const QString &text);
 
@@ -39,9 +43,6 @@ private:
 
      GameOverView *m_gameOverView;
 
-public slots:
-    void changeWidgets();
-signals:
-    void widgetsChanged();
+
 };
 

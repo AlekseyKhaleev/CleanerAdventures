@@ -4,6 +4,7 @@
 
 #include "MainWidget.h"
 
+#include <QCoreApplication>
 #include <QStackedLayout>
 #include <QWidget>
 
@@ -13,6 +14,7 @@ QWidget(parent), m_menu(new MenuWidget), m_game(new GameWidget), m_layout(new QS
     this->setStyleSheet("QWidget {background-color: black; color: WHITE;}");
 
     connect(m_menu, &MenuWidget::widgetsChanged, this, &MainWidget::changeWidgets);
+    connect(m_menu, &MenuWidget::exitClicked, this, &MainWidget::exit);
     connect(m_game, &GameWidget::widgetsChanged, this, &MainWidget::changeWidgets);
 
 
@@ -31,6 +33,10 @@ void MainWidget::changeWidgets() {
     else{
         m_layout->setCurrentWidget(m_menu);
     }
+}
+
+void MainWidget::exit() {
+    QCoreApplication::quit();
 }
 
 MainWidget::~MainWidget()=default;
