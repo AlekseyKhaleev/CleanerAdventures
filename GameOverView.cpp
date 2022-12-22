@@ -9,6 +9,7 @@ GameOverView::GameOverView(QMessageBox *parent): QMessageBox(parent)
 
     this->setStandardButtons(QMessageBox::Close | QMessageBox::Retry);
     this->setDefaultButton(QMessageBox::Retry);
+
 }
 
 GameOverView::~GameOverView()=default;

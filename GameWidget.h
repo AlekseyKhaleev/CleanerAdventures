@@ -38,5 +38,10 @@ private:
     ScoreView *m_scoreView;
 
      GameOverView *m_gameOverView;
+
+public slots:
+    void changeWidgets();
+signals:
+    void widgetsChanged();
 };
 

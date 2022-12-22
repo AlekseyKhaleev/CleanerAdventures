@@ -67,6 +67,7 @@ GameWidget::GameWidget(QWidget *parent)
     connect(m_controller, SIGNAL(robotStateChanged(Robot::Model)),      m_robotModel, SLOT(setRobotState(Robot::Model)));
     connect(m_controller, SIGNAL(stepsChanged(int)),               m_robotModel, SLOT(setRobotSteps(int)));
     connect(m_controller, SIGNAL(scoreIncreaseChanged(bool)),           m_robotModel, SLOT(setScoreIncrease(bool)));
+    connect(m_controller, SIGNAL(widgetsChanged()), this, SLOT(changeWidgets()));
 
     auto gameLay = new QStackedLayout;
     gameLay->setStackingMode(QStackedLayout::StackAll);
@@ -91,4 +92,8 @@ QLabel *GameWidget::createLabel(const QString &text){
     auto *label = new QLabel(text);
     label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     return label;
+}
+
+void GameWidget::changeWidgets() {
+    emit widgetsChanged();
 }

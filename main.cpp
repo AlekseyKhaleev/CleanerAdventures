@@ -1,17 +1,17 @@
 #include <QApplication>
 #include <QPainter>
-
-#include "GameWidget.h"
+#include "MainWidget.h"
 
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
 
-    GameWidget w;    
-    w.showFullScreen();
+    MainWidget mainWindow;
+    mainWindow.showFullScreen();
 
-    return a.exec();
+
+    return QApplication::exec();
 }

@@ -9,6 +9,8 @@
 class Controller: public QObject {
     Q_OBJECT
 signals:
+    void widgetsChanged();
+
     void levelLost();
     void levelDone();
 
