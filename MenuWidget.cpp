@@ -15,6 +15,7 @@ QWidget(parent), m_newGame(createButton(tr("New Game"))), m_controls(createButto
 m_highscores(createButton("Highscores")), m_about(createButton("About")), m_exit(createButton("Exit"))
 {
     connect(m_newGame, SIGNAL(clicked()), this, SIGNAL(newGameClicked()));
+    connect(m_controls, SIGNAL(clicked()), this, SIGNAL(controlsClicked()));
     connect(m_exit,SIGNAL(clicked()), this, SIGNAL(exitClicked()));
     auto menuLabel = new QLabel(tr("Cleaner Adventures"));
     menuLabel->setStyleSheet(
@@ -38,7 +39,7 @@ m_highscores(createButton("Highscores")), m_about(createButton("About")), m_exit
 
 void MenuWidget::keyPressEvent(QKeyEvent *event) {
     if(event->key() == Qt::Key_Escape){
-        emit widgetsChanged();
+        emit returnClicked();
     }
 
 }

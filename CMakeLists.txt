@@ -28,7 +28,7 @@ set(PROJECT_SOURCES
         MazeView.cpp     MazeView.h
         ScoreView.cpp    ScoreView.h
         LevelView.cpp    LevelView.h
-        GameOverView.cpp GameOverView.h MenuWidget.cpp MenuWidget.h MainWidget.cpp MainWidget.h)
+        GameOverView.cpp GameOverView.h MenuWidget.cpp MenuWidget.h MainWidget.cpp MainWidget.h ConrolsView.cpp ConrolsView.h)
 
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

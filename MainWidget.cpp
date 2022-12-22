@@ -8,35 +8,46 @@
 #include <QStackedLayout>
 #include <QWidget>
 
+
+using namespace Menu;
+
 MainWidget::MainWidget(QWidget *parent):
-QWidget(parent), m_menu(new MenuWidget), m_game(new GameWidget), m_layout(new QStackedLayout)
+QWidget(parent), m_menu(new MenuWidget), m_game(new GameWidget), m_layout(new QStackedLayout), m_controls(new ConrolsView)
 {
     this->setStyleSheet("QWidget {background-color: black; color: WHITE;}");
 
-    connect(m_menu, &MenuWidget::widgetsChanged, this, &MainWidget::changeWidgets);
-    connect(m_menu, &MenuWidget::exitClicked, this, &MainWidget::exit);
-    connect(m_game, &GameWidget::widgetsChanged, this, &MainWidget::changeWidgets);
+    connect(m_menu, SIGNAL(newGameClicked(int)), this, SLOT(changeWidgets(int)));
+    connect(m_menu, SIGNAL(controlsClicked(int)), this, SLOT(changeWidgets(int)));
+    connect(m_menu, SIGNAL(highscoresClicked(int)), this, SLOT(changeWidgets(int)));
+    connect(m_menu, SIGNAL(aboutClicked(int)), this, SLOT(changeWidgets(int)));
+    connect(m_menu, SIGNAL(exitClicked(int)), this, SLOT(changeWidgets(int)));
+    connect(m_menu, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
+    connect(m_game, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
+    connect(m_controls, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
 
 
     m_layout->setStackingMode(QStackedLayout::StackOne);
 
     m_layout->addWidget(m_menu);
     m_layout->addWidget(m_game);
+    m_layout->addWidget(m_controls);
 
     setLayout(m_layout);
 }
 
-void MainWidget::changeWidgets() {
-    if(m_layout->currentWidget() == m_menu){
-        m_layout->setCurrentWidget(m_game);
+void MainWidget::changeWidgets(int button) {
+    switch(button){
+        case Menu::RETURN:{
+                    if(m_layout->currentWidget() == m_menu){ m_layout->setCurrentWidget(m_game); }
+                    else{ m_layout->setCurrentWidget(m_menu); }
+                    break;
+        }
+        case Menu::CONTROLS:{ m_layout->setCurrentWidget(m_controls); break; }
+        case Menu::EXIT: QCoreApplication::quit();
+        default:break;
     }
-    else{
-        m_layout->setCurrentWidget(m_menu);
-    }
+
 }
 
-void MainWidget::exit() {
-    QCoreApplication::quit();
-}
 
 MainWidget::~MainWidget()=default;

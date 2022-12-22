@@ -4,6 +4,11 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+namespace Menu{
+    enum{
+        RETURN, NEW_GAME, CONTROLS, HIGHSCORES, ABOUT, EXIT
+    };
+}
 
 class MenuWidget: public QWidget {
 Q_OBJECT
@@ -14,12 +19,12 @@ public:
     ~MenuWidget() override;
 
 signals:
-    void widgetsChanged();
-    void newGameClicked();
-    void controlsClicked();
-    void highscoresClicked();
-    void aboutClicked();
-    void exitClicked();
+    void returnClicked(int button=Menu::RETURN);
+    void newGameClicked(int button=Menu::NEW_GAME);
+    void controlsClicked(int button=Menu::CONTROLS);
+    void highscoresClicked(int button=Menu::HIGHSCORES);
+    void aboutClicked(int button=Menu::ABOUT);
+    void exitClicked(int button=Menu::EXIT);
 
 public slots:
     void keyPressEvent(QKeyEvent *event) override;

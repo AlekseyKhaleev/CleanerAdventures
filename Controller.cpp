@@ -69,7 +69,7 @@ void Controller::keyEventAction(int eventKey) {
             stepBack();
         }
         case Qt::Key_Escape:{
-            emit widgetsChanged();
+            emit returnClicked();
         }
         default:break;
     }

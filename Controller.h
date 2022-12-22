@@ -5,11 +5,12 @@
 
 #include "RobotModel.h"
 #include "MazeModel.h"
+#include "MenuWidget.h"
 
 class Controller: public QObject {
     Q_OBJECT
 signals:
-    void widgetsChanged();
+    void returnClicked(int button=Menu::RETURN);
 
     void levelLost();
     void levelDone();

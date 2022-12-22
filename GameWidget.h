@@ -15,6 +15,7 @@
 #include "RobotModel.h"
 #include "RobotView.h"
 #include "ScoreView.h"
+#include "MenuWidget.h"
 
 
 class GameWidget : public QWidget
@@ -24,7 +25,7 @@ public:
     explicit GameWidget(QWidget *parent = nullptr);
 
 signals:
-    void widgetsChanged();
+    void returnClicked(int button=Menu::RETURN);
 
 private:
     static QLabel *createLabel(const QString &text);
