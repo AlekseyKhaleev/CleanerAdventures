@@ -5,6 +5,7 @@
 #include "MainWidget.h"
 
 #include <QCoreApplication>
+#include <QInputDialog>
 #include <QStackedLayout>
 #include <QWidget>
 
@@ -36,8 +37,32 @@ QWidget(parent), m_menu(new MenuWidget), m_layout(new QStackedLayout), m_control
 void MainWidget::changeWidgets(int button) {
     switch(button){
         case Menu::NEW_GAME:{
+//            QString text = QInputDialog::getText(this, tr("QInputDialog::getText()"),
+//                                                 tr("User name:"), QLineEdit::Normal,
+//                                                 setOption(QInputDialog::NoButtons);
+
+            QInputDialog auth;
+            auth.setOption(QInputDialog::NoButtons);
+//            auth.setOption()
+            auth.setInputMode(QInputDialog::TextInput);
+            auth.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//            auth.resize(2000,2000);
+
+            auto const rec = QGuiApplication::primaryScreen()->size();
+//            auth.setMaximumSize(rec);
+//            auth.setFixedSize(rec);
+
+            auth.setLabelText("Enter your name, robot :");
+
+            auth.setStyleSheet("border: 6px solid white; font: bold; font-size: 24px; "
+                               "color: white; background-color: black; width: 360px; height: 480px;");
+//            auth.resize(20,2000);
+
+            auth.exec();
+            QString name = auth.textValue();
+//            QString name = QInputDialog::getText(nullptr,tr(""),tr("Enter your name, robot:"));
             delete m_game;
-            m_game = new GameWidget;
+            m_game = new GameWidget(name);
             connect(m_game, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
             m_layout->addWidget(m_game);
         }

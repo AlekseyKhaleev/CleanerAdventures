@@ -5,13 +5,14 @@
 #include <QLCDNumber>
 #include <QStackedLayout>
 #include <QString>
+#include <utility>
 
 #include "EnergyView.h"
 #include "RobotModel.h"
 #include "MazeModel.h"
 
-GameWidget::GameWidget(QWidget *parent)
-    : QWidget{parent}, m_robotModel(new Robot::RobotModel), m_mazeModel(new Maze::MazeModel),
+GameWidget::GameWidget(QString name, QWidget *parent)
+    : QWidget{parent}, m_robotModel(new Robot::RobotModel(std::move(name))), m_mazeModel(new Maze::MazeModel),
     m_energyView(new EnergyView), m_gameOverView(new GameOverView)
 {
     m_controller = new Controller{m_robotModel->getModel(), m_mazeModel->getMazeModel()};

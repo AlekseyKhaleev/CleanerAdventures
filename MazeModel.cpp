@@ -94,9 +94,8 @@ void MazeModel::locateWalls(){
 void MazeModel::initFieldSize(){
     auto const rec = QGuiApplication::primaryScreen()->size();
     m_model->fieldWidth = rec.width() / Maze::Model::DOT_SIDE;
-//    m_model->fieldWidth = m_model->fieldWidth+(m_model->fieldWidth % 2)-1;
     m_model->fieldHeight = rec.height() * 0.8 / Maze::Model::DOT_SIDE;
-//    m_model->fieldHeight = m_model->fieldHeight+(m_model->fieldHeight % 2)-1;
+
 }
 
 void MazeModel::initDefaultMazeMap(){

@@ -21,7 +21,7 @@ class GameWidget : public QWidget
 {
 Q_OBJECT
 public:
-    explicit GameWidget(QWidget *parent = nullptr);
+    explicit GameWidget(QString name, QWidget *parent = nullptr);
 
 signals:
     void returnClicked(int button=Menu::RETURN);
