@@ -60,7 +60,7 @@ void RobotView::drawRobot(){
 }
 
 void RobotView::updateModel(Robot::Model model) {
-    m_viewModel = model;
+    m_viewModel = std::move(model);
     repaint();
 }
 

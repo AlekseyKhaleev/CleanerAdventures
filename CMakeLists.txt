@@ -26,8 +26,7 @@ set(PROJECT_SOURCES
         RobotView.cpp    RobotView.h
         Controller.cpp   Controller.h
         MazeView.cpp     MazeView.h
-        ScoreView.cpp    ScoreView.h
-        LevelView.cpp    LevelView.h
+        LCDView.cpp LCDView.h
         GameOverView.cpp GameOverView.h MenuWidget.cpp MenuWidget.h MainWidget.cpp MainWidget.h ConrolsView.cpp ConrolsView.h)
 
 

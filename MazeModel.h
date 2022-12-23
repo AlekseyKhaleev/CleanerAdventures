@@ -39,7 +39,7 @@ namespace Maze {
 
         void delBattery(QPoint value);
 
-        void setMazeState(const Maze::Model &state);
+        void setModel(const Maze::Model &state);
 
         void initMaze();
 
@@ -48,7 +48,7 @@ namespace Maze {
         Model getMazeModel();
 
     private:
-        Model *m_mazeState;
+        Model *m_model;
 
         void initFieldSize();
 

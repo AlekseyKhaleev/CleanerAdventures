@@ -9,12 +9,11 @@
 #include "Controller.h"
 #include "GameOverView.h"
 #include "EnergyView.h"
-#include "LevelView.h"
+#include "LCDView.h"
 #include "MazeModel.h"
 #include "MazeView.h"
 #include "RobotModel.h"
 #include "RobotView.h"
-#include "ScoreView.h"
 #include "MenuWidget.h"
 
 
@@ -39,8 +38,8 @@ private:
     Controller *m_controller;
     EnergyView *m_energyView;
 
-    LevelView *m_levelView;
-    ScoreView *m_scoreView;
+    LCDView *m_levelView;
+    LCDView *m_scoreView;
 
      GameOverView *m_gameOverView;
 

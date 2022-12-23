@@ -24,11 +24,12 @@ namespace Robot {
 
 
     struct Model {
-
         static const int DOT_SIDE{34};
+
+        QString name;
         bool scoreIncrease{};
         Colors curColor{}, tmpColor{};
-        int score{0}, steps{};
+        int score{0}, highScore{0}, steps{};
         Directions robotDestination{};
         QPoint robotPosition;
     };
@@ -40,7 +41,7 @@ namespace Robot {
 
     public:
 
-        explicit RobotModel(QObject *parent = nullptr);
+        explicit RobotModel(QString name="Robot", QObject *parent = nullptr);
 
         ~RobotModel() override;
 
@@ -68,13 +69,13 @@ namespace Robot {
 
         void setScoreIncrease(bool value);
 
-        void setRobotState(Robot::Model state);
+        void setModel(Robot::Model model);
 
         void animateSkin();
 
     private:
 
-        Model *m_robotState;
+        Model *m_model;
 
     };
 }
