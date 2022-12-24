@@ -7,9 +7,9 @@
 #include <QString>
 #include <utility>
 
-#include "EnergyView.h"
-#include "RobotModel.h"
-#include "MazeModel.h"
+#include "game/EnergyView.h"
+#include "game/RobotModel.h"
+#include "game/MazeModel.h"
 
 GameWidget::GameWidget(QString name, QWidget *parent)
     : QWidget{parent}, m_robotModel(new Robot::RobotModel(std::move(name))), m_mazeModel(new Maze::MazeModel),

@@ -5,7 +5,7 @@
 
 #include "RobotModel.h"
 #include "MazeModel.h"
-#include "MenuWidget.h"
+#include "../MenuWidget.h"
 
 class Controller: public QObject {
     Q_OBJECT

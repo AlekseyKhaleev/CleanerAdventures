@@ -2,20 +2,25 @@
 
 #include <QWidget>
 #include <QTableView>
+#include <QLabel>
 
 #include "MenuWidget.h"
 
-class ConrolsView: public QTableView {
+class ControlsWidget: public QWidget {
+
     Q_OBJECT
+
 public:
-    explicit ConrolsView(QTableView *parent=nullptr);
-    ~ConrolsView() override;
+
+    explicit ControlsWidget(QWidget *parent=nullptr);
+    ~ControlsWidget() override;
 
 signals:
     void returnClicked(int button=Menu::RETURN);
 
 public slots:
     void keyPressEvent(QKeyEvent *event) override;
-protected:
 
+private:
+    QLabel *createLabel(const QString &text);
 };

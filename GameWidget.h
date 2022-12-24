@@ -6,14 +6,14 @@
 #include <QObject>
 #include <QWidget>
 
-#include "Controller.h"
-#include "GameOverView.h"
-#include "EnergyView.h"
-#include "LCDView.h"
-#include "MazeModel.h"
-#include "MazeView.h"
-#include "RobotModel.h"
-#include "RobotView.h"
+#include "game/Controller.h"
+#include "game/GameOverView.h"
+#include "game/EnergyView.h"
+#include "game/LCDView.h"
+#include "game/MazeModel.h"
+#include "game/MazeView.h"
+#include "game/RobotModel.h"
+#include "game/RobotView.h"
 #include "MenuWidget.h"
 
 

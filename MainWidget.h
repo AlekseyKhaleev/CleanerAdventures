@@ -7,7 +7,7 @@
 #include "AuthWidget.h"
 #include "MenuWidget.h"
 #include "GameWidget.h"
-#include "ConrolsView.h"
+#include "ControlsWidget.h"
 
 namespace {
 
@@ -22,7 +22,7 @@ private:
 
     MenuWidget *m_menu;
     GameWidget *m_game;
-    ConrolsView *m_controls;
+    ControlsWidget *m_controls;
     QStackedLayout *m_layout;
     AuthWidget *m_auth;
 

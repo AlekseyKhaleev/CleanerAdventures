@@ -67,9 +67,11 @@ void Controller::keyEventAction(int eventKey) {
         }
         case Qt::Key_Backspace:{
             stepBack();
+            break;
         }
         case Qt::Key_Escape:{
             emit returnClicked();
+            break;
         }
         default:break;
     }

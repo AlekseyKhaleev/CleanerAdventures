@@ -5,16 +5,14 @@
 #include "MainWidget.h"
 
 #include <QCoreApplication>
-#include <QInputDialog>
 #include <QStackedLayout>
 #include <QWidget>
-#include <utility>
 
 
 using namespace Menu;
 
 MainWidget::MainWidget(QWidget *parent):
-QWidget(parent), m_menu(new MenuWidget), m_layout(new QStackedLayout), m_controls(new ConrolsView), m_auth(new AuthWidget)
+        QWidget(parent), m_menu(new MenuWidget), m_layout(new QStackedLayout), m_controls(new ControlsWidget), m_auth(new AuthWidget)
 {
     this->setStyleSheet("QWidget {background-color: black; color: WHITE;}");
 
@@ -36,12 +34,16 @@ QWidget(parent), m_menu(new MenuWidget), m_layout(new QStackedLayout), m_control
 
     setLayout(m_layout);
 }
+
+
 void MainWidget::initNewGame(QString name){
     delete m_game;
     m_game = new GameWidget(name);
     connect(m_game, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
+//    m_game->setFocusPolicy(Qt::StrongFocus);
     m_layout->addWidget(m_game);
     m_layout->setCurrentWidget(m_game);
+    m_game->setFocusPolicy(Qt::StrongFocus);
 }
 
 

@@ -20,14 +20,14 @@ set(PROJECT_SOURCES
         resources/resources.qrc
         main.cpp
         GameWidget.cpp   GameWidget.h
-        EnergyView.cpp   EnergyView.h
-        MazeModel.cpp    MazeModel.h
-        RobotModel.cpp   RobotModel.h
-        RobotView.cpp    RobotView.h
-        Controller.cpp   Controller.h
-        MazeView.cpp     MazeView.h
-        LCDView.cpp LCDView.h
-        GameOverView.cpp GameOverView.h MenuWidget.cpp MenuWidget.h MainWidget.cpp MainWidget.h ConrolsView.cpp ConrolsView.h AuthWidget.cpp AuthWidget.h)
+        game/EnergyView.cpp game/EnergyView.h
+        game/MazeModel.cpp game/MazeModel.h
+        game/RobotModel.cpp game/RobotModel.h
+        game/RobotView.cpp game/RobotView.h
+        game/Controller.cpp game/Controller.h
+        game/MazeView.cpp game/MazeView.h
+        game/LCDView.cpp game/LCDView.h
+        game/GameOverView.cpp game/GameOverView.h MenuWidget.cpp MenuWidget.h MainWidget.cpp MainWidget.h ControlsWidget.cpp ControlsWidget.h AuthWidget.cpp AuthWidget.h)
 
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
