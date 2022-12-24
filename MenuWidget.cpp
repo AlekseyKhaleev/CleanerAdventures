@@ -18,11 +18,7 @@ m_highscores(createButton("Highscores")), m_about(createButton("About")), m_exit
     connect(m_controls, SIGNAL(clicked()), this, SIGNAL(controlsClicked()));
     connect(m_exit,SIGNAL(clicked()), this, SIGNAL(exitClicked()));
     auto menuLabel = new QLabel(tr("Cleaner Adventures"));
-    menuLabel->setStyleSheet(
-            "font: bold;"
-            "font-size: 72px;"
-            "height: 120px;"
-            "width: 120px;");
+    menuLabel->setStyleSheet("font: bold; font-size: 72px; height: 120px; width: 120px;");
     menuLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     auto layout = new QGridLayout;
