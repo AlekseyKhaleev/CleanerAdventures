@@ -49,15 +49,24 @@ namespace Robot {
     signals:
 
         void modelChanged(Robot::Model model);
-        void exit();
+
+        void exit(); // state "exit"
 
     public slots:
 
-        void initRobot();
+        //*****************  FSM STATES *********************************
 
-        void setDestination(Robot::Directions dir);
+        void initRobot(); // state "init"
 
-        void setRobotPosition(QPoint tar_pos);
+        void setDestination(Robot::Directions dir); // state "rotate"
+
+        void setRobotPosition(QPoint tar_pos); // state "move"
+
+        void animateSkin(); //state "wait"
+
+        void setModel(Robot::Model model); // state "step back"
+
+        //****************************************************************
 
         void setRobotSteps(int value);
 
@@ -68,10 +77,6 @@ namespace Robot {
         void setTmpColor(Robot::Colors value);
 
         void setScoreIncrease(bool value);
-
-        void setModel(Robot::Model model);
-
-        void animateSkin();
 
     private:
 
