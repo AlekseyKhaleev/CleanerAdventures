@@ -16,7 +16,10 @@ m_highscores(createButton("Highscores")), m_about(createButton("About")), m_exit
 {
     connect(m_newGame, SIGNAL(clicked()), this, SIGNAL(newGameClicked()));
     connect(m_controls, SIGNAL(clicked()), this, SIGNAL(controlsClicked()));
+    connect(m_highscores, SIGNAL(clicked()), this, SIGNAL(highscoresClicked()));
+    connect(m_about, SIGNAL(clicked()), this, SIGNAL(aboutClicked()));
     connect(m_exit,SIGNAL(clicked()), this, SIGNAL(exitClicked()));
+
     auto menuLabel = new QLabel(tr("Cleaner Adventures"));
     menuLabel->setStyleSheet("font: bold; font-size: 72px; height: 120px; width: 120px;");
     menuLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);

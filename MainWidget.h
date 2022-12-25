@@ -4,6 +4,7 @@
 
 #include <QStackedLayout>
 
+#include "AboutWidget.h"
 #include "AuthWidget.h"
 #include "MenuWidget.h"
 #include "GameWidget.h"
@@ -25,6 +26,7 @@ private:
     ControlsWidget *m_controls;
     QStackedLayout *m_layout;
     AuthWidget *m_auth;
+    AboutWidget *m_about;
 
 
 public slots:

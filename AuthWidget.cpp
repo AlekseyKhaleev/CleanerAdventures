@@ -31,8 +31,6 @@ void AuthWidget::changeName() {
 
     emit nameChanged(m_auth->text());
     m_auth->clear();
-//    m_auth->setFocusPolicy(Qt::NoFocus);
-
 }
 
 AuthWidget::~AuthWidget()=default;

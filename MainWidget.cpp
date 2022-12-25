@@ -7,12 +7,15 @@
 #include <QCoreApplication>
 #include <QStackedLayout>
 #include <QWidget>
+#include <utility>
 
+#include "AboutWidget.h"
 
 using namespace Menu;
 
 MainWidget::MainWidget(QWidget *parent):
-        QWidget(parent), m_menu(new MenuWidget), m_layout(new QStackedLayout), m_controls(new ControlsWidget), m_auth(new AuthWidget)
+        QWidget(parent), m_menu(new MenuWidget), m_layout(new QStackedLayout), m_controls(new ControlsWidget),
+        m_auth(new AuthWidget), m_about(new AboutWidget)
 {
     this->setStyleSheet("QWidget {background-color: black; color: WHITE;}");
 
@@ -23,6 +26,7 @@ MainWidget::MainWidget(QWidget *parent):
     connect(m_menu, SIGNAL(exitClicked(int)), this, SLOT(changeWidgets(int)));
     connect(m_menu, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
     connect(m_controls, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
+    connect(m_about, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
     connect(m_auth, SIGNAL(nameChanged(QString)), this, SLOT(initNewGame(QString)));
 
 
@@ -31,6 +35,7 @@ MainWidget::MainWidget(QWidget *parent):
     m_layout->addWidget(m_menu);
     m_layout->addWidget(m_controls);
     m_layout->addWidget(m_auth);
+    m_layout->addWidget(m_about);
 
     setLayout(m_layout);
 }
@@ -38,9 +43,9 @@ MainWidget::MainWidget(QWidget *parent):
 
 void MainWidget::initNewGame(QString name){
     delete m_game;
-    m_game = new GameWidget(name);
+    m_game = new GameWidget(std::move(name));
     connect(m_game, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
-//    m_game->setFocusPolicy(Qt::StrongFocus);
+
     m_layout->addWidget(m_game);
     m_layout->setCurrentWidget(m_game);
     m_game->setFocusPolicy(Qt::StrongFocus);
@@ -59,7 +64,8 @@ void MainWidget::changeWidgets(int button) {
             break;
         }
         case Menu::CONTROLS:{ m_layout->setCurrentWidget(m_controls); break; }
-        case Menu::EXIT: QCoreApplication::quit();
+        case Menu::ABOUT:   { m_layout->setCurrentWidget(m_about); break;    }
+        case Menu::EXIT:    { QCoreApplication::quit();                         }
         default:break;
     }
 
