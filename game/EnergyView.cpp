@@ -15,6 +15,7 @@ EnergyView::EnergyView(QWidget *parent) :
         new QImage(":/images/en_90")
 })
 {
+    this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Ignored);
     m_enStatus = en_90;
     repaint();
 }

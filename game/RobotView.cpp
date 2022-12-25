@@ -7,12 +7,13 @@
 #include <QPainter>
 #include <QStyleOption>
 #include <QTimerEvent>
+#include <utility>
 
 
 
 RobotView::RobotView(Robot::Model targetModel, QWidget *parent):
 QWidget(parent),
-m_viewModel(targetModel),
+m_viewModel(std::move(targetModel)),
 m_white(QVector<QImage>{
         QImage(":/images/VC_wt_lt"),
         QImage(":/images/VC_wt_rt"),
@@ -38,7 +39,7 @@ m_red(QVector<QImage>{
         QImage(":/images/VC_rd_dn")
 })
 {
-    repaint();
+//    repaint();
 }
 
 void RobotView::paintEvent(QPaintEvent *event) {

@@ -22,11 +22,10 @@ namespace Robot {
         WHITE, GREEN, YELLOW, RED
     };
 
-
     struct Model {
         static const int DOT_SIDE{34};
+        QString name, state;
 
-        QString name;
         bool scoreIncrease{};
         Colors curColor{}, tmpColor{};
         int score{0}, highScore{0}, steps{};
@@ -50,6 +49,7 @@ namespace Robot {
     signals:
 
         void modelChanged(Robot::Model model);
+        void exit();
 
     public slots:
 

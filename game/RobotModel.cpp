@@ -26,12 +26,16 @@ RobotModel::RobotModel(QString name, QObject *parent):
 
 //Destructor
 RobotModel::~RobotModel(){
+    m_model->state = "exit";
+    emit modelChanged(*m_model);
+
     delete m_model;
 }
 
 //*****************************************************
 
 void RobotModel::initRobot(){
+    m_model->state = "init";
     m_model->robotDestination = UP;
     m_model->robotPosition = QPoint{1, 1};
     m_model->scoreIncrease = true;
@@ -45,6 +49,7 @@ void RobotModel::initRobot(){
 
 
 void RobotModel::setModel(Robot::Model model){
+    m_model->state = "step back";
     m_model->robotPosition = model.robotPosition;
     m_model->score = model.score;
     m_model->steps = model.steps;
@@ -56,11 +61,13 @@ void RobotModel::setModel(Robot::Model model){
 
 
 void RobotModel::setDestination(Robot::Directions dir) {
+    m_model->state = "rotate";
     m_model->robotDestination = dir;
     emit modelChanged(*m_model);
 }
 
 void RobotModel::setRobotPosition(QPoint tar_pos) {
+    m_model->state = "move";
     m_model->robotPosition = tar_pos;
     emit modelChanged(*m_model);
 }
@@ -92,6 +99,7 @@ void RobotModel::setScoreIncrease(bool value) {
 }
 
 void RobotModel::animateSkin() {
+    m_model->state = "wait";
     qSwap(m_model->curColor, m_model->tmpColor);
     emit modelChanged(*m_model);
 }
@@ -100,13 +108,6 @@ void RobotModel::animateSkin() {
 Robot::Model RobotModel::getModel() {
     return *m_model;
 }
-
-
-
-//void RobotModel::setRobotEnergy(int value) {
-//    m_model->energy = value;
-//    emit modelChanged(*m_model);
-//}
 
 
 
