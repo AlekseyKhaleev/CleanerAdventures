@@ -64,7 +64,7 @@ namespace Robot {
 
         void animateSkin(); //state "wait"
 
-        void setModel(Robot::Model model); // state "step back"
+        void stepBack(); // state "step back"
 
         //****************************************************************
 
@@ -79,9 +79,8 @@ namespace Robot {
         void setScoreIncrease(bool value);
 
     private:
-
-        Model *m_model;
-
+        Model m_model;
+        QStack<Model> m_memory;
     };
 }
 

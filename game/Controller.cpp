@@ -10,14 +10,6 @@
 Controller::Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *parent) :
     QObject(parent), m_robotModel(robotModel), m_mazeModel(mazeModel)
 {
-    if(!m_states.isEmpty()) { m_states.clear();}
-    m_states.push(State(m_robotModel.robotPosition,
-                        m_mazeModel.batteries,
-                        m_robotModel.score,
-                        m_robotModel.steps,
-                        m_robotModel.robotDestination,
-                        m_robotModel.curColor,
-                        m_robotModel.tmpColor));
     m_animationTimerId = startTimer(ANIMATION_DELAY);
 }
 
@@ -66,7 +58,7 @@ void Controller::keyEventAction(int eventKey) {
             break;
         }
         case Qt::Key_Backspace:{
-            stepBack();
+            emit stepBack();
             break;
         }
         case Qt::Key_Escape:{
@@ -77,28 +69,6 @@ void Controller::keyEventAction(int eventKey) {
     }
 }
 
-
-void Controller::stepBack(){
-    if(!m_states.isEmpty()){
-        State lastState = m_states.pop();
-        if(lastState.robotState.steps==m_robotModel.steps){
-            stepBack();
-        }
-        else {
-            emit robotStateChanged(lastState.robotState);
-            emit mazeStateChanged(lastState.mazeState);
-        }
-        if(m_states.isEmpty()){
-            m_states.push(State(m_robotModel.robotPosition,
-                                m_mazeModel.batteries,
-                                m_robotModel.score,
-                                m_robotModel.steps,
-                                m_robotModel.robotDestination,
-                                m_robotModel.curColor,
-                                m_robotModel.tmpColor));
-        }
-    }
-}
 
 void Controller::checkBattery()
 {
@@ -173,13 +143,6 @@ void Controller::doStep(int eventKey){
     emit stepsChanged(m_robotModel.steps + 1);
     updateScore(eventKey);
     checkEnergy();
-    m_states.push(State(m_robotModel.robotPosition,
-                        m_mazeModel.batteries,
-                        m_robotModel.score,
-                        m_robotModel.steps,
-                        m_robotModel.robotDestination,
-                        m_robotModel.curColor,
-                        m_robotModel.tmpColor));
 }
 
 void Controller::updateScore(int eventKey)
@@ -260,10 +223,5 @@ void Controller::startGame() {
     emit resetMaze();
     emit resetRobot();
 }
-
-void Controller::clearMemory() {
-m_states.clear();
-}
-
 
 Controller::~Controller()=default;

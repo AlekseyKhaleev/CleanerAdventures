@@ -28,8 +28,7 @@ signals:
     void batteryLocated(QPoint value);
     void scoreIncreaseChanged(bool value);
     void batteryFound(QPoint value);
-    void robotStateChanged(Robot::Model state);
-    void mazeStateChanged(Maze::Model state);
+    void stepBack();
     void skinAnimated();
 
 public slots:
@@ -38,42 +37,17 @@ public slots:
     void updateMazeModel(Maze::Model model);
     void startGame();
     void endGame();
-    void clearMemory();
+
 
 public:
     Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *parent= nullptr);
     ~Controller() override;
-    friend Robot::RobotModel;
 private:
 
     static const int ANIMATION_DELAY = 300;
     int m_animationTimerId;
 
     void timerEvent(QTimerEvent *event)  override;
-
-    struct State
-    {
-        Robot::Model robotState;
-        Maze::Model mazeState;
-        State() = default;
-        State(QPoint position,
-              QVector<QPoint> batteries,
-              int score,
-              int steps,
-              Robot::Directions destination,
-              Robot::Colors current,
-              Robot::Colors temp)
-        {
-            robotState.robotPosition = position;
-            robotState.score = score;
-            robotState.steps = steps;
-            robotState.robotDestination = destination;
-            robotState.curColor = current;
-            robotState.tmpColor = temp;
-            mazeState.batteries = batteries;
-        }
-    };
-    QStack<State> m_states;
 
     Robot::Model m_robotModel;
     Maze::Model m_mazeModel;
@@ -97,8 +71,6 @@ private:
     bool checkWall(QPoint dest);
 
     void checkBattery();
-
-    void stepBack();
 };
 
 

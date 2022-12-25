@@ -6,6 +6,7 @@
 #include <QPoint>
 #include <QScreen>
 #include <QSet>
+#include <QStack>
 #include <QVector>
 #include <QWidget>
 
@@ -39,7 +40,7 @@ namespace Maze {
 
         void delBattery(QPoint value);
 
-        void setModel(const Maze::Model &state);
+        void stepBack();
 
         void initMaze();
 
@@ -48,7 +49,7 @@ namespace Maze {
         Model getMazeModel();
 
     private:
-        Model *m_model;
+        Model m_model;
 
         void initFieldSize();
 

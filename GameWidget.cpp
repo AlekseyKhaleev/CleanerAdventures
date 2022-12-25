@@ -34,7 +34,7 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     //****************************************** CONNECTIONS *********************************************************
 
     //********* m_gameOverView sender **********
-    connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SLOT(clearMemory()));
+//    connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SLOT(clearMemory()));
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SLOT(startGame()));
     connect(m_gameOverView, SIGNAL(gameEnded()),  m_controller, SLOT(endGame()));
 
@@ -53,27 +53,27 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     connect(m_robotView, SIGNAL(keyHandled(int)), m_controller, SLOT(keyEventAction(int)));
 
     //********* m_controller sender ************
-    connect(m_controller, SIGNAL(levelLost()), m_mazeModel, SLOT(resetLevel()));
-    connect(m_controller, SIGNAL(levelLost()), m_gameOverView, SLOT(levelLost()));
-    connect(m_controller, SIGNAL(levelDone()),   m_gameOverView, SLOT(levelDone()));
-    connect(m_controller, SIGNAL(resetMaze()), m_mazeModel, SLOT(initMaze()));
-    connect(m_controller, SIGNAL(resetRobot()),m_robotModel, SLOT(initRobot()));
+    connect(m_controller, SIGNAL(levelLost()), m_mazeModel,   SLOT(resetLevel()));
+    connect(m_controller, SIGNAL(levelLost()), m_gameOverView,SLOT(levelLost()));
+    connect(m_controller, SIGNAL(levelDone()), m_gameOverView,SLOT(levelDone()));
+    connect(m_controller, SIGNAL(resetMaze()), m_mazeModel,   SLOT(initMaze()));
+    connect(m_controller, SIGNAL(resetRobot()),m_robotModel,  SLOT(initRobot()));
 
-    connect(m_controller, SIGNAL(batteryFound(QPoint)),         m_mazeModel, SLOT(delBattery(QPoint)));
-    connect(m_controller, SIGNAL(batteryLocated(QPoint)),       m_mazeModel, SLOT(addBattery(QPoint)));
-    connect(m_controller, SIGNAL(mazeStateChanged(Maze::Model)),m_mazeModel, SLOT(setModel(Maze::Model)));
+    connect(m_controller, SIGNAL(batteryFound(QPoint)),  m_mazeModel, SLOT(delBattery(QPoint)));
+    connect(m_controller, SIGNAL(batteryLocated(QPoint)),m_mazeModel, SLOT(addBattery(QPoint)));
+    connect(m_controller, SIGNAL(stepBack()),            m_mazeModel, SLOT(stepBack()));
 
+    connect(m_controller, SIGNAL(stepBack()),                       m_robotModel, SLOT(stepBack()));
     connect(m_controller, SIGNAL(skinAnimated()),                       m_robotModel, SLOT(animateSkin()));
-    connect(m_controller, SIGNAL(scoreChanged(int)),               m_robotModel, SLOT(setRobotScore(int)));
+    connect(m_controller, SIGNAL(scoreChanged(int)),                    m_robotModel, SLOT(setRobotScore(int)));
     connect(m_controller, SIGNAL(tmpColorChanged(Robot::Colors)),       m_robotModel, SLOT(setTmpColor(Robot::Colors)));
     connect(m_controller, SIGNAL(curColorChanged(Robot::Colors)),       m_robotModel, SLOT(setCurColor(Robot::Colors)));
-    connect(m_controller, SIGNAL(energyChanged(int)),               m_energyView, SLOT(updateModel(int)));
+    connect(m_controller, SIGNAL(energyChanged(int)),                   m_energyView, SLOT(updateModel(int)));
     connect(m_controller, SIGNAL(destinationChanged(Robot::Directions)),m_robotModel, SLOT(setDestination(Robot::Directions)));
-    connect(m_controller, SIGNAL(positionChanged(QPoint)),         m_robotModel, SLOT(setRobotPosition(QPoint)));
-    connect(m_controller, SIGNAL(robotStateChanged(Robot::Model)),      m_robotModel, SLOT(setModel(Robot::Model)));
-    connect(m_controller, SIGNAL(stepsChanged(int)),               m_robotModel, SLOT(setRobotSteps(int)));
+    connect(m_controller, SIGNAL(positionChanged(QPoint)),              m_robotModel, SLOT(setRobotPosition(QPoint)));
+    connect(m_controller, SIGNAL(stepsChanged(int)),                    m_robotModel, SLOT(setRobotSteps(int)));
     connect(m_controller, SIGNAL(scoreIncreaseChanged(bool)),           m_robotModel, SLOT(setScoreIncrease(bool)));
-    connect(m_controller, SIGNAL(returnClicked(int)), this, SIGNAL(returnClicked(int)));
+    connect(m_controller, SIGNAL(returnClicked(int)),                   this, SIGNAL(returnClicked(int)));
 
     auto gameLay = new QStackedLayout;
     gameLay->setStackingMode(QStackedLayout::StackAll);
