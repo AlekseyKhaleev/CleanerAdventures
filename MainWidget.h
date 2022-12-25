@@ -9,6 +9,7 @@
 #include "MenuWidget.h"
 #include "GameWidget.h"
 #include "ControlsWidget.h"
+#include "HighscoresWidget.h"
 
 namespace {
 
@@ -27,6 +28,7 @@ private:
     QStackedLayout *m_layout;
     AuthWidget *m_auth;
     AboutWidget *m_about;
+    HighscoresWidget *m_highscores;
 
 
 public slots:

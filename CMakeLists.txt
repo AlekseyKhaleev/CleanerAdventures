@@ -27,7 +27,7 @@ set(PROJECT_SOURCES
         game/Controller.cpp game/Controller.h
         game/MazeView.cpp game/MazeView.h
         game/LCDView.cpp game/LCDView.h
-        game/GameOverView.cpp game/GameOverView.h MenuWidget.cpp MenuWidget.h MainWidget.cpp MainWidget.h ControlsWidget.cpp ControlsWidget.h AuthWidget.cpp AuthWidget.h AboutWidget.cpp AboutWidget.h)
+        game/GameOverView.cpp game/GameOverView.h MenuWidget.cpp MenuWidget.h MainWidget.cpp MainWidget.h ControlsWidget.cpp ControlsWidget.h AuthWidget.cpp AuthWidget.h AboutWidget.cpp AboutWidget.h HighscoresWidget.cpp HighscoresWidget.h)
 
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

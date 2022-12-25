@@ -15,7 +15,7 @@ using namespace Menu;
 
 MainWidget::MainWidget(QWidget *parent):
         QWidget(parent), m_menu(new MenuWidget), m_layout(new QStackedLayout), m_controls(new ControlsWidget),
-        m_auth(new AuthWidget), m_about(new AboutWidget)
+        m_auth(new AuthWidget), m_about(new AboutWidget), m_highscores(new HighscoresWidget)
 {
     this->setStyleSheet("QWidget {background-color: black; color: WHITE;}");
 
@@ -28,6 +28,7 @@ MainWidget::MainWidget(QWidget *parent):
     connect(m_controls, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
     connect(m_about, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
     connect(m_auth, SIGNAL(nameChanged(QString)), this, SLOT(initNewGame(QString)));
+    connect(m_highscores, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
 
 
     m_layout->setStackingMode(QStackedLayout::StackOne);
@@ -36,6 +37,7 @@ MainWidget::MainWidget(QWidget *parent):
     m_layout->addWidget(m_controls);
     m_layout->addWidget(m_auth);
     m_layout->addWidget(m_about);
+    m_layout->addWidget(m_highscores);
 
     setLayout(m_layout);
 }
@@ -63,9 +65,10 @@ void MainWidget::changeWidgets(int button) {
             else{ m_layout->setCurrentWidget(m_menu); }
             break;
         }
-        case Menu::CONTROLS:{ m_layout->setCurrentWidget(m_controls); break; }
-        case Menu::ABOUT:   { m_layout->setCurrentWidget(m_about); break;    }
-        case Menu::EXIT:    { QCoreApplication::quit();                         }
+        case Menu::CONTROLS:  { m_layout->setCurrentWidget(m_controls); break; }
+        case Menu::HIGHSCORES:{ m_layout->setCurrentWidget(m_highscores); break; }
+        case Menu::ABOUT:     { m_layout->setCurrentWidget(m_about); break;    }
+        case Menu::EXIT:      { QCoreApplication::quit();                         }
         default:break;
     }
 
