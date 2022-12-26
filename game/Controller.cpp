@@ -8,54 +8,34 @@
 
 
 
-Controller::Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *parent) :
-    QObject(parent), m_robotModel(std::move(robotModel)), m_mazeModel(std::move(mazeModel))
-{
-    m_animationTimerId = startTimer(ANIMATION_DELAY);
-}
-
-void Controller::timerEvent(QTimerEvent *event) {
-    if(event->timerId()==m_animationTimerId){
-        emit skinAnimated();
-    }
-}
-
 void Controller::keyEventAction(int eventKey) {
     switch (eventKey) {
         case Qt::Key_Left: {
             if(m_robotModel.robotDestination!=Robot::Directions::LEFT){
-                emit destinationChanged(Robot::Directions::LEFT);
-                doStep();
+                emit robotRotated(Robot::Directions::LEFT, checkEnergy());
             }
             break;
         }
         case Qt::Key_Right:{
             if(m_robotModel.robotDestination!=Robot::Directions::RIGHT){
-                emit destinationChanged(Robot::Directions::RIGHT);
-                doStep();
+                emit robotRotated(Robot::Directions::RIGHT, checkEnergy());
             }
             break;
         }
         case Qt::Key_Up:{
             if(m_robotModel.robotDestination!=Robot::Directions::UP){
-                emit destinationChanged(Robot::Directions::UP);
-                doStep();
+                emit robotRotated(Robot::Directions::UP, checkEnergy());
             }
             break;
         }
         case Qt::Key_Down:{
             if(m_robotModel.robotDestination!=Robot::Directions::DOWN){
-                emit destinationChanged(Robot::Directions::DOWN);
-                doStep();
+                emit robotRotated(Robot::Directions::DOWN, checkEnergy());
             }
             break;
         }
         case Qt::Key_Space:{
-            if(moveRobot()){
-                checkTarget();
-                checkBattery();
-                doStep(eventKey);
-            }
+            moveRobot();
             break;
         }
         case Qt::Key_Backspace:{
@@ -68,27 +48,46 @@ void Controller::keyEventAction(int eventKey) {
         }
         default:break;
     }
+    if(m_robotModel.steps == m_mazeModel.maxEnergy) { emit levelDone(false); }
 }
 
 
-void Controller::checkBattery()
+
+void Controller::updateMazeModel(Maze::Model model) {
+    m_mazeModel = std::move(model);
+}
+
+
+
+void Controller::updateRobotModel(Robot::Model model) {
+    m_robotModel = std::move(model);
+    if(getPercentEnergy() || (m_robotModel.steps == m_mazeModel.maxEnergy)){ emit energyChanged(getPercentEnergy()); }
+
+}
+
+
+
+Controller::Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *parent) :
+    QObject(parent), m_robotModel(std::move(robotModel)), m_mazeModel(std::move(mazeModel))
 {
-    if (m_mazeModel.batteries.contains(m_robotModel.robotPosition)) {
-        emit scoreIncreaseChanged(false);
-        emit stepsChanged(0);
-        emit energyChanged(getPercentEnergy());
-        emit curColorChanged(Robot::GREEN);
-        emit tmpColorChanged(Robot::WHITE);
-        emit batteryFound(m_robotModel.robotPosition);
-        emit scoreChanged(m_robotModel.score + 50);
+    scoreIncrease = true;
+    m_animationTimerId = startTimer(m_animationDelay);
+}
+
+
+Controller::~Controller()=default;
+
+
+
+void Controller::timerEvent(QTimerEvent *event) {
+    if(event->timerId()==m_animationTimerId){
+        emit skinAnimated();
     }
 }
 
-void Controller::checkTarget(){
-    if (m_robotModel.robotPosition == m_mazeModel.targetPosition) {
-        emit scoreChanged(m_robotModel.score + 100);
-        emit levelDone();
-    }
+
+bool Controller::checkWall(QPoint dest) const{
+    return !m_mazeModel.walls.contains(dest);
 }
 
 
@@ -97,94 +96,34 @@ int Controller::getPercentEnergy() const{
 }
 
 
-bool Controller::moveRobot(){
-    QPoint tar_pos = m_robotModel.robotPosition;
-    switch (m_robotModel.robotDestination) {
-        case Robot::LEFT: {
-            tar_pos.rx()-=1;
-            if (checkWall(tar_pos)) {
-                emit positionChanged(tar_pos);
-                return true;
-            }
-            return false;
-        }
-        case Robot::RIGHT:{
-            tar_pos.rx()+=1;
-            if (checkWall(tar_pos)) {
-                emit positionChanged(tar_pos);
-                return true;
-            }
-            return false;
-        }
-        case Robot::UP:{
-            tar_pos.ry()-=1;
-            if (checkWall(tar_pos)) {
-                emit positionChanged(tar_pos);
-                return true;
-            }
-            return false;
-        }
-        case Robot::DOWN:{
-            tar_pos.ry()+=1;
-            if (checkWall(tar_pos)) {
-                emit positionChanged(tar_pos);
-                return true;
-            }
-            return false;
-        }
-        default: return false;
-    }
-}
-
-bool Controller::checkWall(QPoint dest){
-    return !m_mazeModel.walls.contains(dest);
-}
-
-void Controller::doStep(int eventKey){
-    emit stepsChanged(m_robotModel.steps + 1);
-    updateScore(eventKey);
-    checkEnergy();
-}
-
-void Controller::updateScore(int eventKey)
+int Controller::updateScore() const
 {
-    if ((m_robotModel.steps <= m_mazeModel.maxEnergy) && m_robotModel.scoreIncrease && (eventKey == Qt::Key_Space))
-            emit scoreChanged(m_robotModel.score + 1);
-    else if (m_robotModel.score && eventKey == Qt::Key_Space) {
-        emit scoreChanged(m_robotModel.score - 1);
+    if (scoreIncrease)
+        return (m_robotModel.score + 1);
+    else if (m_robotModel.score) {
+        return (m_robotModel.score - 1);
+    }
+    else {return (m_robotModel.score);}
+}
+
+
+void Controller::checkBattery()
+{
+    if (m_mazeModel.batteries.contains(m_robotModel.robotPosition)) {
+        scoreIncrease = false;
+        emit batteryFound(m_robotModel.robotPosition);
+        emit energyChanged(getPercentEnergy());
+
     }
 }
 
-void Controller::checkEnergy()
-{
-    int curEnergy = getPercentEnergy();
-    if (curEnergy <= 70) {
-        if(m_robotModel.curColor == Robot::GREEN){
-            emit curColorChanged(Robot::YELLOW);
-            locateBattery();
-        }
-        else if(m_robotModel.tmpColor == Robot::GREEN){
-            emit tmpColorChanged(Robot::YELLOW);
-            locateBattery();
-        }
-    }
-    if(curEnergy <= 30) {
-        if(m_robotModel.curColor == Robot::YELLOW){
-            emit curColorChanged(Robot::RED);
-            locateBattery();
-        }
-        else if(m_robotModel.tmpColor == Robot::YELLOW){
-            emit tmpColorChanged(Robot::RED);
-            locateBattery();
-        }
-    }
-    if(m_robotModel.steps == m_mazeModel.maxEnergy){
-        emit curColorChanged(Robot::WHITE);
-        emit tmpColorChanged(Robot::WHITE);
-        emit scoreChanged(0);
-        emit levelLost();
+
+void Controller::checkTarget(){
+    if (m_robotModel.robotPosition == m_mazeModel.targetPosition) {
+        emit levelDone(true);
     }
 }
+
 
 void Controller::locateBattery(){
     QPoint battery;
@@ -196,7 +135,47 @@ void Controller::locateBattery(){
     emit batteryLocated(battery);
 }
 
-QPoint Controller::getRandDot() {
+
+void Controller::moveRobot(){
+    QPoint tar_pos = m_robotModel.robotPosition;
+    switch (m_robotModel.robotDestination) {
+        case Robot::LEFT: {
+            tar_pos.rx()-=1;
+            if (checkWall(tar_pos)) {
+                emit robotMoved(tar_pos, updateScore(), checkEnergy());
+            }
+            break;
+        }
+        case Robot::RIGHT:{
+            tar_pos.rx()+=1;
+            if (checkWall(tar_pos)) {
+                emit robotMoved(tar_pos, updateScore(), checkEnergy());
+            }
+            break;
+        }
+        case Robot::UP:{
+            tar_pos.ry()-=1;
+            if (checkWall(tar_pos)) {
+                emit robotMoved(tar_pos, updateScore(), checkEnergy());
+            }
+            break;
+        }
+        case Robot::DOWN:{
+            tar_pos.ry()+=1;
+            if (checkWall(tar_pos)) {
+                emit robotMoved(tar_pos, updateScore(), checkEnergy());
+            }
+            break;
+        }
+        default: break;
+    }
+    checkTarget();
+    checkBattery();
+
+}
+
+
+QPoint Controller::getRandDot() const {
     QTime time = QTime::currentTime();
     srand((uint) time.msec());
     QPoint dot;
@@ -207,22 +186,24 @@ QPoint Controller::getRandDot() {
     return dot;
 }
 
-void Controller::updateRobotModel(Robot::Model model) {
-    m_robotModel = model;
-    emit energyChanged(getPercentEnergy());
+
+Robot::Colors Controller::checkEnergy()
+{
+    int curEnergy = getPercentEnergy();
+    if(m_robotModel.steps == m_mazeModel.maxEnergy){
+        return Robot::WHITE;
+    }
+
+
+    if ((curEnergy <= 70) && ((m_robotModel.curColor == Robot::GREEN)||(m_robotModel.tmpColor == Robot::GREEN))) {
+        locateBattery();
+        return (Robot::YELLOW);
+    }
+    if((curEnergy <= 30) && ((m_robotModel.curColor == Robot::YELLOW)||(m_robotModel.tmpColor == Robot::YELLOW))){
+        locateBattery();
+        return (Robot::RED);
+    }
+    return (m_robotModel.tmpColor == Robot::WHITE? m_robotModel.curColor:m_robotModel.tmpColor);
 }
 
-void Controller::updateMazeModel(Maze::Model model) {
-    m_mazeModel = model;
-}
 
-void Controller::endGame() {
-    QCoreApplication::quit();
-}
-
-void Controller::startGame() {
-    emit resetMaze();
-    emit resetRobot();
-}
-
-Controller::~Controller()=default;

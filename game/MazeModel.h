@@ -44,7 +44,7 @@ namespace Maze {
 
         void initMaze();
 
-        void resetLevel();
+        void resetLevel(bool success);
 
         Model getMazeModel();
 

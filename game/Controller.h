@@ -8,69 +8,54 @@
 #include "../MenuWidget.h"
 
 class Controller: public QObject {
+
     Q_OBJECT
+
 signals:
-    void returnClicked(int button=Menu::RETURN);
-
-    void levelLost();
-    void levelDone();
-
+    void batteryFound(QPoint batPos);
+    void batteryLocated(QPoint value);
+    void energyChanged(int percEnergy);
+    void levelDone(bool success=true);
     void resetMaze();
     void resetRobot();
-
-    void destinationChanged(Robot::Directions dir);
-    void positionChanged(QPoint tar_pos);
-    void energyChanged(int percEnergy);
-    void stepsChanged(int value);
-    void scoreChanged(int value);
-    void curColorChanged(Robot::Colors value);
-    void tmpColorChanged(Robot::Colors value);
-    void batteryLocated(QPoint value);
-    void scoreIncreaseChanged(bool value);
-    void batteryFound(QPoint value);
-    void stepBack();
+    void returnClicked(int button=Menu::RETURN);
+    void robotMoved(QPoint position, int score, Robot::Colors curColor);
+    void robotRotated(Robot::Directions dir, Robot::Colors curColor);
     void skinAnimated();
+    void stepBack();
 
 public slots:
     void keyEventAction(int eventKey);
-    void updateRobotModel(Robot::Model model);
     void updateMazeModel(Maze::Model model);
-    void startGame();
-    void endGame();
+    void updateRobotModel(Robot::Model model);
 
 
 public:
     Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *parent= nullptr);
     ~Controller() override;
+
 private:
-
-    static const int ANIMATION_DELAY = 300;
+    int m_animationDelay = 300;
+    bool scoreIncrease;
     int m_animationTimerId;
-
-    void timerEvent(QTimerEvent *event)  override;
-
     Robot::Model m_robotModel;
     Maze::Model m_mazeModel;
 
-    void checkTarget();
+    void timerEvent(QTimerEvent *event)  override;
 
-    int getPercentEnergy() const;
+    [[nodiscard]] bool checkWall(QPoint dest) const;
 
-    bool moveRobot();
-
-    void doStep(int eventKey = -1);
-
-    void updateScore(int eventKey);
-
-    void checkEnergy();
-
-    void locateBattery();
-
-    QPoint getRandDot();
-
-    bool checkWall(QPoint dest);
+    [[nodiscard]] int getPercentEnergy() const;
+    [[nodiscard]] int updateScore() const;
 
     void checkBattery();
+    void checkTarget();
+    void locateBattery();
+    void moveRobot();
+
+    [[nodiscard]] QPoint getRandDot() const;
+
+    Robot::Colors checkEnergy();
 };
 
 

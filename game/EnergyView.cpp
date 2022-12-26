@@ -39,6 +39,7 @@ void EnergyView::updateModel(int percEnergy) {
     repaint();
 }
 
+
 void EnergyView::drawStatus() {
     QPainter qp(this);
     qp.drawImage(QRect(this->width() / 2 - this->width() * 0.3, 0, this->width() * 0.6, this->height()),

@@ -19,8 +19,8 @@ signals:
     void gameEnded();
 
 public slots:
-    void levelLost();
-    void levelDone();
+    void levelDone(bool success);
+
 private:
 
    QPushButton *m_accept;

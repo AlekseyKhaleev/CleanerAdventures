@@ -29,19 +29,17 @@ GameOverView::GameOverView(QMessageBox *parent): QMessageBox(parent)
 
 GameOverView::~GameOverView()=default;
 
-void GameOverView::levelLost() {
-   m_accept->setText("TRY AGAIN!");
-    this->setText("<p align=center>Ohh no! You lose!</p>");
-    this->setInformativeText("<p align=center>Wanna try again?</p>");
-    this->addButton(m_exit,QMessageBox::RejectRole);
-    this->addButton(m_accept, QMessageBox::AcceptRole);
-    if(!this->exec()) { emit gameEnded(); }
-}
-
-void GameOverView::levelDone() {
-    m_accept->setText("GO NEXT!");
-    this->setText("<p align='center'>Level done, great! </p>");
-    this->setInformativeText("<p align='center'>Wanna go next?</p>");
+void GameOverView::levelDone(bool success) {
+    if(success) {
+        m_accept->setText("GO NEXT!");
+        this->setText("<p align='center'>Level done, great! </p>");
+        this->setInformativeText("<p align='center'>Wanna go next?</p>");
+    }
+    else {
+        m_accept->setText("TRY AGAIN!");
+        this->setText("<p align=center>Ohh no! You lose!</p>");
+        this->setInformativeText("<p align=center>Wanna try again?</p>");
+    }
     this->addButton(m_exit,QMessageBox::RejectRole);
     this->addButton(m_accept,QMessageBox::AcceptRole);
     if(!this->exec()) { emit gameEnded(); }

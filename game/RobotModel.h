@@ -24,59 +24,47 @@ namespace Robot {
 
     struct Model {
         static const int DOT_SIDE{34};
+
+        int score{0}, highScore{0}, steps{};
+
         QString name, state;
 
-        bool scoreIncrease{};
-        Colors curColor{}, tmpColor{};
-        int score{0}, highScore{0}, steps{};
-        Directions robotDestination{};
         QPoint robotPosition;
+
+        Colors curColor{}, tmpColor{};
+
+        Directions robotDestination{};
+
     };
 
 
     class RobotModel : public QObject {
+
     Q_OBJECT
 
-
-    public:
-
-        explicit RobotModel(QString name="Robot", QObject *parent = nullptr);
-
-        ~RobotModel() override;
-
-        Robot::Model getModel();
-
     signals:
-
         void modelChanged(Robot::Model model);
-
-        void exit(); // state "exit"
 
     public slots:
 
-        //*****************  FSM STATES *********************************
+        void initRobot();                                             // state "init"
 
-        void initRobot(); // state "init"
+        void wait();                                                  //state "wait"
 
-        void setDestination(Robot::Directions dir); // state "rotate"
+        void rotate(Robot::Directions dir, Robot::Colors curColor);   // state "rotate"
 
-        void setRobotPosition(QPoint tar_pos); // state "move"
+        void move(QPoint tar_pos, int score, Robot::Colors curColor); // state "move"
 
-        void animateSkin(); //state "wait"
+        void stepBack();                                              // state "step back"
 
-        void stepBack(); // state "step back"
+        void replaceBattery(QPoint batPos);                           // state "charge battery"
 
-        //****************************************************************
+        void exit(bool success);                                      // state "exit"
 
-        void setRobotSteps(int value);
-
-        void setRobotScore(int value);
-
-        void setCurColor(Robot::Colors value);
-
-        void setTmpColor(Robot::Colors value);
-
-        void setScoreIncrease(bool value);
+    public:
+        explicit RobotModel(QString name="Robot", QObject *parent = nullptr);
+        ~RobotModel() override;
+        Robot::Model getModel();
 
     private:
         Model m_model;

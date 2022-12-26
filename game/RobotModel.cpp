@@ -38,7 +38,6 @@ void RobotModel::initRobot(){
     m_model.state = "init";
     m_model.robotDestination = UP;
     m_model.robotPosition = QPoint{1, 1};
-    m_model.scoreIncrease = true;
     m_model.curColor = GREEN;
     m_model.tmpColor = WHITE;
     m_model.steps = 0;
@@ -76,46 +75,28 @@ void RobotModel::stepBack(){
 }
 
 
-void RobotModel::setDestination(Robot::Directions dir) {
+void RobotModel::rotate(Robot::Directions dir, Robot::Colors curColor) {
     m_model.state = "rotate";
     m_model.robotDestination = dir;
-    emit modelChanged(m_model);
-}
-
-void RobotModel::setRobotPosition(QPoint tar_pos) {
-    m_model.state = "move";
-    m_model.robotPosition = tar_pos;
-    emit modelChanged(m_model);
-}
-
-
-void RobotModel::setRobotSteps(int value) {
-    m_model.steps = value;
+    m_model.steps++;
+    m_model.curColor = curColor;
+    m_model.tmpColor = Colors::WHITE;
     m_memory.push(m_model);
     emit modelChanged(m_model);
 }
 
-void RobotModel::setRobotScore(int value) {
-    m_model.score = value;
+void RobotModel::move(QPoint tar_pos, int score, Robot::Colors curColor) {
+    m_model.state = "move";
+    m_model.steps++;
+    m_model.robotPosition = tar_pos;
+    m_model.score = score;
+    m_model.curColor = curColor;
+    m_model.tmpColor = Colors::WHITE;
+    m_memory.push(m_model);
     emit modelChanged(m_model);
 }
 
-void RobotModel::setCurColor(Robot::Colors value) {
-    m_model.curColor = value;
-    emit modelChanged(m_model);
-}
-
-void RobotModel::setTmpColor(Robot::Colors value) {
-    m_model.tmpColor = value;
-    emit modelChanged(m_model);
-}
-
-void RobotModel::setScoreIncrease(bool value) {
-    m_model.scoreIncrease = value;
-    emit modelChanged(m_model);
-}
-
-void RobotModel::animateSkin() {
+void RobotModel::wait() {
     m_model.state = "wait";
     qSwap(m_model.curColor, m_model.tmpColor);
     emit modelChanged(m_model);
@@ -124,6 +105,25 @@ void RobotModel::animateSkin() {
 
 Robot::Model RobotModel::getModel() {
     return m_model;
+}
+
+void RobotModel::replaceBattery(QPoint batPos) {
+    Q_UNUSED(batPos)
+    m_model.state = "replace battery";
+    m_model.steps = 0;
+    m_model.score += 50;
+    m_model.curColor = Robot::GREEN;
+    m_model.tmpColor = Robot::WHITE;
+    m_memory.push(m_model);
+    emit modelChanged(m_model);
+
+}
+
+void RobotModel::exit(bool success) {
+    if(success){ m_model.score += 100; }
+    m_model.state = "exit";
+
+    emit modelChanged(m_model);
 }
 
 

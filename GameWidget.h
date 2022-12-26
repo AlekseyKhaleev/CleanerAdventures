@@ -20,32 +20,30 @@
 
 class GameWidget : public QWidget
 {
-Q_OBJECT
-public:
-    explicit GameWidget(QString name, QWidget *parent = nullptr);
+    Q_OBJECT
 
 signals:
     void returnClicked(int button=Menu::RETURN);
 
+public:
+    explicit GameWidget(QString name, QWidget *parent = nullptr);
+    ~GameWidget() override;
+
 private:
-    static QLabel *createLabel(const QString &text);
-
-    Robot::RobotModel *m_robotModel;
-    RobotView *m_robotView;
-
-    Maze::MazeModel *m_mazeModel;
-    MazeView *m_mazeView;
-
     Controller *m_controller;
     EnergyView *m_energyView;
-
+    GameOverView *m_gameOverView;
     LCDView *m_levelView;
     LCDView *m_scoreView;
-
     LogView *m_logView;
+    MazeView *m_mazeView;
+    Maze::MazeModel *m_mazeModel;
+    RobotView *m_robotView;
+    Robot::RobotModel *m_robotModel;
 
-     GameOverView *m_gameOverView;
 
-
+    static QLabel *createLabel(const QString &text);
+private slots:
+    static void exit();
 };
 

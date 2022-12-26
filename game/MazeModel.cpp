@@ -209,8 +209,8 @@ QVector<QPoint> MazeModel::getWayNeighbours(QPoint current, const QSet<QPoint> &
     return curNeighbours;
 }
 
-void MazeModel::resetLevel() {
-    m_model.level = 0;
+void MazeModel::resetLevel(bool success) {
+    if(!success){ m_model.level = 0; }
 }
 
 
