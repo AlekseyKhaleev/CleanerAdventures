@@ -4,11 +4,12 @@
 #include <QCoreApplication>
 #include <QKeyEvent>
 #include <QTime>
+#include <utility>
 
 
 
 Controller::Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *parent) :
-    QObject(parent), m_robotModel(robotModel), m_mazeModel(mazeModel)
+    QObject(parent), m_robotModel(std::move(robotModel)), m_mazeModel(std::move(mazeModel))
 {
     m_animationTimerId = startTimer(ANIMATION_DELAY);
 }
@@ -147,7 +148,7 @@ void Controller::doStep(int eventKey){
 
 void Controller::updateScore(int eventKey)
 {
-    if ((m_robotModel.steps <= m_mazeModel.maxEnergy) && m_robotModel.scoreIncrease)
+    if ((m_robotModel.steps <= m_mazeModel.maxEnergy) && m_robotModel.scoreIncrease && (eventKey == Qt::Key_Space))
             emit scoreChanged(m_robotModel.score + 1);
     else if (m_robotModel.score && eventKey == Qt::Key_Space) {
         emit scoreChanged(m_robotModel.score - 1);

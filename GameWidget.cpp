@@ -63,7 +63,7 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     connect(m_controller, SIGNAL(batteryLocated(QPoint)),m_mazeModel, SLOT(addBattery(QPoint)));
     connect(m_controller, SIGNAL(stepBack()),            m_mazeModel, SLOT(stepBack()));
 
-    connect(m_controller, SIGNAL(stepBack()),                       m_robotModel, SLOT(stepBack()));
+    connect(m_controller, SIGNAL(stepBack()),                           m_robotModel, SLOT(stepBack()));
     connect(m_controller, SIGNAL(skinAnimated()),                       m_robotModel, SLOT(animateSkin()));
     connect(m_controller, SIGNAL(scoreChanged(int)),                    m_robotModel, SLOT(setRobotScore(int)));
     connect(m_controller, SIGNAL(tmpColorChanged(Robot::Colors)),       m_robotModel, SLOT(setTmpColor(Robot::Colors)));
@@ -83,7 +83,7 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     auto *layout = new QGridLayout;
     layout->addWidget(createLabel( m_robotModel->getModel().name.toUpper() + " ENERGY"), 0, 0, 2, 1);
     layout->addWidget(m_energyView,2,0,3,1);
-    layout->addWidget(createLabel( m_robotModel->getModel().name.toUpper() + " STATE LOG"), 0, 1, 2, 1);
+    layout->addWidget(createLabel( "STATE LOG"), 0, 1, 2, 1);
     layout->addWidget(m_logView,2,1,3,1, Qt::AlignHCenter);
     layout->addWidget(createLabel("LEVEL"), 0, 2, 2, 1);
     layout->addWidget(m_levelView, 2, 2, 3, 1);

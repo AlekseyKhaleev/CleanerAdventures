@@ -2,6 +2,7 @@
 
 #include "LogView.h"
 
+#include <QTime>
 #include <QVBoxLayout>
 #include <utility>
 
@@ -9,13 +10,12 @@
 LogView::LogView(Robot::Model targetModel, QWidget *parent): RobotView(std::move(targetModel), parent), m_logs(new QListWidget)
 
 {
-//    this->setContentsMargins(0,0,0,0);
+    m_logs->setItemAlignment(Qt::AlignHCenter);
     m_logs->setStyleSheet("border: 6px solid white; font: bold; font-size: 14px");
-    m_logs->addItem(m_viewModel.state);
-    m_logs->setFocusPolicy(Qt::NoFocus);
-//    m_logs->setContentsMargins(50,0,0,0);
-    m_logs->setWindowFlag(Qt::FramelessWindowHint);
 
+    m_logs->addItem(QTime::currentTime().toString() + " - " + m_viewModel.state);
+    m_logs->setFocusPolicy(Qt::NoFocus);
+    m_logs->setWindowFlag(Qt::FramelessWindowHint);
     m_logs->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored);
 
     auto layout = new QVBoxLayout;
@@ -26,8 +26,8 @@ LogView::LogView(Robot::Model targetModel, QWidget *parent): RobotView(std::move
 void LogView::updateModel(Robot::Model model) {
     if(model.state != m_viewModel.state) {
         m_viewModel = model;
-
-        m_logs->addItem(m_viewModel.state);
+       if(m_viewModel.state == "init") { m_logs->clear(); }
+        m_logs->addItem(QTime::currentTime().toString() + " - " + m_viewModel.state);
         m_logs->scrollToBottom();
     }
 }
