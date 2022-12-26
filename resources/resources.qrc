@@ -25,5 +25,6 @@
         <file>images/VC_yw_lt.png</file>
         <file>images/VC_yw_rt.png</file>
         <file>images/VC_yw_up.png</file>
+        <file>highscores.txt</file>
     </qresource>
 </RCC>
