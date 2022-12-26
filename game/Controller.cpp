@@ -1,10 +1,15 @@
 
 #include "Controller.h"
 
+
 #include <QCoreApplication>
 #include <QKeyEvent>
+#include <QTextStream>
 #include <QTime>
 #include <utility>
+
+#include "../HighscoresWidget.h"
+
 
 
 
@@ -119,7 +124,36 @@ void Controller::checkBattery()
 
 
 void Controller::checkTarget(){
+    using namespace Highscores;
     if (m_robotModel.robotPosition == m_mazeModel.targetPosition) {
+        auto *highscores = new QFile(":/highscores.txt");
+        if (!highscores->open(QIODevice::ReadOnly | QIODevice::Text)){return;}
+        QVector<line> lines;
+        while(!highscores->atEnd()) {
+            QString lineName = highscores->readLine();
+            lineName.remove('\n');
+            QString lineScore = highscores->readLine();
+            lineName.remove('\n');
+            lines.push_back(line(lineName, lineScore.toInt()));
+        }
+        highscores->close();
+
+        lines.push_back(line(m_robotModel.name, m_robotModel.score));
+        std::sort(lines.begin(), lines.end(), compareLines);
+
+        if (!highscores->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)){return;}
+        QTextStream out(highscores);
+        if(lines.size() < 10){
+            for (auto &i: lines){
+                out<<i.NAME<<'\n'<<i.SCORE<<'\n';
+            }
+        }
+        else{
+            for(int i=0; i<10;i++){
+                out<<lines[i].NAME<<'\n'<<lines[i].SCORE<<'\n';
+            }
+        }
+        highscores->close();
         emit levelDone(true);
     }
 }

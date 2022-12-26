@@ -8,8 +8,21 @@
 #include <QWidget>
 #include <utility>
 
+namespace Highscores{
+    struct line{
+        QString NAME;
+        int SCORE;
+        line(QString name, int score){
+            NAME = std::move(name);
+            SCORE = score;
+        }
+    };
+    static bool compareLines(const line &first, const line &second){
+        return first.SCORE > second.SCORE;
+    }
+}
 
-
+using namespace Highscores;
 class HighscoresWidget : public QWidget {
 
 Q_OBJECT
@@ -25,17 +38,6 @@ public slots:
     void readHighscores();
 
 private:
-    struct line{
-        QString NAME;
-        int SCORE;
-        line(QString name, int score){
-            NAME = std::move(name);
-            SCORE = score;
-        }
-    };
-    static bool compareLines(const line &first, const line &second){
-        return first.SCORE > second.SCORE;
-    }
     QFile *m_highscores;
     QVector<line> m_lines;
 
