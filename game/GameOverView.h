@@ -16,7 +16,7 @@ public:
 
 signals:
     void gameStarted();
-    void gameEnded(bool success=false);
+    void gameEnded();
 
 public slots:
     void levelDone(bool success);

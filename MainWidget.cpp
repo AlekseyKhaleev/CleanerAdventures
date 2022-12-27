@@ -51,6 +51,7 @@ void MainWidget::initNewGame(QString name){
    }
     m_game = new GameWidget(std::move(name));
     connect(m_game, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
+    connect(m_menu, SIGNAL(exitClicked(int)), m_game, SIGNAL(writeHighscore()));
 
     m_layout->addWidget(m_game);
     m_layout->setCurrentWidget(m_game);
@@ -75,7 +76,7 @@ void MainWidget::changeWidgets(int button) {
            break;
         }
         case Menu::ABOUT:     { m_layout->setCurrentWidget(m_about); break;    }
-        case Menu::EXIT:      { QCoreApplication::quit(); break;}
+        case Menu::EXIT:      { QCoreApplication::quit(); break; }
         case Menu::END_GAME:
         {
            m_layout->setCurrentWidget(m_menu);

@@ -236,10 +236,4 @@ Robot::Colors Controller::checkEnergy()
     return (m_robotModel.tmpColor == Robot::WHITE? m_robotModel.curColor:m_robotModel.tmpColor);
 }
 
-void Controller::exit(bool success)
-{
-   if(success){ writeHighscore(); }
-   emit returnClicked(Menu::END_GAME);
-}
-
 

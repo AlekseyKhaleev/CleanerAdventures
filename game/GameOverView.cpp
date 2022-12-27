@@ -39,7 +39,7 @@ void GameOverView::levelDone(bool success) {
     this->m_accept->setDefault(true);
 
     this->exec();
-    if(this->clickedButton() != m_accept){ emit gameEnded(success); }
+    if(this->clickedButton() != m_accept){ emit gameEnded(); }
     else { emit gameStarted(); }
 }
 

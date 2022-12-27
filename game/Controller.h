@@ -26,10 +26,10 @@ signals:
     void stepBack();
 
 public slots:
-    void exit(bool success);
     void keyEventAction(int eventKey);
     void updateMazeModel(Maze::Model model);
     void updateRobotModel(Robot::Model model);
+    void writeHighscore() const;
 
 
 
@@ -53,7 +53,7 @@ private:
     void checkTarget();
     void locateBattery();
     void moveRobot();
-    void writeHighscore() const;
+
 
     [[nodiscard]] QPoint getRandDot() const;
 

@@ -36,7 +36,7 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     //********* m_gameOverView sender **********
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SIGNAL(resetMaze()));
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SIGNAL(resetRobot()));
-    connect(m_gameOverView, SIGNAL(gameEnded(bool)),  m_controller, SLOT(exit(bool)));
+    connect(m_gameOverView, SIGNAL(gameEnded()),  m_controller, SLOT(writeHighscore()));
 
     //********* m_mazeModel sender ***********
     connect(m_mazeModel, SIGNAL(modelChanged(Maze::Model)),m_controller,SLOT(updateMazeModel(Maze::Model)));
@@ -71,6 +71,8 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     connect(m_controller, SIGNAL(robotRotated(Robot::Directions, Robot::Colors)),m_robotModel, SLOT(rotate(Robot::Directions, Robot::Colors)));
     connect(m_controller, SIGNAL(robotMoved(QPoint, int, Robot::Colors)),m_robotModel, SLOT(move(QPoint, int, Robot::Colors)));
     connect(m_controller, SIGNAL(returnClicked(int)),                   this, SIGNAL(returnClicked(int)));
+
+    connect(this, SIGNAL(writeHighscore()), m_controller, SLOT(writeHighscore()));
 
     auto gameLay = new QStackedLayout;
     gameLay->setStackingMode(QStackedLayout::StackAll);

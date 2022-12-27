@@ -39,14 +39,11 @@ namespace Robot {
 
 
     class RobotModel : public QObject {
-
     Q_OBJECT
-
     signals:
         void modelChanged(Robot::Model model);
 
     public slots:
-
         void initRobot();                                             // state "init"
 
         void wait();                                                  //state "wait"
@@ -64,7 +61,6 @@ namespace Robot {
     public:
         explicit RobotModel(QString name="Robot", QObject *parent = nullptr);
         ~RobotModel() override;
-
         Robot::Model getModel();
 
     private:

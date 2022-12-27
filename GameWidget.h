@@ -24,6 +24,7 @@ class GameWidget : public QWidget
 
 signals:
     void returnClicked(int button=Menu::RETURN);
+    void writeHighscore();
 
 public:
     explicit GameWidget(QString name, QWidget *parent = nullptr);
