@@ -36,7 +36,7 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     //********* m_gameOverView sender **********
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SIGNAL(resetMaze()));
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SIGNAL(resetRobot()));
-    connect(m_gameOverView, SIGNAL(gameEnded()),  m_controller, SLOT(writeHighscore()));
+    connect(m_gameOverView, SIGNAL(gameEnded()),  m_controller, SLOT(exit()));
 
     //********* m_mazeModel sender ***********
     connect(m_mazeModel, SIGNAL(modelChanged(Maze::Model)),m_controller,SLOT(updateMazeModel(Maze::Model)));

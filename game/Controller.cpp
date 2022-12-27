@@ -136,7 +136,7 @@ void Controller::writeHighscore() const{
       lineName.remove('\n');
       lines.push_back(Line(lineName, lineScore.toInt()));
    }
-   lines.push_back(Line(m_robotModel.name, m_robotModel.score));
+   lines.push_back(Line(m_robotModel.name, m_robotModel.highScore));
 
    std::sort(lines.begin(), lines.end(), compareLines);
 
@@ -234,6 +234,12 @@ Robot::Colors Controller::checkEnergy()
         return (Robot::RED);
     }
     return (m_robotModel.tmpColor == Robot::WHITE? m_robotModel.curColor:m_robotModel.tmpColor);
+}
+
+void Controller::exit()
+{
+   writeHighscore();
+   emit returnClicked(Menu::END_GAME);
 }
 
 

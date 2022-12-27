@@ -38,7 +38,6 @@ void RobotModel::initRobot(){
     m_memory.clear();
     m_memory.push(m_model);
     if(m_model.score){ m_model.score += 100; }
-    m_model.highScore += m_model.score;
     emit modelChanged(m_model);
 }
 
@@ -120,6 +119,9 @@ void RobotModel::exit(bool success) {
        m_model.highScore = 0;
        m_model.curColor = Robot::WHITE;
        m_model.tmpColor = Robot::WHITE;
+    } else
+    {
+       m_model.highScore += m_model.score;
     }
     emit modelChanged(m_model);
 }
