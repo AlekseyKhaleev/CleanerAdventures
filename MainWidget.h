@@ -30,7 +30,6 @@ private:
     AboutWidget *m_about;
     HighscoresWidget *m_highscores;
 
-
 public slots:
     void changeWidgets(int button);
     void initNewGame(QString name);
