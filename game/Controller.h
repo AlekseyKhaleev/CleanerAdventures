@@ -52,6 +52,7 @@ private:
     void checkTarget();
     void locateBattery();
     void moveRobot();
+    void writeHighscore() const;
 
     [[nodiscard]] QPoint getRandDot() const;
 

@@ -9,15 +9,15 @@
 #include <utility>
 
 namespace Highscores{
-    struct line{
+    struct Line{
         QString NAME;
         int SCORE;
-        line(QString name, int score){
+        Line(QString name, int score){
             NAME = std::move(name);
             SCORE = score;
         }
     };
-    static bool compareLines(const line &first, const line &second){
+    static bool compareLines(const Line &first, const Line &second){
         return first.SCORE > second.SCORE;
     }
 }
@@ -38,10 +38,14 @@ public slots:
     void readHighscores();
 
 private:
-    QFile *m_highscores;
-    QVector<line> m_lines;
+   QVector<Line> m_FileLines;
+   QVector<QLabel> m_LayLines;
+   QFile *m_HSFile;
+   QGridLayout *m_layout;
 
-    QLabel *createLabel(const QString &text);
+
+   static QLabel *createLabel(const QString &text);
+   void createLayLines();
 
 
 };

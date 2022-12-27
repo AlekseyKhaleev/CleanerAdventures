@@ -66,7 +66,11 @@ void MainWidget::changeWidgets(int button) {
             break;
         }
         case Menu::CONTROLS:  { m_layout->setCurrentWidget(m_controls); break; }
-        case Menu::HIGHSCORES:{ m_layout->setCurrentWidget(m_highscores); break; }
+        case Menu::HIGHSCORES:{
+           m_highscores->readHighscores();
+           m_layout->setCurrentWidget(m_highscores);
+           break;
+        }
         case Menu::ABOUT:     { m_layout->setCurrentWidget(m_about); break;    }
         case Menu::EXIT:      { QCoreApplication::quit();                         }
         default:break;
