@@ -16,7 +16,7 @@ public:
 
 signals:
     void gameStarted();
-    void gameEnded();
+    void gameEnded(bool success=false);
 
 public slots:
     void levelDone(bool success);
@@ -26,5 +26,5 @@ private:
    QPushButton *m_accept;
    QPushButton *m_exit;
 
-   static QPushButton *createButton(const QString &text);
+   static QPushButton* createButton(const QString &text);
 };

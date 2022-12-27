@@ -26,7 +26,7 @@ signals:
     void stepBack();
 
 public slots:
-   void exit();
+    void exit(bool success);
     void keyEventAction(int eventKey);
     void updateMazeModel(Maze::Model model);
     void updateRobotModel(Robot::Model model);

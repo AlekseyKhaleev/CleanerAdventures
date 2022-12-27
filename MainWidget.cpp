@@ -44,14 +44,16 @@ MainWidget::MainWidget(QWidget *parent):
 
 
 void MainWidget::initNewGame(QString name){
-   if(!m_game) { m_game->close(); }
+   if(m_game != nullptr) {
+      m_layout->removeWidget(m_game);
+      delete m_game;
+      m_game = nullptr;
+   }
     m_game = new GameWidget(std::move(name));
-    m_game->setAttribute(Qt::WA_DeleteOnClose);
     connect(m_game, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
 
     m_layout->addWidget(m_game);
     m_layout->setCurrentWidget(m_game);
-    m_game->setFocusPolicy(Qt::StrongFocus);
 }
 
 
@@ -62,7 +64,7 @@ void MainWidget::changeWidgets(int button) {
             break;
         }
         case Menu::RETURN:{
-            if(m_layout->currentWidget() == m_menu && m_game){ m_layout->setCurrentWidget(m_game); }
+            if((m_layout->currentWidget() == m_menu) && (m_game != nullptr)){ m_layout->setCurrentWidget(m_game); }
             else{ m_layout->setCurrentWidget(m_menu); }
             break;
         }
@@ -78,10 +80,8 @@ void MainWidget::changeWidgets(int button) {
         {
            m_layout->setCurrentWidget(m_menu);
            m_layout->removeWidget(m_game);
-           m_game->close();
-//           QLayoutItem *item = m_layout->takeAt(m_layout->indexOf(m_game));
-//           delete item->widget();
-//           delete item;
+           delete m_game;
+           m_game = nullptr;
            break;
         }
         default:break;

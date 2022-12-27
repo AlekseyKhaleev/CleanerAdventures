@@ -20,7 +20,6 @@ RobotModel::RobotModel(QString name, QObject *parent): QObject(parent)
 {
     m_model.name = std::move(name);
     initRobot();
-    m_model.score = 0;
 }
 
 //Destructor
@@ -36,11 +35,10 @@ void RobotModel::initRobot(){
     m_model.curColor = GREEN;
     m_model.tmpColor = WHITE;
     m_model.steps = 0;
-    m_model.score += 100;
     m_model.highScore += m_model.score;
     m_memory.clear();
     m_memory.push(m_model);
-
+    if(m_model.score){ m_model.score += 100; }
     emit modelChanged(m_model);
 }
 

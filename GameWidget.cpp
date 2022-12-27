@@ -14,7 +14,7 @@
 
 
 GameWidget::GameWidget(QString name, QWidget *parent)
-    : QWidget{parent}, m_robotModel(new Robot::RobotModel(std::move(name))), m_mazeModel(new Maze::MazeModel),
+    : QWidget{parent}, m_robotModel(new Robot::RobotModel(std::move(name))), m_mazeModel(new Maze::MazeModel(this)),
     m_energyView(new EnergyView), m_gameOverView(new GameOverView)
 {
     m_controller = new Controller(m_robotModel->getModel(), m_mazeModel->getMazeModel());
@@ -36,7 +36,7 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     //********* m_gameOverView sender **********
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SIGNAL(resetMaze()));
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SIGNAL(resetRobot()));
-    connect(m_gameOverView, SIGNAL(gameEnded()),  m_controller, SLOT(exit()));
+    connect(m_gameOverView, SIGNAL(gameEnded(bool)),  m_controller, SLOT(exit(bool)));
 
     //********* m_mazeModel sender ***********
     connect(m_mazeModel, SIGNAL(modelChanged(Maze::Model)),m_controller,SLOT(updateMazeModel(Maze::Model)));
@@ -78,7 +78,7 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     gameLay->addWidget(m_robotView);
 
     auto *layout = new QGridLayout;
-    layout->addWidget(createLabel( m_robotModel->getModel().name.toUpper() + " ENERGY"), 0, 0, 2, 1);
+    layout->addWidget(createLabel( m_robotModel->getModel().name + " ENERGY"), 0, 0, 2, 1);
     layout->addWidget(m_energyView,2,0,3,1);
     layout->addWidget(createLabel( "STATE LOG"), 0, 1, 2, 1);
     layout->addWidget(m_logView,2,1,3,1, Qt::AlignHCenter);

@@ -1,5 +1,3 @@
-
-148
 Robot 5
 5
 Robot 4
@@ -11,8 +9,4 @@ Robot 2
 Robot 1
 1
 Robot 0
-0
-
-0
-
 0

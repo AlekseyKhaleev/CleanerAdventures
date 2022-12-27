@@ -51,6 +51,7 @@ void Controller::keyEventAction(int eventKey) {
             emit returnClicked();
             break;
         }
+
         default:break;
     }
     if(m_robotModel.steps == m_mazeModel.maxEnergy) { emit levelDone(false); }
@@ -235,9 +236,9 @@ Robot::Colors Controller::checkEnergy()
     return (m_robotModel.tmpColor == Robot::WHITE? m_robotModel.curColor:m_robotModel.tmpColor);
 }
 
-void Controller::exit()
+void Controller::exit(bool success)
 {
-   writeHighscore();
+   if(success){ writeHighscore(); }
    emit returnClicked(Menu::END_GAME);
 }
 

@@ -10,13 +10,7 @@ GameOverView::GameOverView(QMessageBox *parent): QMessageBox(parent)
 {
 
    m_accept = createButton("");
-   m_exit = createButton("I'LL BE BACK");
-
-
-   connect(m_accept, SIGNAL(clicked()), this, SIGNAL(gameStarted()));
-   connect(m_exit, SIGNAL(clicked()), this, SIGNAL(gameEnded()));
-
-
+   m_exit   = createButton("I'LL BE BACK");
 
    this->setStyleSheet("QMessageBox { font: bold; font-size: 36px; border: 6px solid grey; background-color: black; } "
                        "QLabel { color: white; min-width: 240px; min-height: 120px }"
@@ -42,14 +36,16 @@ void GameOverView::levelDone(bool success) {
     }
     this->addButton(m_exit,QMessageBox::RejectRole);
     this->addButton(m_accept,QMessageBox::AcceptRole);
-    if(!this->exec()) { emit gameEnded(); }
+    this->m_accept->setDefault(true);
+
+    this->exec();
+    if(this->clickedButton() != m_accept){ emit gameEnded(success); }
+    else { emit gameStarted(); }
 }
 
 QPushButton *GameOverView::createButton(const QString &text)
 {
    auto *button = new QPushButton(text);
-
-   button->setDefault(true);
 
    button->setStyleSheet("QPushButton { font: bold; border: 3px solid darkgrey; border-radius: 20px;"
                          "outline-radius: 20px; font-size: 18px; height: 60px; width: 120px; }"
