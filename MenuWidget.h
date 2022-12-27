@@ -6,7 +6,7 @@
 
 namespace Menu{
     enum{
-        RETURN, NEW_GAME, CONTROLS, HIGHSCORES, ABOUT, EXIT
+        RETURN, NEW_GAME, CONTROLS, HIGHSCORES, ABOUT, EXIT, END_GAME
     };
 }
 

@@ -17,11 +17,11 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     : QWidget{parent}, m_robotModel(new Robot::RobotModel(std::move(name))), m_mazeModel(new Maze::MazeModel),
     m_energyView(new EnergyView), m_gameOverView(new GameOverView)
 {
-    m_controller = new Controller{m_robotModel->getModel(), m_mazeModel->getMazeModel()};
-    m_robotView  = new RobotView{m_robotModel->getModel()};
-    m_mazeView   = new MazeView{m_mazeModel->getMazeModel()};
-    m_levelView  = new LCDView{m_mazeModel->getMazeModel()};
-    m_scoreView  = new LCDView{m_robotModel->getModel()};
+    m_controller = new Controller(m_robotModel->getModel(), m_mazeModel->getMazeModel());
+    m_robotView  = new RobotView(m_robotModel->getModel());
+    m_mazeView   = new MazeView(m_mazeModel->getMazeModel());
+    m_levelView  = new LCDView(m_mazeModel->getMazeModel());
+    m_scoreView  = new LCDView(m_robotModel->getModel());
     m_logView    = new LogView(m_robotModel->getModel());
 
     this->setStyleSheet("QWidget {background-color: black; color: WHITE;}");
@@ -34,10 +34,9 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     //****************************************** CONNECTIONS *********************************************************
 
     //********* m_gameOverView sender **********
-//    connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SLOT(clearMemory()));
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SIGNAL(resetMaze()));
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SIGNAL(resetRobot()));
-    connect(m_gameOverView, SIGNAL(gameEnded()),  this,         SLOT(exit()));
+    connect(m_gameOverView, SIGNAL(gameEnded()),  m_controller, SLOT(exit()));
 
     //********* m_mazeModel sender ***********
     connect(m_mazeModel, SIGNAL(modelChanged(Maze::Model)),m_controller,SLOT(updateMazeModel(Maze::Model)));
@@ -99,10 +98,6 @@ QLabel *GameWidget::createLabel(const QString &text){
     label->setStyleSheet("QLabel { font: bold; font-size: 30px; }");
     label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     return label;
-}
-
-void GameWidget::exit() {
-    QCoreApplication::quit();
 }
 
 GameWidget::~GameWidget()=default;

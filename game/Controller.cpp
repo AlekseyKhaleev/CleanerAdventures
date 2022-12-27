@@ -66,7 +66,7 @@ void Controller::updateMazeModel(Maze::Model model) {
 
 void Controller::updateRobotModel(Robot::Model model) {
     m_robotModel = std::move(model);
-    if(m_robotModel.state == "init"){ m_animationTimer.start(300);}
+    if(m_robotModel.state == "init"){ m_animationTimer.start(300); }
     if(m_robotModel.state == "exit"){ m_animationTimer.stop(); }
     if(getPercentEnergy() || (m_robotModel.steps == m_mazeModel.maxEnergy)){ emit energyChanged(getPercentEnergy()); }
 }
@@ -76,7 +76,7 @@ void Controller::updateRobotModel(Robot::Model model) {
 Controller::Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *parent) :
     QObject(parent), m_robotModel(std::move(robotModel)), m_mazeModel(std::move(mazeModel))
 {
-    scoreIncrease = true;
+   m_scoreIncrease = true;
     m_animationTimer.start(300);
     connect(&m_animationTimer, SIGNAL(timeout()), this,  SIGNAL(skinAnimated()));
 }
@@ -97,7 +97,7 @@ int Controller::getPercentEnergy() const{
 
 int Controller::updateScore() const
 {
-    if (scoreIncrease)
+    if (m_scoreIncrease)
         return (m_robotModel.score + 1);
     else if (m_robotModel.score) {
         return (m_robotModel.score - 1);
@@ -109,7 +109,7 @@ int Controller::updateScore() const
 void Controller::checkBattery()
 {
     if (m_mazeModel.batteries.contains(m_robotModel.robotPosition)) {
-        scoreIncrease = false;
+       m_scoreIncrease = false;
         emit batteryFound(m_robotModel.robotPosition);
         emit energyChanged(getPercentEnergy());
 
@@ -119,7 +119,7 @@ void Controller::checkBattery()
 
 void Controller::checkTarget(){
     if (m_robotModel.robotPosition == m_mazeModel.targetPosition) {
-       writeHighscore();
+       m_scoreIncrease = true;
        emit levelDone(true);
     }
 }
@@ -233,6 +233,12 @@ Robot::Colors Controller::checkEnergy()
         return (Robot::RED);
     }
     return (m_robotModel.tmpColor == Robot::WHITE? m_robotModel.curColor:m_robotModel.tmpColor);
+}
+
+void Controller::exit()
+{
+   writeHighscore();
+   emit returnClicked(Menu::END_GAME);
 }
 
 

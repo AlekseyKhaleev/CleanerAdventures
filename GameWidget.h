@@ -42,8 +42,6 @@ private:
     Robot::RobotModel *m_robotModel;
 
 
-    static QLabel *createLabel(const QString &text);
-private slots:
-    static void exit();
+    QLabel *createLabel(const QString &text);
 };
 

@@ -44,8 +44,9 @@ MainWidget::MainWidget(QWidget *parent):
 
 
 void MainWidget::initNewGame(QString name){
-    delete m_game;
+   if(!m_game) { m_game->close(); }
     m_game = new GameWidget(std::move(name));
+    m_game->setAttribute(Qt::WA_DeleteOnClose);
     connect(m_game, SIGNAL(returnClicked(int)), this, SLOT(changeWidgets(int)));
 
     m_layout->addWidget(m_game);
@@ -72,7 +73,17 @@ void MainWidget::changeWidgets(int button) {
            break;
         }
         case Menu::ABOUT:     { m_layout->setCurrentWidget(m_about); break;    }
-        case Menu::EXIT:      { QCoreApplication::quit();                         }
+        case Menu::EXIT:      { QCoreApplication::quit(); break;}
+        case Menu::END_GAME:
+        {
+           m_layout->setCurrentWidget(m_menu);
+           m_layout->removeWidget(m_game);
+           m_game->close();
+//           QLayoutItem *item = m_layout->takeAt(m_layout->indexOf(m_game));
+//           delete item->widget();
+//           delete item;
+           break;
+        }
         default:break;
     }
 
