@@ -13,7 +13,7 @@ class ControlsWidget: public QWidget {
 public:
 
     explicit ControlsWidget(QWidget *parent=nullptr);
-    ~ControlsWidget() override;
+
 
 signals:
     void returnClicked(int button=Menu::RETURN);

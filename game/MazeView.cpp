@@ -17,9 +17,6 @@ MazeView::MazeView(Model targetModel, QWidget *parent)
     repaint();
 }
 
-MazeView::~MazeView()=default;
-
-
 
 void MazeView::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event)

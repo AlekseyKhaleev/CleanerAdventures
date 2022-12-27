@@ -37,4 +37,3 @@ void AboutWidget::keyPressEvent(QKeyEvent *event) {
     }
 }
 
-AboutWidget::~AboutWidget()=default;

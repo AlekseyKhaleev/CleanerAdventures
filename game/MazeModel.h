@@ -30,7 +30,6 @@ namespace Maze {
 
     public:
         explicit MazeModel(QObject *parent = nullptr);
-        ~MazeModel() override;
 
     signals:
         void modelChanged(Maze::Model model);

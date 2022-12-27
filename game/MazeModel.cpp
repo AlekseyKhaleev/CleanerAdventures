@@ -19,7 +19,6 @@ MazeModel::MazeModel(QObject *parent): QObject(parent)
     initMaze();
 }
 
-MazeModel::~MazeModel()=default;
 
 //******************************************************
 

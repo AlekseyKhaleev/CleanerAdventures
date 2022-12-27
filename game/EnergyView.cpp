@@ -20,8 +20,6 @@ EnergyView::EnergyView(QWidget *parent) :
     repaint();
 }
 
-EnergyView::~EnergyView() = default;
-
 void EnergyView::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event)
     drawStatus();

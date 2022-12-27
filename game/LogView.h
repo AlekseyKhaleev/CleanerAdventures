@@ -11,7 +11,7 @@ class LogView : public RobotView{
 
 public:
     explicit LogView(Robot::Model targetModel, QWidget *parent= nullptr);
-    ~LogView() override;
+
 
 public slots:
     void updateModel(Robot::Model model) override;

@@ -32,5 +32,3 @@ void AuthWidget::changeName() {
     emit nameChanged(m_auth->text());
     m_auth->clear();
 }
-
-AuthWidget::~AuthWidget()=default;

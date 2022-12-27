@@ -20,10 +20,8 @@ RobotModel::RobotModel(QString name, QObject *parent): QObject(parent)
 {
     m_model.name = std::move(name);
     initRobot();
+    m_model.score = 0;
 }
-
-//Destructor
-RobotModel::~RobotModel()=default;
 
 
 //*****************************************************
@@ -35,6 +33,7 @@ void RobotModel::initRobot(){
     m_model.curColor = GREEN;
     m_model.tmpColor = WHITE;
     m_model.steps = 0;
+    m_model.score += 100;
     m_model.highScore += m_model.score;
     m_memory.clear();
     m_memory.push(m_model);
@@ -115,9 +114,9 @@ void RobotModel::replaceBattery(QPoint batPos) {
 
 void RobotModel::exit(bool success) {
    m_model.state = "exit";
-    if(success){ m_model.score += 100; }
-    else
-    {
+    if(!success){
+       m_model.score = 0;
+       m_model.highScore = 0;
        m_model.curColor = Robot::WHITE;
        m_model.tmpColor = Robot::WHITE;
     }

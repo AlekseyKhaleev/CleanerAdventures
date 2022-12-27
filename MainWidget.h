@@ -19,7 +19,7 @@ Q_OBJECT
 
 public:
     explicit MainWidget(QWidget *parent = nullptr);
-    ~MainWidget() override;
+
 private:
 
     MenuWidget *m_menu;

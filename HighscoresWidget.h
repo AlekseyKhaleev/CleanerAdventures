@@ -29,7 +29,7 @@ Q_OBJECT
 
 public:
     explicit HighscoresWidget(QWidget *parent= nullptr);
-    ~HighscoresWidget() override;
+
 signals:
     void returnClicked(int button=Menu::RETURN);
 

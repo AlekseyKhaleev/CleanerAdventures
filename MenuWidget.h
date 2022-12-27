@@ -6,7 +6,7 @@
 
 namespace Menu{
     enum{
-        RETURN, NEW_GAME, CONTROLS, HIGHSCORES, ABOUT, EXIT
+        RETURN, NEW_GAME, CONTROLS, HIGHSCORES, ABOUT, EXIT, END_GAME
     };
 }
 
@@ -16,7 +16,6 @@ Q_OBJECT
 public:
     explicit MenuWidget(QWidget *parent = nullptr);
 
-    ~MenuWidget() override;
 
 signals:
     void returnClicked(int button=Menu::RETURN);

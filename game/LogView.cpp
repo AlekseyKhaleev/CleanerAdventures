@@ -32,5 +32,3 @@ void LogView::updateModel(Robot::Model model) {
     }
 }
 
-
-LogView::~LogView()=default;

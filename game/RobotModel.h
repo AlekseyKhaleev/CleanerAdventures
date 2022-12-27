@@ -63,7 +63,6 @@ namespace Robot {
 
     public:
         explicit RobotModel(QString name="Robot", QObject *parent = nullptr);
-        ~RobotModel() override;
 
         Robot::Model getModel();
 

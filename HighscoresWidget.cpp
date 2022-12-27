@@ -62,5 +62,3 @@ void HighscoresWidget::createLayLines()
       m_layout->addWidget(createLabel(QString::number(m_FileLines[i].SCORE)), 2 + i, 3, 1, 1);
    }
 }
-
-HighscoresWidget::~HighscoresWidget()=default;

@@ -42,4 +42,3 @@ int LCDView::getRange(int value) {
     return (range != 0? range: 1);
 }
 
-LCDView::~LCDView()=default;

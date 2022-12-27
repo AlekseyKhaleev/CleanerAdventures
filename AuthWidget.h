@@ -11,7 +11,6 @@ Q_OBJECT
 
 public:
     explicit AuthWidget(QWidget *parent = nullptr);
-    ~AuthWidget() override;
 
 signals:
     void nameChanged(QString name);

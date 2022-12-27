@@ -12,8 +12,6 @@ Q_OBJECT
 public:
     explicit EnergyView(QWidget *parent = nullptr);
 
-    ~EnergyView() override;
-
 public slots:
 
     void updateModel(int percEnergy);

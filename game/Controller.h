@@ -26,18 +26,20 @@ signals:
     void stepBack();
 
 public slots:
+   void exit();
     void keyEventAction(int eventKey);
     void updateMazeModel(Maze::Model model);
     void updateRobotModel(Robot::Model model);
 
 
+
 public:
     Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *parent= nullptr);
-    ~Controller() override;
+
 
 private:
 
-    bool scoreIncrease;
+    bool m_scoreIncrease;
     QTimer m_animationTimer;
     Robot::Model m_robotModel;
     Maze::Model m_mazeModel;

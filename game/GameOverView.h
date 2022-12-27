@@ -10,9 +10,9 @@ class GameOverView : public QMessageBox {
     Q_OBJECT
 
 public:
-    explicit GameOverView(QMessageBox *parent = nullptr);
+    explicit GameOverView(QWidget *parent = nullptr);
 
-    ~GameOverView() override;
+
 
 signals:
     void gameStarted();

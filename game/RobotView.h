@@ -17,7 +17,6 @@ public slots:
 
 public:
     explicit RobotView(Robot::Model targetModel, QWidget *parent= nullptr);
-    ~RobotView() override;
 
 protected:
     Robot::Model m_viewModel;

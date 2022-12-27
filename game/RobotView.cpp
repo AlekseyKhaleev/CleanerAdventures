@@ -65,6 +65,5 @@ void RobotView::updateModel(Robot::Model model) {
     repaint();
 }
 
-RobotView::~RobotView()=default;
 
 

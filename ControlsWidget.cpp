@@ -43,4 +43,3 @@ QLabel *ControlsWidget::createLabel(const QString &text){
     return label;
 }
 
-ControlsWidget::~ControlsWidget()=default;

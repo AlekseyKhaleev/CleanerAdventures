@@ -6,7 +6,7 @@
 #include <QMessageBox>
 
 
-GameOverView::GameOverView(QMessageBox *parent): QMessageBox(parent)
+GameOverView::GameOverView(QWidget *parent): QMessageBox(parent)
 {
 
    m_accept = createButton("");
@@ -26,8 +26,6 @@ GameOverView::GameOverView(QMessageBox *parent): QMessageBox(parent)
    this->setDefaultButton(m_accept);
 
 }
-
-GameOverView::~GameOverView()=default;
 
 void GameOverView::levelDone(bool success) {
     if(success) {

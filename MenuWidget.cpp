@@ -56,5 +56,5 @@ QPushButton *MenuWidget::createButton(const QString &text) {
 }
 
 
-MenuWidget::~MenuWidget()=default;
+
 

@@ -10,7 +10,6 @@ class MazeView : public QWidget{
     Q_OBJECT
 public:
     explicit MazeView(Maze::Model targetModel, QWidget *parent= nullptr);
-    ~MazeView() override;
 public slots:
     void paintEvent(QPaintEvent *event) override;
     virtual void updateModel(Maze::Model model);
