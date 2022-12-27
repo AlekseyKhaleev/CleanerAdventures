@@ -57,13 +57,14 @@ namespace Robot {
 
         void stepBack();                                              // state "step back"
 
-        void replaceBattery(QPoint batPos);                           // state "charge battery"
+        void replaceBattery(QPoint batPos);                           // state "replace battery"
 
         void exit(bool success);                                      // state "exit"
 
     public:
         explicit RobotModel(QString name="Robot", QObject *parent = nullptr);
         ~RobotModel() override;
+
         Robot::Model getModel();
 
     private:

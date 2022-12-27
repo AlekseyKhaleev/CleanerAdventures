@@ -2,6 +2,7 @@
 
 #include <QKeyEvent>
 #include <QObject>
+#include <QTimer>
 
 #include "RobotModel.h"
 #include "MazeModel.h"
@@ -35,13 +36,11 @@ public:
     ~Controller() override;
 
 private:
-    int m_animationDelay = 300;
+
     bool scoreIncrease;
-    int m_animationTimerId;
+    QTimer m_animationTimer;
     Robot::Model m_robotModel;
     Maze::Model m_mazeModel;
-
-    void timerEvent(QTimerEvent *event)  override;
 
     [[nodiscard]] bool checkWall(QPoint dest) const;
 

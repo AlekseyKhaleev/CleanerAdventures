@@ -44,8 +44,8 @@ void Controller::keyEventAction(int eventKey) {
             break;
         }
         case Qt::Key_Backspace:{
-            emit stepBack();
-            break;
+           emit stepBack();
+           break;
         }
         case Qt::Key_Escape:{
             emit returnClicked();
@@ -66,8 +66,9 @@ void Controller::updateMazeModel(Maze::Model model) {
 
 void Controller::updateRobotModel(Robot::Model model) {
     m_robotModel = std::move(model);
+    if(m_robotModel.state == "init"){ m_animationTimer.start(300);}
+    if(m_robotModel.state == "exit"){ m_animationTimer.stop(); }
     if(getPercentEnergy() || (m_robotModel.steps == m_mazeModel.maxEnergy)){ emit energyChanged(getPercentEnergy()); }
-
 }
 
 
@@ -76,19 +77,12 @@ Controller::Controller(Robot::Model robotModel, Maze::Model mazeModel, QObject *
     QObject(parent), m_robotModel(std::move(robotModel)), m_mazeModel(std::move(mazeModel))
 {
     scoreIncrease = true;
-    m_animationTimerId = startTimer(m_animationDelay);
+    m_animationTimer.start(300);
+    connect(&m_animationTimer, SIGNAL(timeout()), this,  SIGNAL(skinAnimated()));
 }
 
 
 Controller::~Controller()=default;
-
-
-
-void Controller::timerEvent(QTimerEvent *event) {
-    if(event->timerId()==m_animationTimerId){
-        emit skinAnimated();
-    }
-}
 
 
 bool Controller::checkWall(QPoint dest) const{

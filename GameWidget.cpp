@@ -37,7 +37,7 @@ GameWidget::GameWidget(QString name, QWidget *parent)
 //    connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SLOT(clearMemory()));
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SIGNAL(resetMaze()));
     connect(m_gameOverView, SIGNAL(gameStarted()),m_controller, SIGNAL(resetRobot()));
-    connect(m_gameOverView, SIGNAL(gameEnded()),  this, SLOT(exit()));
+    connect(m_gameOverView, SIGNAL(gameEnded()),  this,         SLOT(exit()));
 
     //********* m_mazeModel sender ***********
     connect(m_mazeModel, SIGNAL(modelChanged(Maze::Model)),m_controller,SLOT(updateMazeModel(Maze::Model)));
@@ -54,8 +54,10 @@ GameWidget::GameWidget(QString name, QWidget *parent)
     connect(m_robotView, SIGNAL(keyHandled(int)), m_controller, SLOT(keyEventAction(int)));
 
     //********* m_controller sender ************
-    connect(m_controller, SIGNAL(levelDone(bool)),    m_mazeModel,   SLOT(resetLevel(bool)));
+    connect(m_controller, SIGNAL(levelDone(bool)),m_robotModel,  SLOT(exit(bool)));
+    connect(m_controller, SIGNAL(levelDone(bool)),m_mazeModel,   SLOT(resetLevel(bool)));
     connect(m_controller, SIGNAL(levelDone(bool)),m_gameOverView,SLOT(levelDone(bool)));
+
     connect(m_controller, SIGNAL(resetMaze()),    m_mazeModel,   SLOT(initMaze()));
     connect(m_controller, SIGNAL(resetRobot()),   m_robotModel,  SLOT(initRobot()));
 

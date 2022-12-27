@@ -16,9 +16,7 @@ using namespace Robot;
 //*****************************************************
 
 //Constructor
-RobotModel::RobotModel(QString name, QObject *parent):
-        QObject(parent)
-//        m_model(new Model)
+RobotModel::RobotModel(QString name, QObject *parent): QObject(parent)
 {
     m_model.name = std::move(name);
     initRobot();
@@ -26,11 +24,7 @@ RobotModel::RobotModel(QString name, QObject *parent):
 
 //Destructor
 RobotModel::~RobotModel()=default;
-//    m_model->state = "exit";
-//    emit modelChanged(*m_model);
-//
-//    delete m_model;
-//}
+
 
 //*****************************************************
 
@@ -120,9 +114,13 @@ void RobotModel::replaceBattery(QPoint batPos) {
 }
 
 void RobotModel::exit(bool success) {
+   m_model.state = "exit";
     if(success){ m_model.score += 100; }
-    m_model.state = "exit";
-
+    else
+    {
+       m_model.curColor = Robot::WHITE;
+       m_model.tmpColor = Robot::WHITE;
+    }
     emit modelChanged(m_model);
 }
 
