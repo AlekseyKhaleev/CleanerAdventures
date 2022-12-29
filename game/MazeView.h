@@ -13,7 +13,7 @@ public:
     ~MazeView() override;
 public slots:
     void paintEvent(QPaintEvent *event) override;
-    virtual void updateModel(Maze::Model model);
+    virtual void updateModel(const Maze::Model &model);
 
 protected:
     Maze::Model m_viewModel;

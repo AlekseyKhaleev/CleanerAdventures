@@ -59,8 +59,8 @@ void MazeView::drawBattery(){
     }
 }
 
-void MazeView::updateModel(Maze::Model model) {
-    m_viewModel = std::move(model);
+void MazeView::updateModel(const Maze::Model &model) {
+    m_viewModel = model;
     repaint();
 }
 
